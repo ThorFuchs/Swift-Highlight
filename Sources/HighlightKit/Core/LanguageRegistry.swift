@@ -465,7 +465,8 @@ final class LanguageRegistry: Sendable {
         let engine = HighlightEngine(
             registry: self,
             ancestry: ancestry,
-            cancellationProbe: cancellationProbe
+            cancellationProbe: cancellationProbe,
+            strictErrors: strictErrors
         )
         do {
             let result = try engine.highlight(

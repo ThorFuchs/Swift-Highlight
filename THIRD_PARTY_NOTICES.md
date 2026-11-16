@@ -12,9 +12,13 @@ texts must accompany source and binary distributions. The Apache-2.0 root
 license applies to new project contributions, not as a replacement for the
 licenses of imported material.
 
-The fixture corpus is imported unchanged from HighlightKit. Its individual
-provenance has not been independently audited: in particular
+The fixture corpus is imported unchanged from HighlightKit. A byte-level inventory
+against the pinned highlight.js checkout found 354 exact matches and 21 files
+without exact matches; see `Documentation/FIXTURE-PROVENANCE.md`. Exact matches
+do not by themselves prove the ownership of all contributed material. In particular,
 `Tests/HighlightKitTests/Fixtures/xml/document-type-variations.code.txt`
-contains a Walt Disney Company copyright string. Before distribution, review
-individual fixtures and any additional upstream notices; this document does
-not assert that such an audit is complete.
+contains a Walt Disney Company copyright string. The Erlang fixtures `erlang/sigil.code.txt` and
+`erlang/triple_quote_string.code.txt` include an attributed Dorothy L. Sayers
+quotation; both match upstream highlight.js test files. Before distribution,
+review the 21 unmatched fixtures and any additional rights in quoted material.
+This document does not assert that such an audit is complete.

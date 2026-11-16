@@ -42,3 +42,19 @@ normalization count instead of hiding it.
 For a reproducible result, record the highlight.js commit, language,
 count, seed, HighlightKit commit, OS, and Swift toolchain. Reference errors
 are failures rather than silently skipped inputs.
+
+## Verify checked-in fixtures
+
+`HIGHLIGHTJS_DIR=/path/to/highlight.js python3 Scripts/verify-fixtures.py`
+checks the exact reference commit, inventory, and every checked-in token and
+relevance expectation without modifying them. It uses the same pinned Node
+build and emitter as the differential runner. A mismatch exits nonzero;
+fixture changes require a separate reviewed update. Add `--output-dir /tmp/new-fixtures` to generate 375 JSON files into a new directory outside the repository for inspection; this never updates the checked-in files.
+
+## Linux Thread Sanitizer control
+
+`swiftc -sanitize=thread Scripts/MutexSanitizerControl.swift -o /tmp/mutex-control && /tmp/mutex-control`
+exercises only the standard library's `Synchronization.Mutex` with concurrent
+increments. On Swift 6.2.4 Linux it has reported sanitizer warnings, so use it
+to distinguish a toolchain-wide symptom from package-specific evidence. A
+warning in this control does not establish that package warnings are harmless.

@@ -157,6 +157,22 @@ public struct HighlightResult: Sendable {
     /// Second-best language found during auto-detection.
     public let secondBest: (language: String, relevance: Double)?
 
+    private var analyzedSource: String?
+
+    /// Verifies exact UTF-16 identity, including normalization differences.
+    public func validateSource(_ source: String) throws {
+        guard let analyzedSource, analyzedSource.utf16.elementsEqual(source.utf16) else {
+            throw TokenValidationError.sourceMismatch
+        }
+        try validateTokens(tokens, in: source)
+    }
+
+    func bindingSource(_ source: String) -> HighlightResult {
+        var result = self
+        result.analyzedSource = source
+        return result
+    }
+
     init(
         language: String?,
         relevance: Double,
@@ -165,6 +181,7 @@ public struct HighlightResult: Sendable {
         continuation: Continuation? = nil,
         secondBest: (language: String, relevance: Double)? = nil
     ) {
+        self.analyzedSource = nil
         self.language = language
         self.relevance = relevance
         self.illegal = illegal

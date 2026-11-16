@@ -7,6 +7,13 @@ public struct HTMLHighlightRenderer: Sendable {
     public enum RenderError: Error, Sendable, Equatable { case invalidClass(String); case nullCharacter }
     public init() {}
 
+    /// Validates that this result belongs to exactly this source.
+    public func render(_ source: String, result: HighlightResult) throws -> String {
+        try result.validateSource(source)
+        return try render(source, tokens: result.tokens)
+    }
+
+    /// Low-level API: callers are responsible for associating tokens with their source.
     public func render(_ source: String, tokens: [HighlightToken]) throws -> String {
         guard !source.unicodeScalars.contains(where: { $0.value == 0 }) else { throw RenderError.nullCharacter }
         try validateTokens(tokens, in: source)

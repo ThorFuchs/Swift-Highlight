@@ -67,22 +67,22 @@ public final class Highlighter: Sendable {
                 languageName: languageName,
                 ignoreIllegals: ignoreIllegals,
                 continuation: continuation
-            )
+            ).bindingSource(code)
         } catch {
-            return .plain()
+            return HighlightResult.plain().bindingSource(code)
         }
     }
 
     /// Explicit-language path that reports unknown languages, invalid grammars,
     /// and top-level engine aborts. Illegal input is indicated by result.illegal.
     public func highlightStrict(_ code: String, as language: String, ignoreIllegals: Bool = true) throws -> HighlightResult {
-        try registry.highlight(code, languageName: language, ignoreIllegals: ignoreIllegals, strictErrors: true)
+        try registry.highlight(code, languageName: language, ignoreIllegals: ignoreIllegals, strictErrors: true).bindingSource(code)
     }
 
     /// Highlights `code`, detecting the language automatically by
     /// relevance among `subset` (or all registered languages).
     public func highlightAuto(_ code: String, subset: [String]? = nil) -> HighlightResult {
-        registry.highlightAuto(code, subset: subset)
+        registry.highlightAuto(code, subset: subset).bindingSource(code)
     }
 
     /// Concurrent ``highlightAuto(_:subset:)``: candidate grammars are
@@ -92,10 +92,14 @@ public final class Highlighter: Sendable {
     /// stops scheduling new candidates and cooperatively interrupts active
     /// parser work, then ranks whatever completed.
     public func highlightAuto(_ code: String, subset: [String]? = nil) async -> HighlightResult {
-        await registry.highlightAuto(code, subset: subset)
+        await registry.highlightAuto(code, subset: subset).bindingSource(code)
     }
 
 }
 
 /// An engine stopped before completing its scan.
-public enum HighlightFailure: Error, Sendable { case engineAborted }
+public enum HighlightFailure: Error, Sendable, Equatable {
+    case engineAborted
+    case nestedLanguage(String)
+    case nestedAutoDetection
+}

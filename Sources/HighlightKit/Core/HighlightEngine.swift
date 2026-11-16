@@ -21,15 +21,18 @@ struct HighlightEngine {
     /// this optional preserves the synchronous parser's cancellation-agnostic
     /// semantics and lets its main loop stay branch-free.
     let cancellationProbe: CancellationProbe?
+    let strictErrors: Bool
 
     init(
         registry: LanguageRegistry,
         ancestry: LanguageAncestry? = nil,
-        cancellationProbe: CancellationProbe? = nil
+        cancellationProbe: CancellationProbe? = nil,
+        strictErrors: Bool = false
     ) {
         self.registry = registry
         self.ancestry = ancestry
         self.cancellationProbe = cancellationProbe
+        self.strictErrors = strictErrors
     }
 
     /// Relevance saturation per keyword text per run (highlight.js's
@@ -155,6 +158,8 @@ struct HighlightEngine {
         var relevance: Double = 0
         var index = 0
         var iterations = 0
+        /// First embedded-language failure observed on the strict path.
+        var nestedFailure: HighlightFailure?
         /// Sticky observation from an interruptible keyword scan. Once any
         /// hot path sees cancellation, a partial candidate cannot escape.
         var wasCancelled = false
@@ -347,6 +352,7 @@ struct HighlightEngine {
             if names.count == 1 {
                 let subLanguageName = names[0]
                 guard let sub = try? engine.registry.compiledLanguage(named: names[0]) else {
+                    if engine.strictErrors && nestedFailure == nil { nestedFailure = .nestedLanguage(subLanguageName) }
                     if !subContinuations.isEmpty {
                         subContinuations.removeValue(forKey: subLanguageName)
                     }
@@ -356,7 +362,8 @@ struct HighlightEngine {
                 let childEngine = HighlightEngine(
                     registry: engine.registry,
                     ancestry: childAncestry,
-                    cancellationProbe: engine.cancellationProbe
+                    cancellationProbe: engine.cancellationProbe,
+                    strictErrors: engine.strictErrors
                 )
                 let result: HighlightEngine.InternalResult
                 do {
@@ -373,6 +380,7 @@ struct HighlightEngine {
                     wasCancelled = true
                     return
                 } catch {
+                    if engine.strictErrors && nestedFailure == nil { nestedFailure = .nestedLanguage(subLanguageName) }
                     if !subContinuations.isEmpty {
                         subContinuations.removeValue(forKey: subLanguageName)
                     }
@@ -385,6 +393,11 @@ struct HighlightEngine {
                 }
                 emitter.addSublanguage(result.tokens, length: buffer.length)
             } else {
+                if engine.strictErrors {
+                    if nestedFailure == nil { nestedFailure = .nestedAutoDetection }
+                    emitter.addText(length: buffer.length)
+                    return
+                }
                 let result = engine.registry.highlightAuto(
                     text,
                     subset: names.isEmpty ? nil : names,
@@ -801,6 +814,7 @@ struct HighlightEngine {
                 || engine.cancellationProbe?() == true {
                 throw CancellationError()
             }
+            if let nestedFailure { throw nestedFailure }
             pruneClosedSubLanguageContinuations()
 
             return InternalResult(

@@ -112,7 +112,7 @@ extension HighlightResult {
     ///   - code: the exact code string that produced this result.
     ///   - theme: colors and font to apply.
     public func attributedString(for code: String, theme: HighlightTheme) throws -> NSAttributedString {
-        try validateTokens(tokens, in: code)
+        try validateSource(code)
         let baseFont = theme.font.resolved()
         let text = NSMutableAttributedString(
             string: code,

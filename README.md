@@ -11,7 +11,7 @@ three intended products: `SwiftHighlight` for analysis, `SwiftHighlightHTML`
 for HTML fragments, and `SwiftHighlightApple` for UIKit/AppKit themes. It has
 no external Swift package dependencies. Foundation (including its ICU-backed
 regular expressions) and `Synchronization` are system requirements. Swift
-6.1 is the manifest minimum, not yet a verified compatibility promise.
+6.1 is the manifest minimum; Linux x86_64 tests passed on 6.1.3, 6.2.4 and 6.4.2.
 
 For a local checkout, add `.package(path: "../Swift-Highlight")` to the
 consumer's `dependencies` and add the `SwiftHighlight` and
@@ -25,7 +25,7 @@ import SwiftHighlightHTML
 let source = "let message = \"<hello>\""
 let highlighter = Highlighter()
 let result = try highlighter.highlightStrict(source, as: "swift")
-let fragment = try HTMLHighlightRenderer().render(source, tokens: result.tokens)
+let fragment = try HTMLHighlightRenderer().render(source, result: result)
 ```
 
 The fragment is intended for the inside of an existing code block;
@@ -41,7 +41,7 @@ classes and tokens throw. Carriage returns are encoded as character references; 
 ```
 
 Use `highlightStrict` to distinguish unknown languages and grammar errors
-from an empty token stream. `highlight(_:as:)` is the inherited tolerant
+from an empty token stream. It also reports errors in explicit nested languages; nested automatic detection currently throws `nestedAutoDetection`, because candidate failures cannot yet be diagnosed reliably. `highlight(_:as:)` is the inherited tolerant
 plain-text fallback. `illegal` signals a rejected input when `ignoreIllegals`
 is false. Whole-block parsing is the reference path; incremental line parsing
 can differ at regex boundaries. Auto-detection is explicit, not a default for
@@ -59,9 +59,11 @@ let styled = try result.attributedString(for: source, theme: .githubLight)
 
 Applying another theme to the same result does not require re-highlighting.
 Token ranges are UTF-16 offsets into the exact analyzed string; scopes are
-outermost first and plain gaps are omitted. Renderers validate ordering,
-bounds and Unicode scalar boundaries, but cannot detect a different input
-with matching boundaries; pass the original source. HTML rendering is not a
+outermost first and plain gaps are omitted. The result-based renderers check the exact UTF-16 source and validate ordering,
+bounds and Unicode scalar boundaries. The low-level token-only HTML API cannot
+detect a different source with matching boundaries; callers must supply the
+original source. Results retain the source string for exact checking; account for
+that lifetime when processing large inputs. HTML rendering is not a
 full HTML post-processor or a cmark adapter.
 
 Regexes run synchronously and may consume substantial time or memory on

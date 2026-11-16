@@ -8,6 +8,15 @@
 
 The public API is provisional before the first release. No version or
 compatibility guarantee is implied by this unreleased work.
+
+### Unreleased follow-up
+
+- Bind public highlight results to their exact UTF-16 input for result-based renderers.
+- Report embedded-language failures in strict mode and reject unsupported strict nested auto-detection.
+- Validate scalar boundaries without rejecting valid combining-character or ZWJ boundaries.
+- Add read-only reference-fixture verification and a provenance inventory.
+
+
 # Changelog
 
 ## 0.2.0 — 2026-07-14

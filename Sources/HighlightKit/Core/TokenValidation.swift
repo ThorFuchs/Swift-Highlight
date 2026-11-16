@@ -2,6 +2,7 @@ public import Foundation
 
 /// Invalid token ranges must never be rendered as if they were valid.
 public enum TokenValidationError: Error, Sendable, Equatable {
+    case sourceMismatch
     case invalidRange(index: Int)
 }
 
@@ -17,10 +18,14 @@ public func validateTokens(_ tokens: [HighlightToken], in source: String) throws
             throw TokenValidationError.invalidRange(index: index)
         }
         let next = range.location + range.length
-        let startIndex = units.index(units.startIndex, offsetBy: range.location)
-        let endIndex = units.index(units.startIndex, offsetBy: next)
-        guard String.Index(startIndex, within: source) != nil,
-              String.Index(endIndex, within: source) != nil else {
+        func isScalarBoundary(_ offset: Int) -> Bool {
+            guard offset > 0, offset < count else { return true }
+            let index = units.index(units.startIndex, offsetBy: offset)
+            let previous = units[units.index(before: index)]
+            let current = units[index]
+            return !(0xD800...0xDBFF).contains(previous) || !(0xDC00...0xDFFF).contains(current)
+        }
+        guard isScalarBoundary(range.location), isScalarBoundary(next) else {
             throw TokenValidationError.invalidRange(index: index)
         }
         end = next
