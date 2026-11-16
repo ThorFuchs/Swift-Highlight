@@ -12,7 +12,7 @@ compatibility guarantee is implied by this unreleased work.
 ### Unreleased follow-up
 
 - Bind public highlight results to their exact UTF-16 input for result-based renderers.
-- Report embedded-language failures in strict mode and reject unsupported strict nested auto-detection.
+- Report embedded-language and automatic-detection candidate failures in strict mode.
 - Validate scalar boundaries without rejecting valid combining-character or ZWJ boundaries.
 - Add read-only reference-fixture verification and a provenance inventory.
 

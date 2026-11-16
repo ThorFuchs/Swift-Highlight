@@ -393,17 +393,31 @@ struct HighlightEngine {
                 }
                 emitter.addSublanguage(result.tokens, length: buffer.length)
             } else {
+                let result: HighlightResult
                 if engine.strictErrors {
-                    if nestedFailure == nil { nestedFailure = .nestedAutoDetection }
-                    emitter.addText(length: buffer.length)
-                    return
+                    do {
+                        result = try engine.registry.highlightAutoStrict(
+                            text, subset: names.isEmpty ? nil : names,
+                            ancestry: childAncestry, cancellationProbe: engine.cancellationProbe
+                        )
+                    } catch is CancellationError {
+                        wasCancelled = true
+                        return
+                    } catch let failure as HighlightFailure {
+                        if nestedFailure == nil { nestedFailure = failure }
+                        emitter.addText(length: buffer.length)
+                        return
+                    } catch {
+                        if nestedFailure == nil { nestedFailure = .nestedAutoDetection }
+                        emitter.addText(length: buffer.length)
+                        return
+                    }
+                } else {
+                    result = engine.registry.highlightAuto(
+                        text, subset: names.isEmpty ? nil : names,
+                        ancestry: childAncestry, cancellationProbe: engine.cancellationProbe
+                    )
                 }
-                let result = engine.registry.highlightAuto(
-                    text,
-                    subset: names.isEmpty ? nil : names,
-                    ancestry: childAncestry,
-                    cancellationProbe: engine.cancellationProbe
-                )
                 // Nested auto-detection ranks completed candidates instead
                 // of throwing. Its production probe is monotonic, so sample
                 // it immediately and latch cancellation in this Run.

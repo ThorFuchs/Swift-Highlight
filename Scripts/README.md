@@ -58,3 +58,8 @@ exercises only the standard library's `Synchronization.Mutex` with concurrent
 increments. On Swift 6.2.4 Linux it has reported sanitizer warnings, so use it
 to distinguish a toolchain-wide symptom from package-specific evidence. A
 warning in this control does not establish that package warnings are harmless.
+
+A companion `Scripts/NSLockSanitizerControl.swift` uses an `NSLock`-protected
+counter. Its isolated `@unchecked Sendable` type is a diagnostic control,
+not part of the library. On the same Swift 6.4.2 Linux runtime it completed
+without sanitizer warnings, whereas the Mutex control reported warnings.

@@ -1,10 +1,10 @@
 # Fixture provenance inventory
 
-Compared raw bytes against tracked highlight.js source files at commit `08cb242e7d4aee787114eb04cc7ab18314d82f92`. Exact matches establish byte identity, not the original source or ownership of each contribution. Unmatched files may be modified, generated, or independently authored; their provenance remains unresolved. JSON expectations were not used for attribution.
+Compared raw bytes against tracked highlight.js source files at commit `08cb242e7d4aee787114eb04cc7ab18314d82f92`. Exact matches establish byte identity, not the original source or ownership of each contribution. Similarities are character-sequence ratios (Python difflib, autojunk disabled), not proof of derivation or ownership. Unmatched or modified files may be generated, changed, or independently authored; their provenance remains unresolved. JSON expectations were not used for attribution.
 
 | Imported code fixture | Byte-identical highlight.js file(s) |
 | --- | --- |
-| `ada/default.code.txt` | **Unresolved** |
+| `ada/default.code.txt` | Similar, not byte-identical: `test/markup/ada/default.txt` (similarity 0.988); attribution unconfirmed |
 | `ada/detect-sample.code.txt` | `test/markup/ada/default.txt`, `test/detect/ada/default.txt` |
 | `apache/default.code.txt` | `test/markup/apache/default.txt`, `test/detect/apache/default.txt` |
 | `apache/detect-sample.code.txt` | `test/markup/apache/default.txt`, `test/detect/apache/default.txt` |
@@ -44,7 +44,7 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `cpp/detect-sample.code.txt` | `test/detect/cpp/default.txt` |
 | `cpp/expression-keywords.code.txt` | `test/markup/cpp/expression-keywords.txt` |
 | `cpp/function-declarations.code.txt` | `test/markup/cpp/function-declarations.txt` |
-| `cpp/function-like-keywords.code.txt` | **Unresolved** |
+| `cpp/function-like-keywords.code.txt` | Upstream fixture is an exact prefix: `test/markup/cpp/function-like-keywords.txt`; appended content and attribution unconfirmed |
 | `cpp/function-params.code.txt` | `test/markup/cpp/function-params.txt` |
 | `cpp/function-title.code.txt` | `test/markup/cpp/function-title.txt` |
 | `cpp/initializers.code.txt` | `test/markup/cpp/initializers.txt` |
@@ -57,7 +57,7 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `cpp/truncated-raw-string.code.txt` | `test/markup/cpp/truncated-raw-string.txt` |
 | `csharp/detect-sample.code.txt` | `test/detect/csharp/default.txt` |
 | `csharp/dotted-namespace.code.txt` | `test/markup/csharp/dotted-namespace.txt` |
-| `csharp/floats.code.txt` | **Unresolved** |
+| `csharp/floats.code.txt` | Similar, not byte-identical: `test/markup/csharp/floats.txt` (similarity 0.869); attribution unconfirmed |
 | `csharp/functions.code.txt` | `test/markup/csharp/functions.txt` |
 | `csharp/generic_modifiers.code.txt` | `test/markup/csharp/generic_modifiers.txt` |
 | `csharp/identifiers.code.txt` | `test/markup/csharp/identifiers.txt` |
@@ -67,7 +67,7 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `csharp/string-raw.code.txt` | `test/markup/csharp/string-raw.txt` |
 | `csharp/titles.code.txt` | `test/markup/csharp/titles.txt` |
 | `csharp/try-catch.code.txt` | `test/markup/csharp/try-catch.txt` |
-| `css/css_consistency.code.txt` | **Unresolved** |
+| `css/css_consistency.code.txt` | Similar, not byte-identical: `test/markup/css/css_consistency.txt` (similarity 0.998); attribution unconfirmed |
 | `css/detect-sample.code.txt` | `test/detect/css/default.txt` |
 | `css/hex-colors.code.txt` | `test/markup/css/hex-colors.txt` |
 | `css/pseudo-selector.code.txt` | `test/markup/css/pseudo-selector.txt` |
@@ -84,7 +84,7 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `delphi/numeric-literal.code.txt` | `test/markup/delphi/numeric-literal.txt` |
 | `diff/comments.code.txt` | `test/markup/diff/comments.txt` |
 | `diff/detect-sample.code.txt` | `test/detect/diff/default.txt` |
-| `diff/git-format-patch.code.txt` | **Unresolved** |
+| `diff/git-format-patch.code.txt` | Upstream fixture is an exact prefix: `test/markup/diff/git-format-patch.txt`; appended content and attribution unconfirmed |
 | `dockerfile/default.code.txt` | `test/markup/dockerfile/default.txt` |
 | `dockerfile/detect-sample.code.txt` | `test/detect/dockerfile/default.txt` |
 | `dos/comments.code.txt` | `test/markup/dos/comments.txt` |
@@ -114,7 +114,7 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `fsharp/types.code.txt` | `test/markup/fsharp/types.txt` |
 | `go/detect-sample.code.txt` | `test/detect/go/default.txt` |
 | `go/functions.code.txt` | `test/markup/go/functions.txt` |
-| `go/numbers.code.txt` | **Unresolved** |
+| `go/numbers.code.txt` | Similar, not byte-identical: `test/markup/go/numbers.txt` (similarity 0.978); attribution unconfirmed |
 | `go/strings.code.txt` | `test/markup/go/strings.txt` |
 | `groovy/default.code.txt` | `test/markup/groovy/default.txt` |
 | `groovy/detect-sample.code.txt` | `test/detect/groovy/default.txt` |
@@ -161,7 +161,7 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `javascript/jsx.code.txt` | `test/markup/javascript/jsx.txt` |
 | `javascript/keyword-as-part-of-method-name.code.txt` | `test/markup/javascript/keyword-as-part-of-method-name.txt` |
 | `javascript/keyword_as_identifier.code.txt` | `test/markup/javascript/keyword_as_identifier.txt` |
-| `javascript/keywords.code.txt` | **Unresolved** |
+| `javascript/keywords.code.txt` | Similar, not byte-identical: `test/markup/javascript/keywords.txt` (similarity 0.921); attribution unconfirmed |
 | `javascript/method-call.code.txt` | `test/markup/javascript/method-call.txt` |
 | `javascript/modules.code.txt` | `test/markup/javascript/modules.txt` |
 | `javascript/numbers.code.txt` | `test/markup/javascript/numbers.txt` |
@@ -177,9 +177,9 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `kotlin/function.code.txt` | `test/markup/kotlin/function.txt` |
 | `kotlin/nested_comment.code.txt` | `test/markup/kotlin/nested_comment.txt` |
 | `kotlin/string.code.txt` | `test/markup/kotlin/string.txt` |
-| `leaf/default.code.txt` | **Unresolved** |
+| `leaf/default.code.txt` | Similar, not byte-identical: `test/markup/leaf/default.txt` (similarity 0.990); attribution unconfirmed |
 | `leaf/detect-sample.code.txt` | `test/markup/leaf/default.txt`, `test/detect/leaf/default.txt` |
-| `less/css_consistency.code.txt` | **Unresolved** |
+| `less/css_consistency.code.txt` | Similar, not byte-identical: `test/markup/less/css_consistency.txt` (similarity 0.998); attribution unconfirmed |
 | `less/detect-sample.code.txt` | `test/detect/less/default.txt` |
 | `less/selectors.code.txt` | `test/markup/less/selectors.txt` |
 | `lisp/detect-sample.code.txt` | `test/detect/lisp/default.txt` |
@@ -220,11 +220,11 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `perl/detect-sample.code.txt` | `test/detect/perl/default.txt` |
 | `perl/number.code.txt` | `test/markup/perl/number.txt` |
 | `perl/regex.code.txt` | `test/markup/perl/regex.txt` |
-| `php/attributes.code.txt` | **Unresolved** |
+| `php/attributes.code.txt` | Similar, not byte-identical: `test/markup/php/attributes.txt` (similarity 0.963); attribution unconfirmed |
 | `php/case.code.txt` | `test/markup/php/case.txt` |
 | `php/comments.code.txt` | `test/markup/php/comments.txt` |
 | `php/detect-sample.code.txt` | `test/detect/php/default.txt` |
-| `php/functions.code.txt` | **Unresolved** |
+| `php/functions.code.txt` | Similar, not byte-identical: `test/markup/php/functions.txt` (similarity 0.881); attribution unconfirmed |
 | `php/namespace.code.txt` | `test/markup/php/namespace.txt` |
 | `php/numbers.code.txt` | `test/markup/php/numbers.txt` |
 | `php/php80.code.txt` | `test/markup/php/php80.txt` |
@@ -273,8 +273,8 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `rust/detect-sample.code.txt` | `test/detect/rust/default.txt` |
 | `rust/extern.code.txt` | **Unresolved** |
 | `rust/invoked-keywords.code.txt` | `test/markup/rust/invoked-keywords.txt` |
-| `rust/numbers.code.txt` | **Unresolved** |
-| `rust/sample1.code.txt` | **Unresolved** |
+| `rust/numbers.code.txt` | Similar, not byte-identical: `test/markup/rust/numbers.txt` (similarity 0.921); attribution unconfirmed |
+| `rust/sample1.code.txt` | Similar, not byte-identical: `test/markup/rust/sample1.txt` (similarity 0.984); attribution unconfirmed |
 | `rust/strings.code.txt` | `test/markup/rust/strings.txt` |
 | `rust/traits.code.txt` | `test/markup/rust/traits.txt` |
 | `rust/types.code.txt` | `test/markup/rust/types.txt` |
@@ -299,7 +299,7 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `scheme/detect-sample.code.txt` | `test/detect/scheme/default.txt` |
 | `scheme/lambda.code.txt` | `test/markup/scheme/lambda.txt` |
 | `scheme/quoted.code.txt` | `test/markup/scheme/quoted.txt` |
-| `scss/css_consistency.code.txt` | **Unresolved** |
+| `scss/css_consistency.code.txt` | Similar, not byte-identical: `test/markup/scss/css_consistency.txt` (similarity 0.998); attribution unconfirmed |
 | `scss/default.code.txt` | `test/markup/scss/default.txt`, `test/detect/scss/default.txt` |
 | `scss/detect-sample.code.txt` | `test/markup/scss/default.txt`, `test/detect/scss/default.txt` |
 | `shell/command-continuation.code.txt` | `test/markup/shell/command-continuation.txt` |
@@ -320,7 +320,7 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `sql/string-types.code.txt` | `test/markup/sql/string-types.txt` |
 | `sql/types.code.txt` | `test/markup/sql/types.txt` |
 | `sql/values-statement.code.txt` | `test/markup/sql/values-statement.txt` |
-| `stylus/css_consistency.code.txt` | **Unresolved** |
+| `stylus/css_consistency.code.txt` | Similar, not byte-identical: `test/markup/stylus/css_consistency.txt` (similarity 0.998); attribution unconfirmed |
 | `stylus/default.code.txt` | `test/markup/stylus/default.txt`, `test/detect/stylus/default.txt` |
 | `stylus/detect-sample.code.txt` | `test/markup/stylus/default.txt`, `test/detect/stylus/default.txt` |
 | `swift/attributes.code.txt` | `test/markup/swift/attributes.txt` |
@@ -365,8 +365,8 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `xml/detect-sample.code.txt` | `test/detect/xml/default.txt` |
 | `xml/document-type-variations.code.txt` | `test/markup/xml/document-type-variations.txt` |
 | `xml/namespace.code.txt` | `test/markup/xml/namespace.txt` |
-| `xml/non-ascii-attribute-names.code.txt` | **Unresolved** |
-| `xml/non-ascii-element-names.code.txt` | **Unresolved** |
+| `xml/non-ascii-attribute-names.code.txt` | Similar, not byte-identical: `test/markup/xml/non-ascii-attribute-names.txt` (similarity 0.997); attribution unconfirmed |
+| `xml/non-ascii-element-names.code.txt` | Similar, not byte-identical: `test/markup/xml/non-ascii-element-names.txt` (similarity 0.999); attribution unconfirmed |
 | `xml/processing.code.txt` | `test/markup/xml/processing.txt` |
 | `xml/space-attributes.code.txt` | `test/markup/xml/space-attributes.txt` |
 | `xml/sublanguage_no_relevancy.code.txt` | `test/markup/xml/sublanguage_no_relevancy.txt` |
@@ -379,3 +379,9 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `yaml/special_chars.code.txt` | `test/markup/yaml/special_chars.txt` |
 | `yaml/string.code.txt` | `test/markup/yaml/string.txt` |
 | `yaml/tag.code.txt` | `test/markup/yaml/tag.txt` |
+
+The four still unmatched files were already present in HighlightKit's initial
+commit `b6c89dd5012d16a2d2dba44a2df758b474e81a59`. That commit's MIT license
+covers the distributed HighlightKit source under its stated terms; this fact
+alone does not establish whether any third-party material was incorporated
+before that commit.

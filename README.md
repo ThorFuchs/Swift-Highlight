@@ -41,7 +41,7 @@ classes and tokens throw. Carriage returns are encoded as character references; 
 ```
 
 Use `highlightStrict` to distinguish unknown languages and grammar errors
-from an empty token stream. It also reports errors in explicit nested languages; nested automatic detection currently throws `nestedAutoDetection`, because candidate failures cannot yet be diagnosed reliably. `highlight(_:as:)` is the inherited tolerant
+from an empty token stream. It also reports errors in explicit or automatically selected nested languages. A missing candidate or recursion with no viable candidate reports `nestedAutoDetection`; candidates rejected by illegal input, opted out, or skipped to prevent non-progressing recursion are excluded from ranking. `highlight(_:as:)` is the inherited tolerant
 plain-text fallback. `illegal` signals a rejected input when `ignoreIllegals`
 is false. Whole-block parsing is the reference path; incremental line parsing
 can differ at regex boundaries. Auto-detection is explicit, not a default for

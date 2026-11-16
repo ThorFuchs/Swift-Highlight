@@ -543,6 +543,60 @@ final class LanguageRegistry: Sendable {
         return selectBest(candidates)
     }
 
+    /// Nested strict detection reports compilation and engine failures rather
+    /// than silently dropping candidates. Illegal input and candidates that
+    /// opted out or would recurse without progress are intentionally skipped.
+    func highlightAutoStrict(
+        _ code: String,
+        subset: [String]?,
+        ancestry: LanguageAncestry,
+        cancellationProbe: HighlightEngine.CancellationProbe? = nil
+    ) throws -> HighlightResult {
+        let entries = detectionEntries(subset: subset)
+        if let subset, entries.count != subset.count { throw HighlightFailure.nestedAutoDetection }
+        guard ancestry.depth < LanguageAncestry.maximumDepth else { throw HighlightFailure.nestedAutoDetection }
+        let sourceLength = code.utf16.count
+        var skippedForRecursion = false
+        var consideredCandidate = false
+        var candidates = [DetectionCandidate(result: .plain(), supersetOf: nil, order: 0)]
+        candidates.reserveCapacity(entries.count + 1)
+        for (index, entry) in entries.enumerated() {
+            if cancellationProbe?() == true { throw CancellationError() }
+            let name: String
+            switch entry {
+            case .compiled(let language): name = language.name
+            case .uncompiled(let descriptor): name = descriptor.canonicalName
+            }
+            let compiled: CompiledLanguage
+            do {
+                compiled = try compiledLanguage(from: entry)
+            } catch {
+                throw HighlightFailure.nestedLanguage(name)
+            }
+            guard !compiled.disableAutodetect else { continue }
+            if ancestry.wouldNotProgress(compiled, sourceLength: sourceLength, initialMode: compiled.root) {
+                skippedForRecursion = true
+                continue
+            }
+            consideredCandidate = true
+            let result: HighlightResult
+            do {
+                result = try highlight(code, language: compiled, ignoreIllegals: false,
+                                       ancestry: ancestry, cancellationProbe: cancellationProbe, strictErrors: true)
+            } catch is CancellationError {
+                throw CancellationError()
+            } catch let failure as HighlightFailure {
+                throw failure
+            } catch {
+                throw HighlightFailure.nestedLanguage(name)
+            }
+            guard !result.illegal else { continue }
+            candidates.append(DetectionCandidate(result: result, supersetOf: compiled.supersetOf, order: index + 1))
+        }
+        if skippedForRecursion && !consideredCandidate { throw HighlightFailure.nestedAutoDetection }
+        return selectBest(candidates)
+    }
+
     /// Concurrent auto-detection: candidate grammars run in a processor-
     /// bounded window of child tasks. Results are reassembled in candidate order and
     /// ranked by the same ``selectBest(_:)``, so for the same input this

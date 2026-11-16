@@ -16,8 +16,11 @@ Both `swift test -j 4` and `swift build -c release -j 4` exited 1. No baseline t
 Core/HTML/Apple separation and strict explicit-language diagnostics are implemented.
 The tolerant API falls back to plain text. Strict highlighting reports top-level
 compile/engine failures and failed explicit sub-languages; illegal input is
-indicated on the result. Nested automatic detection is explicitly rejected in
-strict mode because the inherited candidate ranking suppresses errors.
+indicated on the result. Strict nested automatic detection ranks successful
+candidates while surfacing compilation or engine failures. Candidates that
+opt out, reject the input as illegal, or would recurse without progress are
+skipped; a missing listed candidate or recursion with no viable candidate
+produces a diagnostic.
 Public highlighter results retain the source and result-based renderers compare
 its exact UTF-16 before applying validated ranges. The low-level token-only HTML
 API cannot prove source association; its caller must supply the original input.
@@ -30,21 +33,23 @@ No race or leak freedom is inferred without instrumentation.
 
 | Platform | Implemented | Built | Tested | Limitation |
 | --- | --- | --- | --- | --- |
-| Linux x86_64 Core/HTML | Yes | Debug, Swift 6.1.3, 6.2.4 and 6.4.2 | `swift test -j 4`: 252 tests on Swift 6.1.3, 6.2.4 and 6.4.2, including 375 fixture cases | Standard release not yet verified; non-WMO releases and separate consumer passed |
+| Linux x86_64 Core/HTML | Yes | Debug, Swift 6.1.3, 6.2.4 and 6.4.2 | `swift test -j 4`: 254 tests on Swift 6.1.3, 6.2.4 and 6.4.2, including 375 fixture cases | Swift 6.4.2 standard release and separate consumer passed |
 | macOS Core/HTML/Apple | In progress | No | No | Apple SDK unavailable |
 | iOS Apple | In progress | No | No | Apple SDK unavailable |
 | Linux arm64, WASI, musl | Not established | No | No | SDK/toolchain unavailable |
 
 Retained license texts and unresolved fixture provenance are described in
 `THIRD_PARTY_NOTICES.md` and `Documentation/FIXTURE-PROVENANCE.md`. Raw byte
-comparison found 354 matches against the pinned highlight.js tree and 21
-unmatched files; this is not proof of ownership of contributed content. This is not a completed distribution audit. No release,
+comparison found 354 matches against the pinned highlight.js tree. Of the 21
+non-identical fixtures, 15 closely resemble reference files, two extend a
+reference file, and four lack a match; this is not proof of ownership of
+contributed content. This is not a completed distribution audit. No release,
 tag, PR or publish was created by this work.
 
 The 6.2.4 Linux test run used `swift:6.2.4` (image digest
 `sha256:3459518b2e723a7c363d0f8cfa44fc796c77ecd8c18e92fd10e6f92dd78c0b12`)
 on x86_64. One upstream Mach-specific memory test is excluded on Linux.
-The standard release command `swift build -c release -j 3` on Swift 6.2.4
+The earlier standard release command `swift build -c release -j 3` on Swift 6.2.4
 was stopped after over five minutes of compiler CPU time without completing.
 A subsequent run from a frozen snapshot of the intermediate follow-up state was
 stopped after ten minutes without completing; it was not the final Unicode fix.
@@ -69,11 +74,13 @@ The package warnings have not been resolved or classified conclusively;
 do not consider concurrency verified. The targeted Swift 6.2.4 run
 `swift test --sanitize=address --filter compilationReleasesDetachedRawModes`
 passed its Swift Testing assertion but exited 1: LeakSanitizer reported 144 bytes
-in two allocations with stacks in XCTest's suite/runner. This is not a clean
-instrumented pass or a proof about application leak freedom.
+in two allocations with stacks in XCTest's suite/runner. Repeating the same
+targeted test with `--disable-xctest` executed one Swift Testing test and passed
+with exit 0 and no ASan/LSan report. This isolates the original report to the
+XCTest-enabled run; it does not prove the whole application leak-free.
 
 Follow-up: the full suite passed on Linux x86_64 with Swift 6.2.4, 6.1.3 and 6.4.2,
-252 tests each including 375 fixture cases. Tests cover exact source binding,
+254 tests each including 375 fixture cases. Tests cover exact source binding,
 nested diagnostics, combining-character and ZWJ boundaries, and rejection of
 surrogate splits. HTML NUL remains unrepresentable through an HTML5 parse and
 is rejected explicitly. The read-only pinned reference check passed all 375
@@ -84,3 +91,21 @@ emoji, script-like text, ampersands, and CRLF. Python's `html.parser.HTMLParser`
 recovered the exact original UTF-8 text (49 bytes) after entity decoding, and
 no raw script tag appeared in the fragment. This is one representative
 round-trip, not a proof for all inputs or a full HTML document adapter.
+
+The isolated `Scripts/NSLockSanitizerControl.swift` counter completed under
+Swift 6.4.2 TSan without warnings (10,000 increments), whereas the
+`Synchronization.Mutex` control on the same toolchain reported two warnings.
+This narrows the toolchain symptom to the Mutex-based control; it is still not
+a proof that the package's seven reported accesses are safe.
+
+Strict auto-detection was subsequently validated with an unlabelled Markdown
+fence: its token output matched the tolerant path. Candidate compilation errors,
+missing candidates and self-only recursive detection have dedicated tests.
+After extending the nested engine loop-fuse test, the full 254-test suites passed again with Swift 6.1.3, 6.2.4 and 6.4.2.
+
+The standard, unmodified `swift build -c release -j 4` succeeded on Linux
+x86_64 using the `swift:6.4` image (Swift 6.4.2, digest
+`sha256:0384f00cf80f81064a907c249a0ad56a1648906f65075a95b1827e88de666e21`)
+from a frozen checkout of this version of the package source. It took 274.02
+seconds; no alternative optimization flags were used. After this snapshot,
+only test and documentation files were edited, not package source.
