@@ -38,6 +38,13 @@ No race or leak freedom is inferred without instrumentation.
 | iOS Apple | In progress | No | No | Apple SDK unavailable |
 | Linux arm64, WASI, musl | Not established | No | No | SDK/toolchain unavailable |
 
+After the branch was pushed, the user reported a successful local Apple build
+(`BUILD SUCCEEDED`) using the supplied commands. This is a user-reported result;
+the specific SDK, Xcode/Swift versions, destination, and individual test results
+have not yet been independently recorded. The table above reflects the checks
+performed in the cloud environment; it does not claim that local tests or WASI
+have been verified.
+
 Retained license texts and unresolved fixture provenance are described in
 `THIRD_PARTY_NOTICES.md` and `Documentation/FIXTURE-PROVENANCE.md`. Raw byte
 comparison found 354 matches against the pinned highlight.js tree. Of the 21
