@@ -131,5 +131,11 @@ The user's macOS build using Apple Swift 6.4.2 from the Xcode toolchain failed
 while importing the SDK's precompiled Foundation module with a compiler-version
 mismatch. Swift.org's Wasm instructions call for the matching Swift.org
 toolchain even on macOS with Xcode installed. The successful Linux cross-build
-supports that toolchain mismatch as the likely cause; the Mac retry has not yet
-been performed and its outcome is not assumed.
+supports that toolchain mismatch as the likely cause. The user subsequently
+reported that both `SwiftHighlight` and `SwiftHighlightHTML` built successfully
+on macOS arm64 with a swiftly-selected `swift-6.4.2-RELEASE` toolchain and
+the matching WASI SDK. The reported output contained three unused-public-import warnings; these
+imports were narrowed in a later change. Both WASI library products were then
+rebuilt on Linux using Swift 6.4.2 with `-Xswiftc -warnings-as-errors`; both
+passed. The full 254-test Linux suite also passed with Swift 6.1.3. No local
+WASI execution or full fixture test was reported.

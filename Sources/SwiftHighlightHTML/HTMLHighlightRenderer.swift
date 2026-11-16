@@ -1,4 +1,4 @@
-public import Foundation
+internal import Foundation
 public import SwiftHighlight
 
 /// Produces HTML from UTF-16 token ranges. Class components must consist of

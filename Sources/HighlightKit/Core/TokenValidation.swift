@@ -1,4 +1,4 @@
-public import Foundation
+internal import Foundation
 
 /// Invalid token ranges must never be rendered as if they were valid.
 public enum TokenValidationError: Error, Sendable, Equatable {

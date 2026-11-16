@@ -1,4 +1,4 @@
-public import Foundation
+internal import Foundation
 
 /// Syntax highlighter with a highlight.js-compatible parsing engine and
 /// grammars, producing scope tokens (`NSRange` + scope name) and
