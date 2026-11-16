@@ -2,9 +2,9 @@
 
 ## Supported versions
 
-There is currently no public release. Before 1.0, security fixes are intended
-for the latest published minor release once a release exists; no backport or
-response-time guarantee is made.
+There is currently no public release. Once a release exists, security fixes are
+intended for the latest minor version of the current major version. No backport
+or response-time guarantee is made.
 
 ## Report a vulnerability
 

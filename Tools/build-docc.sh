@@ -18,15 +18,20 @@ else
     printf '%s\n' 'DocC not found in the selected toolchain' >&2
     exit 1
 fi
-# SwiftPM versions use different graph directories; locate the actual output.
-graph=$(find "$scratch" -type f -name SwiftHighlight.symbols.json -print -quit)
-test -n "$graph"
-graphdir=$(dirname "$graph")
+# SwiftPM may place each target's symbol graph in a separate directory.
+# Prefer the consolidated output, but search per target when it is absent.
 tmp=$(mktemp -d "${TMPDIR:-/tmp}/swift-highlight-docc.XXXXXXXX")
 trap 'rm -rf "$tmp"' EXIT HUP INT TERM
 for module in SwiftHighlight SwiftHighlightHTML SwiftHighlightApple; do
-    graph="$graphdir/$module.symbols.json"
-    test -f "$graph"
+    graph="$scratch/out/symbolgraph/$module.symbols.json"
+    if [ ! -f "$graph" ]; then
+        graph=$(find "$scratch" -type f -name "$module.symbols.json" -print -quit)
+    fi
+    if [ -z "$graph" ] || [ ! -f "$graph" ]; then
+        printf 'Symbol graph not found for %s under %s\n' "$module" "$scratch" >&2
+        exit 1
+    fi
+    graphdir=$(dirname "$graph")
     case "$module" in
       SwiftHighlight) catalog=Sources/HighlightKit/SwiftHighlight.docc ;;
       SwiftHighlightHTML) catalog=Sources/SwiftHighlightHTML/SwiftHighlightHTML.docc ;;
@@ -35,7 +40,7 @@ for module in SwiftHighlight SwiftHighlightHTML SwiftHighlightApple; do
     # Linux cannot emit UIKit/AppKit symbols; report the omission explicitly.
     count=$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))["symbols"]))' "$graph")
     if [ "$count" -eq 0 ]; then
-        if [ "$module" = SwiftHighlightApple ]; then
+        if [ "$module" = SwiftHighlightApple ] && [ "$(uname -s)" = Linux ]; then
             printf '%s\n' 'Skipping SwiftHighlightApple DocC: no Apple SDK symbols on this host.'
             continue
         fi
@@ -51,6 +56,6 @@ for module in SwiftHighlight SwiftHighlightHTML SwiftHighlightApple; do
     python3 Tools/check-symbol-documentation.py "$tmp/$module/"*.symbols.json
     "$docc_command" convert "$catalog" --additional-symbol-graph-dir "$tmp/$module" \
         --fallback-display-name "$module" --fallback-bundle-identifier "io.github.thorfuchs.$module" \
-        --fallback-bundle-version 0.1.0 --output-path "$output/$module.doccarchive" --warnings-as-errors
+        --fallback-bundle-version 1.0.0 --output-path "$output/$module.doccarchive" --warnings-as-errors
     printf 'Documentation archive: %s/%s.doccarchive\n' "$output" "$module"
 done

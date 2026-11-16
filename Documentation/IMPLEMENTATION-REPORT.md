@@ -164,11 +164,26 @@ Before public release, verify the Apple DocC and SDK checks on the intended
 Apple toolchain, review the unresolved sanitizer observations and third-party
 material, enable and verify a private vulnerability-reporting channel, and
 confirm CI for the exact release commit. The local `0.1.0` tag refers to
-HighlightKit's initial commit, not the proposed Swift-Highlight release; no
-`0.1.0` tag was found on origin during this preparation. See
-[RELEASING.md](../RELEASING.md) before creating a release tag or publishing.
+HighlightKit's initial commit, not a Swift-Highlight release; the proposed
+initial release was subsequently changed to `1.0.0`. See [RELEASING.md](../RELEASING.md)
+before creating a release tag or publishing.
 
 The public-preparation source state was also built in standard release mode on
 Linux x86_64 with Swift 6.4.2 using `swift build -c release -j 4`; it completed
 successfully in 227.76 seconds. The WASI core and HTML products were rebuilt
 with the matching 6.4.2 SDK and `-Xswiftc -warnings-as-errors`, both passing.
+
+## 1.0.0 release preparation and macOS DocC feedback
+
+The maintainer selected `1.0.0` for the planned initial release. Neither a
+local nor remote `1.0.0` tag was found when checked. The existing local
+`0.1.0`, `0.1.1` and `0.2.0` tags belong to HighlightKit history and must not
+be published as Swift-Highlight releases by a blanket tag push.
+
+On macOS, the user reported the `Tools/build-docc.sh` run following commit
+`e36d69d`. Its output confirms a successful build and 215/215 documented Core
+symbols, followed by creation of `SwiftHighlight.doccarchive`. The output does
+not show HTML or Apple archives or a shell exit status. It therefore does not
+establish that those archives were built. The script was updated to locate each
+module's symbol graph separately, and its corrected macOS run remains to be
+verified.

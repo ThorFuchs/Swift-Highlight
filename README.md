@@ -48,7 +48,7 @@ summarizes observed checks, not an unsupported-platform guarantee:
 | WebAssembly (WASI Preview 1) | Core and HTML builds reported on macOS; one Swift/HTML consumer smoke executed on Node.js 24 from Linux |
 | Linux arm64, static Linux (musl), other Apple platforms | Not verified |
 
-The proposed first release is `0.1.0`; **it has not been published**. Until a
+The proposed first release is `1.0.0`; **it has not been published**. Until a
 release is available, use a local checkout or the existing development branch:
 
 ```swift
@@ -65,8 +65,8 @@ targets: [
 ]
 ```
 
-Branch dependencies are not stable releases. Once `0.1.0` is actually
-published, replace `branch:` with `from: "0.1.0"`. The repository is currently
+Branch dependencies are not stable releases. Once `1.0.0` is actually
+published, replace `branch:` with `from: "1.0.0"`. The repository is currently
 private, so consumers need access. See [release preparation](RELEASING.md).
 
 ## Analyze source
@@ -175,9 +175,10 @@ API contracts.
 
 ## Versioning and support
 
-Before 1.0, minor versions may contain breaking API changes; patch versions are
-intended for compatible fixes. There is no published stability guarantee until
-a release exists. Use [GitHub Issues](https://github.com/ThorFuchs/Swift-Highlight/issues)
+The planned 1.0.0 release establishes a Semantic Versioning contract for the
+public APIs of the Core, HTML and Apple library products. Before publication,
+the API remains provisional. Subsequent incompatible public API changes require
+a major version; compatible additions use a minor version and fixes use a patch. Use [GitHub Issues](https://github.com/ThorFuchs/Swift-Highlight/issues)
 for questions and bugs; report security issues as described in [SECURITY.md](SECURITY.md).
 
 New contributions are offered under [Apache-2.0](LICENSE). Imported MIT- and

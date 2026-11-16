@@ -1,4 +1,4 @@
-# Swift-Highlight 0.1.0 — draft release notes
+# Swift-Highlight 1.0.0 — draft release notes
 
 This is a draft for review, not a published release or tag.
 
@@ -22,7 +22,7 @@ destination and test results have not been independently recorded. The Apple
 DocC archive remains unverified here.
 
 Before publishing, complete the checks in [RELEASING.md](../RELEASING.md),
-including the local upstream `0.1.0` tag collision, third-party rights review,
+including upstream tag provenance, third-party rights review,
 private security reporting, Apple checks, Thread Sanitizer findings, and CI for
 the exact release commit. No hard time or input-size limit is enforced; callers
 must account for regex resource use on untrusted input.

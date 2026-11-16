@@ -44,4 +44,5 @@ jobs:
       - name: Install Python for documentation checks
         run: apt-get update && apt-get install -y python3
       - run: python3 Tools/check-documentation-links.py
+      - run: python3 -m unittest discover -s Tools -p 'test_*.py'
       - run: sh Tools/build-docc.sh

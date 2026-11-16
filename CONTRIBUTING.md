@@ -44,6 +44,7 @@ swift build
 swift test
 swift build -c release
 python3 Tools/check-documentation-links.py
+python3 -m unittest discover -s Tools -p 'test_*.py'
 sh Tools/build-docc.sh
 ```
 
