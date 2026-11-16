@@ -36,7 +36,8 @@ No race or leak freedom is inferred without instrumentation.
 | Linux x86_64 Core/HTML | Yes | Debug, Swift 6.1.3, 6.2.4 and 6.4.2 | `swift test -j 4`: 254 tests on Swift 6.1.3, 6.2.4 and 6.4.2, including 375 fixture cases | Swift 6.4.2 standard release and separate consumer passed |
 | macOS Core/HTML/Apple | In progress | No | No | Apple SDK unavailable |
 | iOS Apple | In progress | No | No | Apple SDK unavailable |
-| Linux arm64, WASI, musl | Not established | No | No | SDK/toolchain unavailable |
+| WASI Preview 1 (wasm32) | Core/HTML | Swift.org 6.4.2 | One Swift/HTML consumer smoke under Node 24 | Full fixture suite and Apple-host build unverified |
+| Linux arm64, musl | Not established | No | No | SDK/toolchain unavailable |
 
 After the branch was pushed, the user reported a successful local Apple build
 (`BUILD SUCCEEDED`) using the supplied commands. This is a user-reported result;
@@ -116,3 +117,19 @@ x86_64 using the `swift:6.4` image (Swift 6.4.2, digest
 from a frozen checkout of this version of the package source. It took 274.02
 seconds; no alternative optimization flags were used. After this snapshot,
 only test and documentation files were edited, not package source.
+
+WASI follow-up: On Linux x86_64, the official Swift.org 6.4.2 toolchain and
+`swift-6.4.2-RELEASE_wasm` SDK built both library products successfully. The
+SDK archive SHA-256 (`83baca83553f8c443cda7b84800912e6e709c3acd2e7ebf277794ca5836c0da5`)
+was checked against the Swift.org release data. The standalone
+`Examples/WASISmoke` package built as a wasm32-wasip1 executable; Node.js
+24.22.1's WASI Preview 1 implementation ran it successfully, checking a
+Swift keyword token and HTML escaping. This is a representative runtime smoke
+test, not full language or fixture coverage.
+
+The user's macOS build using Apple Swift 6.4.2 from the Xcode toolchain failed
+while importing the SDK's precompiled Foundation module with a compiler-version
+mismatch. Swift.org's Wasm instructions call for the matching Swift.org
+toolchain even on macOS with Xcode installed. The successful Linux cross-build
+supports that toolchain mismatch as the likely cause; the Mac retry has not yet
+been performed and its outcome is not assumed.

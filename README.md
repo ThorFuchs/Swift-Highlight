@@ -69,5 +69,4 @@ full HTML post-processor or a cmark adapter.
 Regexes run synchronously and may consume substantial time or memory on
 untrusted input; cancellation is not a hard interruption of an ICU regex call.
 Set input limits in the calling application. No fixed resource bound is
-currently enforced by this package. Apple SDKs, Linux architectures other than
-x86_64, WASI and musl are not verified in this environment.
+currently enforced by this package. Apple SDKs, Linux architectures other than x86_64, and musl are not verified in this environment. WASI Preview 1 has passed a single Swift and HTML runtime smoke test; see [the example](Examples/WASISmoke/README.md).
