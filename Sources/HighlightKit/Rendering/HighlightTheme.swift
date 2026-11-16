@@ -9,16 +9,22 @@ public typealias HighlightColor = UIColor
 public typealias HighlightFont = UIFont
 #elseif canImport(AppKit)
 public import AppKit
+/// The platform color type (`NSColor`).
 public typealias HighlightColor = NSColor
+/// The platform font type (`NSFont`).
 public typealias HighlightFont = NSFont
 #endif
 
 /// Text styling for one scope.
 public struct ScopeStyle: Sendable {
+    /// An optional foreground color override.
     public var color: HighlightColor?
+    /// Whether to request a bold font variant.
     public var bold: Bool
+    /// Whether to request an italic font variant.
     public var italic: Bool
 
+    /// Creates a scope style with optional color and font traits.
     public init(color: HighlightColor? = nil, bold: Bool = false, italic: Bool = false) {
         self.color = color
         self.bold = bold
@@ -38,8 +44,10 @@ public struct HighlightTheme: Sendable {
     public struct FontSpec: Sendable {
         /// PostScript font name; `nil` uses the system monospaced font.
         public var name: String?
+        /// The font size in points.
         public var size: CGFloat
 
+        /// Creates a font specification from an optional PostScript name and point size.
         public init(name: String? = nil, size: CGFloat = 13) {
             self.name = name
             self.size = size
@@ -64,6 +72,7 @@ public struct HighlightTheme: Sendable {
     /// structurally; string literals work for custom scopes.
     public var styles: [HighlightScope: ScopeStyle]
 
+    /// Creates a theme from base colors, a font, and scope-specific styles.
     public init(
         foregroundColor: HighlightColor,
         backgroundColor: HighlightColor,

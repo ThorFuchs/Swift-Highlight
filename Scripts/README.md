@@ -40,7 +40,7 @@ single, terminal, known unit and rejects every other out-of-range token;
 normalization count instead of hiding it.
 
 For a reproducible result, record the highlight.js commit, language,
-count, seed, HighlightKit commit, OS, and Swift toolchain. Reference errors
+count, seed, Swift-Highlight commit, OS, and Swift toolchain. Reference errors
 are failures rather than silently skipped inputs.
 
 ## Verify checked-in fixtures
@@ -49,7 +49,7 @@ are failures rather than silently skipped inputs.
 checks the exact reference commit, inventory, and every checked-in token and
 relevance expectation without modifying them. It uses the same pinned Node
 build and emitter as the differential runner. A mismatch exits nonzero;
-fixture changes require a separate reviewed update. Add `--output-dir /tmp/new-fixtures` to generate 375 JSON files into a new directory outside the repository for inspection; this never updates the checked-in files.
+fixture changes require a separate reviewed update. Add `--output-dir /tmp/new-fixtures` to generate 375 JSON files into a new directory outside the repository after the existing expectations pass; this never updates the checked-in files. It is not a generator for a changed or expanded corpus.
 
 ## Linux Thread Sanitizer control
 

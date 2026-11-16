@@ -50,8 +50,9 @@ Retained license texts and unresolved fixture provenance are described in
 `THIRD_PARTY_NOTICES.md` and `Documentation/FIXTURE-PROVENANCE.md`. Raw byte
 comparison found 354 matches against the pinned highlight.js tree. Of the 21
 non-identical fixtures, 15 closely resemble reference files, two extend a
-reference file, and four lack a match; this is not proof of ownership of
-contributed content. This is not a completed distribution audit. No release,
+reference file, and four exactly match fixtures at later highlight.js commits
+whose root BSD-3-Clause license is unchanged. This is not proof of ownership
+of all contributed content. This is not a completed distribution audit. No release,
 tag, PR or publish was created by this work.
 
 The 6.2.4 Linux test run used `swift:6.2.4` (image digest
@@ -139,3 +140,35 @@ imports were narrowed in a later change. Both WASI library products were then
 rebuilt on Linux using Swift 6.4.2 with `-Xswiftc -warnings-as-errors`; both
 passed. The full 254-test Linux suite also passed with Swift 6.1.3. No local
 WASI execution or full fixture test was reported.
+
+## Public-release preparation
+
+The project documentation was aligned with the structure of Swift-GFM. DocC
+catalogs now cover the core, HTML and Apple layers. On Linux x86_64 with Swift
+6.4.2, `Tools/build-docc.sh` built the core and HTML archives with DocC warnings
+as errors and checked documentation on 215/215 and 8/8 source-declared public
+symbols respectively. The Apple archive was skipped because this host has no
+Apple SDK; its symbols and documentation have not been verified here. The
+local-link checker, 254-test Swift 6.4.2 suite, and a separate Swift 6.1.3
+consumer using the documented core and HTML APIs also passed. The added CI
+documentation job has not yet run on GitHub.
+
+The four previously unmatched code fixtures were compared byte-for-byte to
+later highlight.js commits, and the root BSD-3-Clause text at each commit
+matched the retained license. Seventeen other fixtures differ from the pinned
+reference; similarities and exact-prefix relationships are recorded in the
+provenance inventory. Quoted material and individual contributions still need
+release review; this analysis is not a legal opinion.
+
+Before public release, verify the Apple DocC and SDK checks on the intended
+Apple toolchain, review the unresolved sanitizer observations and third-party
+material, enable and verify a private vulnerability-reporting channel, and
+confirm CI for the exact release commit. The local `0.1.0` tag refers to
+HighlightKit's initial commit, not the proposed Swift-Highlight release; no
+`0.1.0` tag was found on origin during this preparation. See
+[RELEASING.md](../RELEASING.md) before creating a release tag or publishing.
+
+The public-preparation source state was also built in standard release mode on
+Linux x86_64 with Swift 6.4.2 using `swift build -c release -j 4`; it completed
+successfully in 227.76 seconds. The WASI core and HTML products were rebuilt
+with the matching 6.4.2 SDK and `-Xswiftc -warnings-as-errors`, both passing.

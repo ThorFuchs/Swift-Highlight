@@ -73,8 +73,10 @@ public final class Highlighter: Sendable {
         }
     }
 
-    /// Explicit-language path that reports unknown languages, invalid grammars,
-    /// and top-level engine aborts. Illegal input is indicated by result.illegal.
+    /// Highlights with an explicit language and reports compilation or engine failures.
+    ///
+    /// Nested language failures are reported too. When `ignoreIllegals` is false,
+    /// rejected input is reported through `result.illegal` with no tokens.
     public func highlightStrict(_ code: String, as language: String, ignoreIllegals: Bool = true) throws -> HighlightResult {
         try registry.highlight(code, languageName: language, ignoreIllegals: ignoreIllegals, strictErrors: true).bindingSource(code)
     }
@@ -99,7 +101,10 @@ public final class Highlighter: Sendable {
 
 /// An engine stopped before completing its scan.
 public enum HighlightFailure: Error, Sendable, Equatable {
+    /// The engine stopped before completing the scan.
     case engineAborted
+    /// A nested language or automatic-detection candidate failed to compile or run.
     case nestedLanguage(String)
+    /// Nested detection had missing candidates or could not progress.
     case nestedAutoDetection
 }

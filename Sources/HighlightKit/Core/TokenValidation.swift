@@ -2,7 +2,9 @@ internal import Foundation
 
 /// Invalid token ranges must never be rendered as if they were valid.
 public enum TokenValidationError: Error, Sendable, Equatable {
+    /// The supplied text differs from the source retained by the result.
     case sourceMismatch
+    /// The token at the given index has an invalid or overlapping range.
     case invalidRange(index: Int)
 }
 

@@ -1,5 +1,8 @@
 # Testing
 
+> Historical HighlightKit test and coverage notes are retained below. For current
+> Swift-Highlight results and platform status, see [the implementation report](../Documentation/IMPLEMENTATION-REPORT.md).
+
 Run the default suite with `swift test`. Do not hard-code a test count in
 documentation: Swift Testing parameterization expands cases (including 375
 fidelity fixtures), and the count changes as regressions are added.
@@ -9,12 +12,12 @@ the macOS test host:
 
 ```sh
 SDK=$(xcrun --sdk iphoneos --show-sdk-path)
-swift build --target HighlightKit \
+swift build --target SwiftHighlightApple \
   --triple arm64-apple-ios18.0 --sdk "$SDK"
 ```
 
-The final 2026-07-10 gate compiled the entire target successfully against iOS
-18.0; this catches accidental use of APIs newer than the package manifest.
+The upstream HighlightKit 2026-07-10 gate reported compilation against iOS
+18.0; this is not a build of the separated Swift-Highlight Apple target. Such a check can catch accidental use of APIs newer than the package manifest.
 
 ## Layers
 

@@ -211,10 +211,10 @@ where a begin pattern needs the text.
    variable if preferred. The checked-in harness exits nonzero on reference
    errors or output differences.
 4. Add or update paired fixtures under
-   `Tests/HighlightKitTests/Fixtures/<lang>/`. This repository does not ship
-   a fixture generator; a fixture-changing PR must include or link the
-   reviewed generator, pin its highlight.js commit, and record its exact
-   invocation. Inputs may be upstream-derived or reviewed adversarial cases,
+   `Tests/HighlightKitTests/Fixtures/<lang>/`. Use the pinned reference and
+   `Scripts/verify-fixtures.py` to verify the existing corpus and optionally
+   generate output outside the checkout when the existing expectations pass. For changes to the corpus, supply a separate reviewed generator. A fixture-changing PR must explain
+   and review its generator, reference revision, and exact invocation. Inputs may be upstream-derived or reviewed adversarial cases,
    but expected token JSON must always be regenerated from the pinned source;
    never hand-edit it merely to make a failure pass.
 5. `FIDELITY_LANG=<lang> swift test --filter matchesReference` — every

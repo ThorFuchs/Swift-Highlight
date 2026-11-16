@@ -10,14 +10,19 @@ import Foundation
 public enum CommonModes {
     // MARK: Common pattern sources
 
+    /// A regex source that never matches.
     public static let matchNothingRe = "\\b\\B"
+    /// A regex source for an ASCII-letter-led identifier.
     public static let identRe = "[a-zA-Z]\\w*"
+    /// A regex source for an identifier that may start with an underscore.
     public static let underscoreIdentRe = "[a-zA-Z_]\\w*"
+    /// A regex source for a simple decimal number.
     public static let numberRe = "\\b\\d+(\\.\\d+)?"
     /// 0x…, decimal, float with exponent
     public static let cNumberRe = "(-?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)"
     /// 0b…
     public static let binaryNumberRe = "\\b(0b[01]+)"
+    /// A regex source for tokens that can precede a regular-expression literal.
     public static let reStartersRe =
         "!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~"
 
@@ -43,18 +48,22 @@ public enum CommonModes {
         )
     }
 
+    /// A fresh mode matching a backslash escape.
     public static var backslashEscape: Mode {
         Mode(begin: "\\\\[\\s\\S]", relevance: 0)
     }
 
+    /// A fresh single-quoted string mode with escapes.
     public static var aposStringMode: Mode {
         Mode(scope: "string", begin: "'", end: "'", illegal: ["\\n"], contains: [backslashEscape])
     }
 
+    /// A fresh double-quoted string mode with escapes.
     public static var quoteStringMode: Mode {
         Mode(scope: "string", begin: "\"", end: "\"", illegal: ["\\n"], contains: [backslashEscape])
     }
 
+    /// A fresh relevance mode for common prose words.
     public static var phrasalWordsMode: Mode {
         Mode(begin: "\\b(a|an|the|are|I'm|isn't|don't|doesn't|won't|but|just|should|pretty|simply|enough|gonna|going|wtf|so|such|will|you|your|they|like|more)\\b")
     }
@@ -99,30 +108,37 @@ public enum CommonModes {
         return "[ ]+(\(englishWord)[.]?[:]?([.][ ]|[ ])){3}"
     }()
 
+    /// A fresh C-style line-comment mode.
     public static var cLineCommentMode: Mode {
         comment("//", "$")
     }
 
+    /// A fresh C-style block-comment mode.
     public static var cBlockCommentMode: Mode {
         comment("/\\*", "\\*/")
     }
 
+    /// A fresh hash-prefixed line-comment mode.
     public static var hashCommentMode: Mode {
         comment("#", "$")
     }
 
+    /// A fresh simple-decimal number mode.
     public static var numberMode: Mode {
         Mode(scope: "number", begin: .re(numberRe), relevance: 0)
     }
 
+    /// A fresh C-style number mode.
     public static var cNumberMode: Mode {
         Mode(scope: "number", begin: .re(cNumberRe), relevance: 0)
     }
 
+    /// A fresh binary-number mode.
     public static var binaryNumberMode: Mode {
         Mode(scope: "number", begin: .re(binaryNumberRe), relevance: 0)
     }
 
+    /// A fresh slash-delimited regular-expression mode.
     public static var regexpMode: Mode {
         Mode(
             scope: "regexp",
@@ -135,10 +151,12 @@ public enum CommonModes {
         )
     }
 
+    /// A fresh title mode using a letter-led identifier.
     public static var titleMode: Mode {
         Mode(scope: "title", begin: .re(identRe), relevance: 0)
     }
 
+    /// A fresh title mode allowing an initial underscore.
     public static var underscoreTitleMode: Mode {
         Mode(scope: "title", begin: .re(underscoreIdentRe), relevance: 0)
     }

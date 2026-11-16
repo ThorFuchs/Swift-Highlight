@@ -13,6 +13,6 @@ paste the code here
 **Expected** — highlight.js's output for the same input
 (https://highlightjs.org/demo has a live demo).
 
-**Actual** — the tokens or rendering HighlightKit produced.
+**Actual** — the tokens or rendering Swift-Highlight produced.
 
-**Environment** — HighlightKit version, platform + OS version.
+**Environment** — Swift-Highlight version, platform + OS version.

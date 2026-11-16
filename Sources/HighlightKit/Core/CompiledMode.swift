@@ -142,10 +142,14 @@ final class CompiledLanguage: @unchecked Sendable {
 
 /// Errors raised while compiling a grammar.
 public enum HighlightError: Error, CustomStringConvertible {
+    /// The requested language or alias is not registered.
     case unknownLanguage(String)
+    /// A grammar pattern could not be compiled; includes the underlying error.
     case invalidRegex(language: String, pattern: String, underlying: any Error)
+    /// A language definition violates a grammar constraint.
     case invalidGrammar(language: String, reason: String)
 
+    /// A human-readable description of the compilation failure.
     public var description: String {
         switch self {
         case .unknownLanguage(let name):

@@ -8,5 +8,5 @@ labels: bug
 
 **Minimal reproduction** — code snippet or failing input.
 
-**Environment** — HighlightKit version, Xcode/Swift version, platform +
+**Environment** — Swift-Highlight version, Xcode/Swift version, platform +
 OS, device or simulator.

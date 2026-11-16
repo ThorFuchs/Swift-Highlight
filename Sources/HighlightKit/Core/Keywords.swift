@@ -11,16 +11,20 @@ public struct Keywords: Sendable {
     /// A single scope's word list. Expressible as `"a b c"` (space
     /// separated) or `["a", "b", "c"]`.
     public struct Group: Sendable, ExpressibleByStringLiteral, ExpressibleByStringInterpolation, ExpressibleByArrayLiteral {
+        /// The words in this group, optionally suffixed with `|relevance`.
         public var words: [String]
 
+        /// Creates a group from individual keyword strings.
         public init(words: [String]) {
             self.words = words
         }
 
+        /// Creates a group by splitting a space-separated string.
         public init(stringLiteral value: String) {
             self.words = value.split(separator: " ").map(String.init)
         }
 
+        /// Creates a group from an array literal.
         public init(arrayLiteral elements: String...) {
             self.words = elements
         }
@@ -33,6 +37,7 @@ public struct Keywords: Sendable {
     /// Scope name → word list.
     public var groups: [String: Group]
 
+    /// Creates scoped keyword groups and an optional candidate-word pattern.
     public init(pattern: String? = nil, _ groups: [String: Group]) {
         self.pattern = pattern
         self.groups = groups
@@ -47,18 +52,21 @@ public struct Keywords: Sendable {
 }
 
 extension Keywords: ExpressibleByStringLiteral, ExpressibleByStringInterpolation {
+    /// Creates default-scope keywords from a space-separated string literal.
     public init(stringLiteral value: String) {
         self.init(keyword: Group(stringLiteral: value))
     }
 }
 
 extension Keywords: ExpressibleByArrayLiteral {
+    /// Creates default-scope keywords from an array literal.
     public init(arrayLiteral elements: String...) {
         self.init(keyword: Group(words: elements))
     }
 }
 
 extension Keywords: ExpressibleByDictionaryLiteral {
+    /// Creates keyword groups from a scope-to-group dictionary literal.
     public init(dictionaryLiteral elements: (String, Group)...) {
         self.init(Dictionary(uniqueKeysWithValues: elements))
     }

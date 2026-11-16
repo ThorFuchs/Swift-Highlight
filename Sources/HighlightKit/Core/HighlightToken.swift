@@ -20,6 +20,7 @@ public struct HighlightToken: Sendable, Hashable {
     /// `title.function`, `variable.language`.
     public var scope: String { scopes[scopes.count - 1] }
 
+    /// Creates a token. The scope array must not be empty; renderers validate the range separately.
     public init(range: NSRange, scopes: [String]) {
         precondition(!scopes.isEmpty, "a token must have at least one scope")
         self.range = range

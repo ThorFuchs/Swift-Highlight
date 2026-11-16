@@ -4,7 +4,14 @@ public import SwiftHighlight
 /// Produces HTML from UTF-16 token ranges. Class components must consist of
 /// ASCII letters, digits, hyphens, or underscores; dots separate components.
 public struct HTMLHighlightRenderer: Sendable {
-    public enum RenderError: Error, Sendable, Equatable { case invalidClass(String); case nullCharacter }
+    /// An error specific to HTML text or class rendering.
+    public enum RenderError: Error, Sendable, Equatable {
+        /// A scope or language name cannot be mapped to a safe class.
+        case invalidClass(String)
+        /// The source contains NUL, which HTML parsing cannot round-trip.
+        case nullCharacter
+    }
+    /// Creates a stateless HTML renderer.
     public init() {}
 
     /// Validates that this result belongs to exactly this source.
@@ -33,6 +40,7 @@ public struct HTMLHighlightRenderer: Sendable {
         return output
     }
 
+    /// Renders a `<pre><code>` wrapper. Callers must associate tokens with their source.
     public func codeBlock(_ source: String, tokens: [HighlightToken], language: String? = nil) throws -> String {
         let attribute = try language.map { " class=\"language-\(try cssName($0))\"" } ?? ""
         return "<pre><code\(attribute)>\(try render(source, tokens: tokens))</code></pre>"

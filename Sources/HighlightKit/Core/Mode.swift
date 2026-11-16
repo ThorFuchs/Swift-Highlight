@@ -4,7 +4,9 @@ public import Foundation
 /// list of patterns that are concatenated at compile time so that scopes
 /// can be assigned per part (highlight.js "multi-class" matches).
 public enum RegexRef: Sendable {
+    /// A single regex source.
     case re(String)
+    /// Ordered regex sources concatenated for a multi-part match.
     case parts([String])
 
     var single: String? {
@@ -14,17 +16,21 @@ public enum RegexRef: Sendable {
 }
 
 extension RegexRef: ExpressibleByStringLiteral, ExpressibleByStringInterpolation {
+    /// Creates a single-pattern reference from a string literal.
     public init(stringLiteral value: String) { self = .re(value) }
 }
 
 extension RegexRef: ExpressibleByArrayLiteral {
+    /// Creates a multi-part reference from a string array literal.
     public init(arrayLiteral elements: String...) { self = .parts(elements) }
 }
 
 /// A scope assignment: a single scope name for the whole mode, or a map of
 /// capture-group number → scope name for multi-part matches.
 public enum ScopeRef: Sendable {
+    /// A scope applied to the entire match.
     case name(String)
+    /// Scopes indexed by capture-group number.
     case multi([Int: String])
     /// Explicitly *no* scope — lets a variant cancel its base mode's
     /// scope (JavaScript's `className: null`).
@@ -32,10 +38,12 @@ public enum ScopeRef: Sendable {
 }
 
 extension ScopeRef: ExpressibleByStringLiteral, ExpressibleByStringInterpolation {
+    /// Creates a single scope from a string literal.
     public init(stringLiteral value: String) { self = .name(value) }
 }
 
 extension ScopeRef: ExpressibleByDictionaryLiteral {
+    /// Creates capture-group scopes from a dictionary literal.
     public init(dictionaryLiteral elements: (Int, String)...) {
         self = .multi(Dictionary(uniqueKeysWithValues: elements))
     }
@@ -79,6 +87,7 @@ public struct CallbackMatch {
 /// veto a match and stash data shared between `onBegin` and `onEnd` of the
 /// same mode (per highlight run).
 public final class Response {
+    /// Whether this callback has vetoed the current match.
     public private(set) var isMatchIgnored = false
 
     /// Free-form storage shared between the begin and end callbacks of a
@@ -89,6 +98,7 @@ public final class Response {
         self.data = data
     }
 
+    /// Vetoes the current match so the engine can consider another rule.
     public func ignoreMatch() {
         isMatchIgnored = true
     }
@@ -110,7 +120,9 @@ public final class Mode {
     /// Matches a complete expression (sugar for `begin` with an implicit
     /// zero-length `end`). Mutually exclusive with `begin`/`end`.
     public var match: RegexRef?
+    /// The regex that begins this mode.
     public var begin: RegexRef?
+    /// The regex that ends this mode.
     public var end: RegexRef?
     /// If matched inside this mode (and illegals are honored), parsing of
     /// the whole snippet is aborted.
@@ -125,15 +137,22 @@ public final class Mode {
 
     // MARK: Scoping
 
+    /// The scope assigned to the mode contents.
     public var scope: ScopeRef?
+    /// The scope or capture-group scopes assigned to the begin match.
     public var beginScope: ScopeRef?
+    /// The scope or capture-group scopes assigned to the end match.
     public var endScope: ScopeRef?
 
     // MARK: Behavior flags
 
+    /// Whether the begin match is attributed to the parent rather than this mode.
     public var excludeBegin = false
+    /// Whether the end match is attributed to the parent rather than this mode.
     public var excludeEnd = false
+    /// Whether to reprocess the begin match in the new mode.
     public var returnBegin = false
+    /// Whether to reprocess the end match in the parent mode.
     public var returnEnd = false
     /// Content is matched but attributed to the parent mode's buffer.
     public var skip = false
@@ -147,17 +166,20 @@ public final class Mode {
 
     // MARK: Content
 
+    /// Keyword groups recognized within this mode.
     public var keywords: Keywords?
     /// `nil` means "unset" (inheritable by variants); `[]` means
     /// explicitly no children — the distinction matters when merging
     /// variants, mirroring JavaScript object-key presence.
     public var contains: [Mode]?
+    /// Alternative mode definitions expanded during grammar compilation.
     public var variants: [Mode]?
     /// Mode entered immediately after this one ends.
     public var starts: Mode?
     /// Delegate the mode's content to other registered languages
     /// (auto-detected among the listed names; empty = all).
     public var subLanguage: [String]?
+    /// The relevance contribution used by automatic detection.
     public var relevance: Double?
     /// Free-form marker so other grammars can find and replace this mode
     /// (for example TypeScript extending JavaScript).
@@ -165,7 +187,9 @@ public final class Mode {
 
     // MARK: Callbacks
 
+    /// A callback that can inspect or veto a begin match.
     public var onBegin: ModeCallback?
+    /// A callback that can inspect or veto an end match.
     public var onEnd: ModeCallback?
 
     // MARK: Internal compilation state
@@ -174,6 +198,7 @@ public final class Mode {
     var internalBeforeBegin: ModeCallback?
     var cachedVariants: [Mode]?
 
+    /// Creates a mutable grammar mode. Return a fresh mode tree from each language factory.
     public init(
         scope: ScopeRef? = nil,
         match: RegexRef? = nil,

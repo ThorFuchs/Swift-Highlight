@@ -118,7 +118,7 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `go/strings.code.txt` | `test/markup/go/strings.txt` |
 | `groovy/default.code.txt` | `test/markup/groovy/default.txt` |
 | `groovy/detect-sample.code.txt` | `test/detect/groovy/default.txt` |
-| `groovy/numbers.code.txt` | **Unresolved** |
+| `groovy/numbers.code.txt` | Byte-identical to `test/markup/groovy/numbers.txt` at later highlight.js commit `8b5018a3883ebf3cd22c11353daced3938544d0e` |
 | `groovy/oneoffs.code.txt` | `test/markup/groovy/oneoffs.txt` |
 | `haskell/char.code.txt` | `test/markup/haskell/char.txt` |
 | `haskell/detect-sample.code.txt` | `test/detect/haskell/default.txt` |
@@ -253,7 +253,7 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `python/function-header.code.txt` | `test/markup/python/function-header.txt` |
 | `python/identifiers.code.txt` | `test/markup/python/identifiers.txt` |
 | `python/keywords.code.txt` | `test/markup/python/keywords.txt` |
-| `python/lazy-import.code.txt` | **Unresolved** |
+| `python/lazy-import.code.txt` | Byte-identical to `test/markup/python/lazy-import.txt` at later highlight.js commit `40fc89efb14216a8e491f83ba543e276b18af842` |
 | `python/matrix-multiplication.code.txt` | `test/markup/python/matrix-multiplication.txt` |
 | `python/numbers.code.txt` | `test/markup/python/numbers.txt` |
 | `r/detect-sample.code.txt` | `test/detect/r/default.txt` |
@@ -271,7 +271,7 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `ruby/strings.code.txt` | `test/markup/ruby/strings.txt` |
 | `rust/comments.code.txt` | `test/markup/rust/comments.txt` |
 | `rust/detect-sample.code.txt` | `test/detect/rust/default.txt` |
-| `rust/extern.code.txt` | **Unresolved** |
+| `rust/extern.code.txt` | Byte-identical to `test/markup/rust/extern.txt` at later highlight.js commit `5478eb8a6b54306a7c81f75158f814ccc2eef214` |
 | `rust/invoked-keywords.code.txt` | `test/markup/rust/invoked-keywords.txt` |
 | `rust/numbers.code.txt` | Similar, not byte-identical: `test/markup/rust/numbers.txt` (similarity 0.921); attribution unconfirmed |
 | `rust/sample1.code.txt` | Similar, not byte-identical: `test/markup/rust/sample1.txt` (similarity 0.984); attribution unconfirmed |
@@ -305,7 +305,7 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `shell/command-continuation.code.txt` | `test/markup/shell/command-continuation.txt` |
 | `shell/detect-sample.code.txt` | `test/detect/shell/default.txt` |
 | `shell/plain-prompt.code.txt` | `test/markup/shell/plain-prompt.txt` |
-| `shell/prompt-with-period.code.txt` | **Unresolved** |
+| `shell/prompt-with-period.code.txt` | Byte-identical to `test/markup/shell/prompt-with-period.txt` at later highlight.js commit `5116e879ddbc528ab698185cac64456a3da60014` |
 | `shell/prompt-with-slash.code.txt` | `test/markup/shell/prompt-with-slash.txt` |
 | `shell/prompt-with-tilde.code.txt` | `test/markup/shell/prompt-with-tilde.txt` |
 | `shell/simple.code.txt` | `test/markup/shell/simple.txt` |
@@ -380,8 +380,10 @@ Compared raw bytes against tracked highlight.js source files at commit `08cb242e
 | `yaml/string.code.txt` | `test/markup/yaml/string.txt` |
 | `yaml/tag.code.txt` | `test/markup/yaml/tag.txt` |
 
-The four still unmatched files were already present in HighlightKit's initial
-commit `b6c89dd5012d16a2d2dba44a2df758b474e81a59`. That commit's MIT license
-covers the distributed HighlightKit source under its stated terms; this fact
-alone does not establish whether any third-party material was incorporated
-before that commit.
+The four fixtures above are absent from the pinned 11.11.1 tree but are
+byte-identical to files in the later highlight.js commits shown. The root
+BSD-3-Clause license at each of those commits is identical to the license in
+`Licenses/highlight.js-BSD-3-Clause.txt`. All four were also present in
+HighlightKit's initial commit `b6c89dd5012d16a2d2dba44a2df758b474e81a59`.
+Byte identity establishes a match, not independent verification of all rights
+in the original contribution.

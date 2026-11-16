@@ -1,79 +1,75 @@
-# Contributing to HighlightKit
+# Contributing to Swift-Highlight
 
-Thanks for helping build native syntax highlighting for Apple platforms.
+Start with a focused issue or a reproducible example. Open a pull request against
+the project's default branch once your change is ready for review. The project
+is maintained by [Thorsten Fuchs](https://github.com/ThorFuchs).
 
-## Development setup
+## Set up
+
+Use Swift 6.1 or later. The package has no external Swift package dependencies;
+Foundation's regular expressions and `Synchronization` come from the selected
+Swift toolchain and platform. Apple rendering requires an Apple SDK. For WASI,
+use a Swift.org toolchain and SDK of the same release. The
+[implementation report](Documentation/IMPLEMENTATION-REPORT.md) records what
+has actually been tested.
 
 ```sh
-git clone https://github.com/PhraseHQ/HighlightKit.git && cd HighlightKit
-swift build          # Xcode 16.3+ / Swift 6.1+
-swift test           # all tests must stay green
+git clone https://github.com/ThorFuchs/Swift-Highlight.git
+cd Swift-Highlight
+swift build
+swift test
 ```
 
-Concurrency and coverage are separate instrumented runs:
+The repository is private while release preparation is in progress; access is
+required to clone it. Do not assume a release tag or public default branch exists.
+
+## Make a change
+
+- Keep the `SwiftHighlight`, `SwiftHighlightHTML`, and `SwiftHighlightApple`
+  boundaries. Core must not depend on Apple UI frameworks or a renderer.
+- Add a focused regression test when behavior changes. Preserve UTF-16 source
+  ranges, plain-text gaps, strict diagnostics, and safe HTML escaping.
+- Document public APIs and meaningful behavior changes. Add user-visible changes
+  to the `Unreleased` section of [CHANGELOG.md](CHANGELOG.md).
+- Do not rewrite fixture inputs or expected tokens to hide a failure. Check the
+  pinned reference and document intentional differences.
+- For performance work, report the workload, command, toolchain, environment,
+  baseline, and candidate measurements. The retained upstream benchmark notes
+  are historical context, not measurements of your change.
+
+## Verify
 
 ```sh
-swift test --sanitize=thread \
-  --filter 'LanguageRegistryTests|IncrementalTests|StressTests|CoreCoverageCompletionTests'
-swift test --enable-code-coverage
-swift test --show-codecov-path
-```
-
-## The correctness bar
-
-HighlightKit is verified against highlight.js itself, and PRs are held to
-that:
-
-- **375 token-exact fidelity fixtures** (`Tests/HighlightKitTests/Fixtures/`)
-  assert identical token streams to the reference highlight.js on every
-  `swift test`. A change that shifts any token is either a bug or needs
-  regenerated fixtures with justification.
-- **Differential suites** pin hand-written fast paths to live ICU at
-  runtime: every matcher prefilter (arrow functions, number literals,
-  identifier heads, keyword alternations) is fuzzed against raw
-  `NSRegularExpression` enumeration with seeded, deterministic corpora.
-  If you optimize a matching path, add the same kind of differential test.
-- Faithful-port rule: highlight.js behavior wins, including quirks.
-  Deliberate divergences must be pinned by an explicit test.
-
-## Performance
-
-Performance changes must come with numbers. Use the bench target:
-
-```sh
+swift build
+swift test
 swift build -c release
-.build/release/highlight-bench 5 javascript            # throughput
-.build/release/highlight-bench 5 javascript --incremental  # per-line latency
-.build/release/highlight-bench --auto 10               # language detection
-.build/release/highlight-bench --render 20 swift       # NSAttributedString
+python3 Tools/check-documentation-links.py
+sh Tools/build-docc.sh
 ```
 
-Freeze baseline and candidate executables from the same
-`swift build -c release` configuration. Warm each scenario, interleave
-process-level A/B order in the same thermal batch, include an unaffected
-negative-control workload, and verify token counts. Report absolute medians,
-paired relative effects, confidence intervals, machine/OS/toolchain, and exact
-commands; retain the raw machine-readable samples and statistics script. An
-optimization that cannot demonstrate a real-workload win is
-reverted; an interval crossing zero is neutral. Never compare a testable binary
-emitted by `swift test` with a production binary emitted by `swift build`.
+DocC needs Python 3 and a `docc` executable from the selected Swift toolchain.
+The documentation script checks public symbol comments for available modules;
+on Linux it reports that Apple DocC is skipped because Apple SDK symbols are
+unavailable. Validate the Apple archive on an Apple toolchain separately.
 
-Record every adopted and rejected experiment in
-[`Docs/PERFORMANCE.md`](Docs/PERFORMANCE.md). Several "obviously faster"
-designs measured slower; keeping the rejected results prevents the same work
-from being repeated.
+The fixture inventory asserts 375 code/expectation pairs across 65 languages;
+the parameterized fidelity test compares tokens and relevance. For grammar and
+engine changes, also follow [Scripts/README.md](Scripts/README.md) to build the
+pinned highlight.js reference and run `Scripts/verify-fixtures.py` and relevant
+differential checks. The verifier does not overwrite checked-in expectations.
 
-## Adding a language
+The [WASI smoke example](Examples/WASISmoke/README.md) demonstrates a separate
+consumer. Apple-specific changes require the relevant Apple SDK checks. Linux
+Thread Sanitizer currently reports warnings even in a minimal `Mutex` control;
+that observation does not prove a package warning harmless. Report actual
+commands, failures, and unavailable checks in the pull request.
 
-Grammars live in `Sources/HighlightKit/Languages/`, one file per language,
-ported from the corresponding highlight.js 11.11.1 grammar. Register a new
-descriptor in `LanguageCatalog`, compare it with the pinned source through
-`Scripts/difftest.py`, add reviewed fixtures, and make the fidelity suite pass.
-The full workflow and fixture-provenance requirements are in
-[`Docs/PORTING.md`](Docs/PORTING.md).
+## Licensing and conduct
 
-## Commit style
+New contributions are offered under [Apache-2.0](LICENSE). Preserve existing
+MIT/BSD notices, file headers and attribution; see [NOTICE](NOTICE) and
+[third-party notices](THIRD_PARTY_NOTICES.md). For new third-party material,
+record its source, revision, license and any required notices.
 
-`feat:` / `fix:` / `perf:` / `test:` / `refactor:` / `chore:` prefixes;
-imperative subject; body explains the why and includes measured numbers
-for perf changes.
+Follow [community standards](CODE_OF_CONDUCT.md). Report security issues
+privately as described in [SECURITY.md](SECURITY.md).
