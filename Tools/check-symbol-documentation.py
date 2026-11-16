@@ -16,6 +16,11 @@ for name in sys.argv[1:]:
     for symbol in symbols:
         if symbol.get("accessLevel") != "public" or not symbol.get("location"):
             continue
+        # Swift emits extension containers for foreign types in secondary
+        # graphs. They are not declarations of those types; their public
+        # members have separate symbols and must still be documented.
+        if symbol.get("kind", {}).get("identifier") == "swift.extension":
+            continue
         count += 1
         if not symbol.get("docComment", {}).get("lines"):
             missing.append(".".join(symbol["pathComponents"]))

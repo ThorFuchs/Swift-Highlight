@@ -187,3 +187,14 @@ not show HTML or Apple archives or a shell exit status. It therefore does not
 establish that those archives were built. The script was updated to locate each
 module's symbol graph separately, and its corrected macOS run remains to be
 verified.
+
+The subsequent macOS run at `fe6fc79` built the Core and HTML DocC archives
+with 215/215 and 8/8 documented public symbols. It did not build the Apple
+archive: the checker reported `HighlightResult`, `Highlighter`, and `NSColor`
+as undocumented and exited 1 (87/90). A separate two-module Swift 6.4.2
+reproduction showed that cross-module and Foundation extensions emit synthetic
+`swift.extension` container symbols alongside their separately declared public
+members. The checker now skips only those containers; it still requires every
+public member's documentation and rejects graphs containing only containers.
+The fix and its regression tests were checked on Linux; the Apple DocC run must
+be repeated on macOS before calling it verified.
