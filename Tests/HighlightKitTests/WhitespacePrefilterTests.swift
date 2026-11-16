@@ -1,6 +1,9 @@
 import Foundation
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 /// The bare `\s+` rule synthesizes ASCII whitespace runs and defers to
 /// ICU whenever a non-ASCII unit could participate — `\s` is

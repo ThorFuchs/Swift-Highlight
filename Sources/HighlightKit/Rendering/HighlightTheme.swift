@@ -1,3 +1,5 @@
+#if canImport(UIKit) || canImport(AppKit)
+import SwiftHighlight
 public import Foundation
 #if canImport(UIKit)
 public import UIKit
@@ -109,7 +111,8 @@ extension HighlightResult {
     /// - Parameters:
     ///   - code: the exact code string that produced this result.
     ///   - theme: colors and font to apply.
-    public func attributedString(for code: String, theme: HighlightTheme) -> NSAttributedString {
+    public func attributedString(for code: String, theme: HighlightTheme) throws -> NSAttributedString {
+        try validateTokens(tokens, in: code)
         let baseFont = theme.font.resolved()
         let text = NSMutableAttributedString(
             string: code,
@@ -118,12 +121,11 @@ extension HighlightResult {
                 .foregroundColor: theme.foregroundColor,
             ]
         )
-        let fullLength = (code as NSString).length
 
         var boldItalicCache: [String: HighlightFont] = [:]
         for token in tokens {
             guard let style = theme.style(for: token) else { continue }
-            guard token.range.location + token.range.length <= fullLength else { continue }
+
 
             var attributes: [NSAttributedString.Key: Any] = [:]
             if let color = style.color {
@@ -162,3 +164,5 @@ extension HighlightFont {
         #endif
     }
 }
+
+#endif

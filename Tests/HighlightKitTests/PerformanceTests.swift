@@ -1,6 +1,9 @@
 import Foundation
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 /// Throughput measurements — opt-in via `HIGHLIGHT_BENCH=1 swift test -c
 /// release --filter Performance`. Kept out of the default run so CI time

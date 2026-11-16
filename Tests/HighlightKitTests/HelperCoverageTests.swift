@@ -1,6 +1,9 @@
 import Foundation
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 /// Direct coverage for reusable helpers and literal-syntax initializers
 /// that grammars can use but the bundled ones happen not to exercise.

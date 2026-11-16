@@ -2,7 +2,9 @@ import Foundation
 
 extension LanguageCatalog {
     /// Swift. Port of highlight.js `languages/swift.js`.
-    public static let swift = LanguageDescriptor(name: "swift") {
+    public static let swift = LanguageDescriptor(name: "swift") { makeSwiftDefinition() }
+
+    private static func makeSwiftDefinition() -> LanguageDefinition {
         let whitespace = Mode(match: #"\s+"#, relevance: 0)
         // https://docs.swift.org/swift-book/ReferenceManual/LexicalStructure.html#ID411
         let blockComment = CommonModes.comment(#"/\*"#, #"\*/"#) { mode in
@@ -309,13 +311,16 @@ extension LanguageCatalog {
             relevance: 0
         )
         // Matches tuples as well as the parameter list of a function type.
-        let tupleContains: [Mode] = [Mode.selfReference, tupleElementName]
-            + comments
-            + [regexp]
-            + keywordModes + builtIns + operators
-            + [number, string]
-            + identifiers + attributes
-            + [type]
+        var tupleContains: [Mode] = [Mode.selfReference, tupleElementName]
+        tupleContains += comments
+        tupleContains += [regexp]
+        tupleContains += keywordModes
+        tupleContains += builtIns
+        tupleContains += operators
+        tupleContains += [number, string]
+        tupleContains += identifiers
+        tupleContains += attributes
+        tupleContains += [type]
         let tuple = Mode(
             begin: #"\("#,
             end: #"\)"#,
@@ -339,11 +344,13 @@ extension LanguageCatalog {
             ],
             relevance: 0
         )
-        let functionParametersContains: [Mode] = [functionParameterName]
-            + comments + keywordModes + operators
-            + [number, string]
-            + attributes
-            + [type, tuple]
+        var functionParametersContains: [Mode] = [functionParameterName]
+        functionParametersContains += comments
+        functionParametersContains += keywordModes
+        functionParametersContains += operators
+        functionParametersContains += [number, string]
+        functionParametersContains += attributes
+        functionParametersContains += [type, tuple]
         let functionParameters = Mode(
             begin: #"\("#,
             end: #"\)"#,
@@ -473,8 +480,8 @@ extension LanguageCatalog {
             ]
         }
 
-        let rootContains: [Mode] = comments
-            + [
+        var rootContains: [Mode] = comments
+        rootContains += [
                 functionOrMacro,
                 initSubscript,
                 classFuncDeclaration,
@@ -490,10 +497,13 @@ extension LanguageCatalog {
                 ),
                 regexp,
             ]
-            + keywordModes + builtIns + operators
-            + [number, string]
-            + identifiers + attributes
-            + [type, tuple]
+        rootContains += keywordModes
+        rootContains += builtIns
+        rootContains += operators
+        rootContains += [number, string]
+        rootContains += identifiers
+        rootContains += attributes
+        rootContains += [type, tuple]
         return LanguageDefinition(
             name: "swift",
             root: Mode(

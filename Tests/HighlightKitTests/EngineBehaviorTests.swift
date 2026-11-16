@@ -1,6 +1,9 @@
 import Foundation
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 @Suite("Engine behavior")
 struct EngineBehaviorTests {
@@ -151,8 +154,10 @@ struct EngineBehaviorTests {
             #expect(ns.substring(with: attr.range) == "\"名前😀\"")
         }
         // rendering an attributed string must not crash and covers everything
-        let attributed = result.attributedString(for: code, theme: .githubLight)
+        #if canImport(UIKit) || canImport(AppKit)
+        let attributed = try! result.attributedString(for: code, theme: .githubLight)
         #expect(attributed.length == ns.length)
+        #endif
     }
 
     @Test func registeringACustomLanguageWorks() {

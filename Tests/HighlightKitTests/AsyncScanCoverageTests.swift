@@ -1,7 +1,10 @@
 import Foundation
 import Synchronization
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 /// Every hand-written prefilter has an async variant: when the cache
 /// carries a cancellation probe, scans run in chunks and poll the probe

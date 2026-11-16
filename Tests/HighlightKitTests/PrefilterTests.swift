@@ -1,6 +1,9 @@
 import Foundation
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 /// Unit coverage for the matcher prefilters. These paths are also
 /// exercised end-to-end by the fidelity suite; the cases here pin the

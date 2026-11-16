@@ -1,6 +1,9 @@
 import Foundation
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 /// The bare ECMAScript identifier rule is matched by a raw UTF-16 scan
 /// with no ICU fallback at all — the two ASCII classes are the entire

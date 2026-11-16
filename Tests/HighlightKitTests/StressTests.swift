@@ -1,9 +1,13 @@
 import Foundation
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 @Suite("Stress and memory")
 struct StressTests {
+    #if canImport(Darwin)
     private static func footprintBytes() -> Int {
         var info = task_vm_info_data_t()
         var count = mach_msg_type_number_t(
@@ -17,6 +21,8 @@ struct StressTests {
         guard result == KERN_SUCCESS else { return 0 }
         return Int(info.phys_footprint)
     }
+
+    #endif
 
     /// Variant expansion replaces raw modes with clones and
     /// parent-dependent modes with copies, detaching the originals from
@@ -66,6 +72,7 @@ struct StressTests {
         #expect(parentDependent == nil)
     }
 
+    #if canImport(Darwin)
     /// Repeated highlighting must not accumulate memory: all per-run
     /// state (match caches, emitters, frames) dies with the run; only
     /// compiled grammars persist, and those are warmed before measuring.
@@ -105,6 +112,8 @@ struct StressTests {
         // all per-run state dies with the run. Slack for allocator noise.
         #expect(growth < 8_000_000, "footprint grew by \(growth) bytes over 500 steady-state runs")
     }
+
+    #endif
 
     /// Deeply nested input must not blow the stack or the iteration
     /// guard, and malformed/hostile inputs must terminate.

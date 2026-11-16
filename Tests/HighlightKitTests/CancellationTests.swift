@@ -2,7 +2,10 @@ import Foundation
 import Synchronization
 import Testing
 
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 @Suite("Cooperative cancellation")
 struct CancellationTests {

@@ -1,7 +1,10 @@
 #if os(macOS)
 import AppKit
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 /// Generates the README showcase images straight from the library —
 /// no external tooling, what you see is what `attributedString(for:)`
@@ -15,7 +18,7 @@ struct ScreenshotGenerator {
             "swift", "Swift — Xcode theme available too",
             """
             // TODO: ship it
-            import HighlightKit
+            import SwiftHighlight
 
             struct CodeCard: View {
                 @State private var source = "print(\\"hi\\")"

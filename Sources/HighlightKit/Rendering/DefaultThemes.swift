@@ -1,3 +1,5 @@
+#if canImport(UIKit) || canImport(AppKit)
+import SwiftHighlight
 import Foundation
 
 extension HighlightColor {
@@ -301,3 +303,5 @@ extension HighlightTheme {
         builtInThemes[name.lowercased()]
     }
 }
+
+#endif

@@ -1,6 +1,9 @@
 import Foundation
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 /// Differential coverage for the Swift-grammar prefilters
 /// (`identifierHeadStart`, `uppercaseBoundary`) and the tightened

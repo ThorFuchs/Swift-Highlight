@@ -1,6 +1,9 @@
 import Foundation
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 /// The arrow-function prefilter locates candidates by hand (literal `=>`
 /// scan + backward walk); a wrong walk silently loses or misplaces

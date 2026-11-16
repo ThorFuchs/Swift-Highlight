@@ -1,7 +1,10 @@
 import Foundation
 import Synchronization
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 /// Boundary and rarely-hit branches: public API surface, empty/degenerate
 /// inputs, error paths, and the engine's defensive guards.
@@ -22,7 +25,9 @@ struct EdgeCaseTests {
         for lang in ["json", "javascript", "swift", "xml", "plaintext"] {
             let result = Highlighter.shared.highlight("", as: lang)
             #expect(result.tokens.isEmpty)
-            #expect(result.attributedString(for: "", theme: .githubLight).length == 0)
+            #if canImport(UIKit) || canImport(AppKit)
+            #expect(try! result.attributedString(for: "", theme: .githubLight).length == 0)
+            #endif
         }
     }
 

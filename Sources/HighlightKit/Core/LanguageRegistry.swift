@@ -436,7 +436,8 @@ final class LanguageRegistry: Sendable {
         languageName: String,
         ignoreIllegals: Bool,
         continuation: Continuation? = nil,
-        ancestry: LanguageAncestry? = nil
+        ancestry: LanguageAncestry? = nil,
+        strictErrors: Bool = false
     ) throws -> HighlightResult {
         let language = try compiledLanguage(named: languageName)
         return try highlight(
@@ -444,7 +445,8 @@ final class LanguageRegistry: Sendable {
             language: language,
             ignoreIllegals: ignoreIllegals,
             continuation: continuation,
-            ancestry: ancestry
+            ancestry: ancestry,
+            strictErrors: strictErrors
         )
     }
 
@@ -457,7 +459,8 @@ final class LanguageRegistry: Sendable {
         ignoreIllegals: Bool,
         continuation: Continuation? = nil,
         ancestry: LanguageAncestry? = nil,
-        cancellationProbe: HighlightEngine.CancellationProbe? = nil
+        cancellationProbe: HighlightEngine.CancellationProbe? = nil,
+        strictErrors: Bool = false
     ) throws -> HighlightResult {
         let engine = HighlightEngine(
             registry: self,
@@ -483,6 +486,7 @@ final class LanguageRegistry: Sendable {
             case .illegal:
                 return HighlightResult(language: language.name, relevance: 0, illegal: true, tokens: [])
             case .potentialInfiniteLoop, .recursiveSubLanguage:
+                if strictErrors { throw HighlightFailure.engineAborted }
                 return HighlightResult(language: language.name, relevance: 0, illegal: false, tokens: [])
             }
         }
@@ -619,6 +623,7 @@ final class LanguageRegistry: Sendable {
         guard !Task.isCancelled else { return (index, nil) }
         // NSRegularExpression autoreleases match objects; drain per candidate
         // so parallel runs do not pool them until the whole task group exits.
+        #if canImport(ObjectiveC)
         let candidate = autoreleasepool {
             autodetectCandidate(
                 code,
@@ -627,6 +632,9 @@ final class LanguageRegistry: Sendable {
                 order: index + 1
             )
         }
+        #else
+        let candidate = autodetectCandidate(code, entry: entry, cancellationProbe: { Task.isCancelled }, order: index + 1)
+        #endif
         return Task.isCancelled ? (index, nil) : (index, candidate)
     }
 

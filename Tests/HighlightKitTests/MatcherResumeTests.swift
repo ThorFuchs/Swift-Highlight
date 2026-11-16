@@ -1,6 +1,9 @@
 import Foundation
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 /// Exercises the "resume scanning at the same position" machinery: when a
 /// begin match is vetoed by a callback, the engine re-scans the same spot

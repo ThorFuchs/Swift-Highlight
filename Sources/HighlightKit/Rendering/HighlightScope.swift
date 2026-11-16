@@ -1,3 +1,5 @@
+#if canImport(UIKit) || canImport(AppKit)
+import SwiftHighlight
 /// A token's semantic role — `.keyword`, `.titleFunction`, … — matching
 /// highlight.js scope names.
 ///
@@ -84,3 +86,5 @@ extension HighlightScope {
     public static let addition: Self = "addition"
     public static let deletion: Self = "deletion"
 }
+
+#endif

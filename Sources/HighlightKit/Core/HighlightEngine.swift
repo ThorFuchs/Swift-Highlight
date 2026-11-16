@@ -216,15 +216,17 @@ struct HighlightEngine {
             var lastEnd = buffer.location
             // Default (opaque, anchoring) bounds so the buffer behaves
             // like the standalone substring highlight.js scans.
+            var scanner = self
             pattern.enumerateMatches(in: sourceString, options: [], range: buffer) { match, _, _ in
                 guard let match else { return }
-                handleKeyword(
+                scanner.handleKeyword(
                     match.range,
                     keywords: keywords,
                     caseInsensitive: caseInsensitive,
                     lastEnd: &lastEnd
                 )
             }
+            self = scanner
             emitter.addText(length: buffer.location + buffer.length - lastEnd)
         }
 
@@ -287,8 +289,9 @@ struct HighlightEngine {
             keywords: CompiledKeywords,
             pattern: NSRegularExpression,
             caseInsensitive: Bool,
-            cancellationProbe: HighlightEngine.CancellationProbe
+            cancellationProbe: @escaping HighlightEngine.CancellationProbe
         ) {
+            var scanner = self
             var lastEnd = buffer.location
             var callbacksUntilCancellationCheck =
                 RuleMatchCache.cancellationProgressCheckStride
@@ -309,13 +312,14 @@ struct HighlightEngine {
                         RuleMatchCache.cancellationProgressCheckStride
                 }
                 guard let match else { return }
-                handleKeyword(
+                scanner.handleKeyword(
                     match.range,
                     keywords: keywords,
                     caseInsensitive: caseInsensitive,
                     lastEnd: &lastEnd
                 )
             }
+            self = scanner
             if !cancelled {
                 emitter.addText(length: buffer.location + buffer.length - lastEnd)
             } else {

@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- Import HighlightKit at `524c185b0553756498c1b6a1765e8d119c4623a6` with history.
+- Begin separation of the core, HTML renderer, and Apple theme layer.
+- Add explicit error reporting and token validation paths.
+
+The public API is provisional before the first release. No version or
+compatibility guarantee is implied by this unreleased work.
+# Changelog
+
 ## 0.2.0 — 2026-07-14
 
 - Fixed: a keyword listed under two scope groups of the same mode now

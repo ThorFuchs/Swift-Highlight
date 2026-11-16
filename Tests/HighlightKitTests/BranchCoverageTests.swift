@@ -1,6 +1,9 @@
 import Foundation
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 /// Targets specific reachable branches that the corpus/fuzz suites don't
 /// happen to exercise, so behavior at those edges is pinned directly.

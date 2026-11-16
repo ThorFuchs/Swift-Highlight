@@ -1,6 +1,10 @@
+#if canImport(UIKit) || canImport(AppKit)
 import Foundation
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 #if canImport(UIKit)
 import UIKit
 #elseif canImport(AppKit)
@@ -65,7 +69,7 @@ struct DynamicThemeTests {
         let code = "let x = 42 // answer"
         let result = Highlighter.shared.highlight(code, as: "swift")
         for theme in [HighlightTheme.github, .githubLight, .githubDark] {
-            let attributed = result.attributedString(for: code, theme: theme)
+            let attributed = try! result.attributedString(for: code, theme: theme)
             #expect(attributed.length == (code as NSString).length)
             var range = NSRange()
             #expect(attributed.attribute(.foregroundColor, at: 0, effectiveRange: &range) != nil)
@@ -105,3 +109,5 @@ struct DynamicThemeTests {
         #endif
     }
 }
+
+#endif

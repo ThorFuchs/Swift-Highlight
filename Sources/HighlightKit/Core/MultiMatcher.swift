@@ -956,7 +956,7 @@ final class RuleMatchCache {
         rule: CompiledRule,
         in source: String,
         length: Int,
-        cancellationProbe: HighlightEngine.CancellationProbe
+        cancellationProbe: @escaping HighlightEngine.CancellationProbe
     ) {
         var collected = 0
         var sawWindowStop = false
@@ -1757,7 +1757,7 @@ final class RuleMatchCache {
                 callbacksUntilCancellationCheck -= 1
                 if callbacksUntilCancellationCheck == 0 {
                     if cancellationProbe() {
-                        wasCancelled = true
+                        self.wasCancelled = true
                         stop.pointee = true
                         return
                     }
@@ -2286,7 +2286,7 @@ final class RuleMatchCache {
                 callbacksUntilCancellationCheck -= 1
                 if callbacksUntilCancellationCheck == 0 {
                     if cancellationProbe() {
-                        wasCancelled = true
+                        self.wasCancelled = true
                         stop.pointee = true
                         return
                     }

@@ -1,6 +1,10 @@
+#if canImport(UIKit) || canImport(AppKit)
 import Foundation
 import Testing
-@testable import HighlightKit
+@testable import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+@testable import SwiftHighlightApple
+#endif
 
 @Suite("Themes and rendering")
 struct ThemeTests {
@@ -42,7 +46,7 @@ struct ThemeTests {
     @Test func attributedStringAppliesColorsAndFonts() {
         let code = #"{"a": true}"#
         let result = Highlighter.shared.highlight(code, as: "json")
-        let attributed = result.attributedString(for: code, theme: .githubLight)
+        let attributed = try! result.attributedString(for: code, theme: .githubLight)
         #expect(attributed.length == (code as NSString).length)
 
         // base attributes exist everywhere
@@ -76,7 +80,7 @@ struct ThemeTests {
         let highlighter = Highlighter(languages: [custom])
         let code = "**bold** and _italic_"
         let result = highlighter.highlight(code, as: "mini")
-        let attributed = result.attributedString(for: code, theme: theme)
+        let attributed = try! result.attributedString(for: code, theme: theme)
 
         var range = NSRange()
         let boldFont = attributed.attribute(.font, at: 0, effectiveRange: &range) as? HighlightFont
@@ -158,3 +162,5 @@ struct ThemeTests {
         #expect(auto.string == "SELECT id FROM users;")
     }
 }
+
+#endif

@@ -73,6 +73,12 @@ public final class Highlighter: Sendable {
         }
     }
 
+    /// Explicit-language path that reports unknown languages, invalid grammars,
+    /// and top-level engine aborts. Illegal input is indicated by result.illegal.
+    public func highlightStrict(_ code: String, as language: String, ignoreIllegals: Bool = true) throws -> HighlightResult {
+        try registry.highlight(code, languageName: language, ignoreIllegals: ignoreIllegals, strictErrors: true)
+    }
+
     /// Highlights `code`, detecting the language automatically by
     /// relevance among `subset` (or all registered languages).
     public func highlightAuto(_ code: String, subset: [String]? = nil) -> HighlightResult {
@@ -89,26 +95,7 @@ public final class Highlighter: Sendable {
         await registry.highlightAuto(code, subset: subset)
     }
 
-    /// Highlights and styles in one call — the common app path.
-    ///
-    /// ```swift
-    /// label.attributedText = Highlighter.shared.attributedString(
-    ///     for: code, language: "swift", theme: .xcode
-    /// )
-    /// ```
-    ///
-    /// - Parameters:
-    ///   - code: the source text.
-    ///   - language: a language name or alias; `nil` detects the
-    ///     language automatically.
-    ///   - theme: defaults to the adaptive GitHub theme, which follows
-    ///     the system appearance without re-highlighting.
-    public func attributedString(
-        for code: String,
-        language: String? = nil,
-        theme: HighlightTheme = .github
-    ) -> NSAttributedString {
-        let result = language.map { highlight(code, as: $0) } ?? highlightAuto(code)
-        return result.attributedString(for: code, theme: theme)
-    }
 }
+
+/// An engine stopped before completing its scan.
+public enum HighlightFailure: Error, Sendable { case engineAborted }

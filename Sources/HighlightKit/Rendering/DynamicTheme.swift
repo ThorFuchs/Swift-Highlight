@@ -1,3 +1,5 @@
+#if canImport(UIKit) || canImport(AppKit)
+import SwiftHighlight
 import Foundation
 #if canImport(UIKit)
 public import UIKit
@@ -75,3 +77,5 @@ extension HighlightTheme {
         dark: .xcodeDark
     )
 }
+
+#endif

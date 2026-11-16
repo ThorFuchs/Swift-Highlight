@@ -4,7 +4,10 @@ import Darwin
 #elseif canImport(Glibc)
 import Glibc
 #endif
-import HighlightKit
+import SwiftHighlight
+#if canImport(UIKit) || canImport(AppKit)
+import SwiftHighlightApple
+#endif
 import Synchronization
 
 // Standalone benchmark / leak-check host.
@@ -57,6 +60,7 @@ func withBenchmarkAutoreleasePool<Result>(
 // ownership traffic into the operation under test. `@inline(never)` is a
 // benchmark-only guard against dead-code elimination, not a production
 // optimization hint.
+#if canImport(UIKit) || canImport(AppKit)
 @inline(never)
 func themeChecksum(_ theme: borrowing HighlightTheme) -> Int {
     theme.styles.count &* 31 &+ Int(theme.font.size)
@@ -66,6 +70,8 @@ func themeChecksum(_ theme: borrowing HighlightTheme) -> Int {
 func attributedChecksum(_ string: borrowing NSAttributedString) -> Int {
     string.length
 }
+
+#endif
 
 func measureThemeBenchmark(
     iterations: Int,
@@ -340,6 +346,7 @@ if arguments.count >= 2, arguments[1] == "--incremental-check" {
 }
 
 
+#if canImport(UIKit) || canImport(AppKit)
 // Theme construction and small-block rendering benchmark:
 //   highlight-bench --theme-bench <scenario> <iterations>
 // Scenarios: theme-get, registry-get, one-call, pure-render, theme-cold.
@@ -374,7 +381,7 @@ if arguments.count >= 4, arguments[1] == "--theme-bench" {
         // throughput; it must not include theme construction/access cost.
         let theme = HighlightTheme.github
         operation = {
-            attributedChecksum(result.attributedString(for: code, theme: theme))
+            attributedChecksum(try! result.attributedString(for: code, theme: theme))
         }
     default:
         print("expected theme-get, registry-get, one-call, pure-render, or theme-cold")
@@ -406,6 +413,7 @@ if arguments.count >= 4, arguments[1] == "--theme-bench" {
 // the per-generation cache under simultaneous reads. `cold-contention`
 // also reports the exact descriptor build count: one build per round is
 // the required invariant regardless of task count.
+#endif
 if arguments.count >= 4, arguments[1] == "--registry-bench" {
     let scenario = arguments[2]
 
@@ -564,6 +572,7 @@ if arguments.count >= 4, arguments[1] == "--registry-bench" {
     exit(EXIT_SUCCESS)
 }
 
+#if canImport(UIKit) || canImport(AppKit)
 // Rendering benchmark: highlight once, then time repeated
 // attributedString(for:theme:) generation — the block-editor
 // re-render workload. `highlight-bench --render <iters> [language]`.
@@ -573,12 +582,12 @@ if arguments.count >= 3, arguments[1] == "--render" {
     let code = sampleJS
     let result = Highlighter.shared.highlight(code, as: lang)
     let theme = HighlightTheme.githubDark
-    _ = result.attributedString(for: code, theme: theme) // warm
+    _ = try! result.attributedString(for: code, theme: theme) // warm
     let start = ContinuousClock.now
     var total = 0
     for _ in 0..<iters {
         withBenchmarkAutoreleasePool {
-            total += result.attributedString(for: code, theme: theme).length
+            total += try! result.attributedString(for: code, theme: theme).length
         }
     }
     let el = ContinuousClock.now - start
@@ -588,6 +597,7 @@ if arguments.count >= 3, arguments[1] == "--render" {
     exit(0)
 }
 
+#endif
 // Auto-detection benchmark: `highlight-bench --auto <iters> [file]`.
 // The paste-time "which language is this?" path. Cold = fresh
 // Highlighter instance (compiles every grammar); warm = repeated
@@ -605,11 +615,7 @@ if arguments.count >= 2, arguments[1] == "--auto-bench" {
           let iterations = Int(arguments[3]),
           iterations > 0
     else {
-        fputs(
-            "usage: highlight-bench --auto-bench <cold|warm> " +
-                "<positive-iterations> [file]\n",
-            stderr
-        )
+        FileHandle.standardError.write(Data("usage: highlight-bench --auto-bench <cold|warm> <positive-iterations> [file]\n".utf8))
         exit(EXIT_FAILURE)
     }
 
@@ -620,7 +626,7 @@ if arguments.count >= 2, arguments[1] == "--auto-bench" {
             contentsOfFile: arguments[4],
             encoding: .utf8
         ) else {
-            fputs("could not read UTF-8 input: \(arguments[4])\n", stderr)
+            FileHandle.standardError.write(Data("could not read UTF-8 input: \(arguments[4])\n".utf8))
             exit(EXIT_FAILURE)
         }
         code = input
