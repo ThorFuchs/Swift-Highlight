@@ -198,3 +198,10 @@ members. The checker now skips only those containers; it still requires every
 public member's documentation and rejects graphs containing only containers.
 The fix and its regression tests were checked on Linux; the Apple DocC run must
 be repeated on macOS before calling it verified.
+
+The macOS run at `6dd7545` confirmed 215/215 Core, 8/8 HTML, and 87/87 Apple
+public symbols documented. Apple archive conversion then failed because a
+documentation link to the Core type `HighlightToken` could not be resolved in
+the Apple-only symbol graphs. That reference now uses inline code instead of a
+DocC symbol link. Apple archive conversion must be rerun on macOS to verify the
+fix.

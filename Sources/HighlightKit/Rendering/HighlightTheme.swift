@@ -108,7 +108,7 @@ public struct HighlightTheme: Sendable {
         }
     }
 
-    /// Resolves a raw scope name (as carried by ``HighlightToken``).
+    /// Resolves a raw scope name (as carried by `HighlightToken`).
     public func style(forScope scope: String) -> ScopeStyle? {
         style(forScope: HighlightScope(scope))
     }
