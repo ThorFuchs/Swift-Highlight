@@ -56,7 +56,7 @@ To use a tagged release, specify a version requirement:
 ```swift
 dependencies: [
     .package(url: "https://github.com/ThorFuchs/Swift-Highlight.git",
-             from: "1.0.0")
+             from: "1.0.1")
 ],
 targets: [
     .target(name: "YourTarget", dependencies: [

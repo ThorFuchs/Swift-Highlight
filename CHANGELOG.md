@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 1.0.1
+
+- Replace identified literary quotations and a named example in three test
+  fixtures with neutral text, preserving reference-checked syntax coverage.
+- Use NSLock-protected registry state on Linux so targeted concurrency paths can
+  be checked by Thread Sanitizer; record the measured contention trade-off.
+- Add repeated Linux Thread Sanitizer checks and document fixture provenance,
+  historical limitations, and the 1.0.0 release status.
+
 ## 1.0.0
 
 - Import the HighlightKit history and the pinned highlight.js-derived catalog.
