@@ -9,6 +9,12 @@ mkdir -p "$scratch" "$output"
 scratch=$(CDPATH= cd -- "$scratch" && pwd)
 output=$(CDPATH= cd -- "$output" && pwd)
 cd "$root"
+# On some Apple toolchains SwiftPM also extracts the generated package test
+# runner, even though dump-symbol-graph builds without tests. Build that module
+# in the same scratch directory first so extraction can import it.
+if [ "$(uname -s)" = Darwin ]; then
+    swift build --scratch-path "$scratch" --build-tests
+fi
 swift package --scratch-path "$scratch" dump-symbol-graph --skip-synthesized-members
 if command -v docc >/dev/null 2>&1; then
     docc_command=docc

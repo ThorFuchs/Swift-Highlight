@@ -209,3 +209,11 @@ three documentation archives successfully, with 215/215 Core, 8/8 HTML, and
 87/87 Apple public source symbols documented and DocC exit status 0. This
 confirms documentation generation on that macOS toolchain; it is not a substitute
 for the remaining platform tests or CI on the eventual release commit.
+
+The macOS CI DocC step at `7e6e61a` later failed while extracting the
+automatically generated `SwiftHighlightPackageTests` module from a fresh
+scratch directory. On Linux with Swift 6.4.2's native build system, the same
+missing test-module failure was reproduced; building tests in that scratch
+directory first made symbol graph extraction succeed. On macOS the DocC
+script now builds tests before extraction, without suppressing extraction
+errors. The updated macOS CI run remains to be verified.

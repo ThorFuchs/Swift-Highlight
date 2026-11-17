@@ -71,5 +71,37 @@ class DocCGraphDiscoveryTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Symbol graph not found for SwiftHighlightHTML", result.stderr)
 
+    def test_extraction_failure_is_not_ignored(self):
+        for module in MODULES:
+            self.graph(module)
+        swift = self.bin / "swift"
+        swift.write_text("#!/bin/sh\nif [ \"$1\" = package ]; then exit 17; fi\n", encoding="utf-8")
+        result = self.run_script()
+        self.assertEqual(result.returncode, 17)
+        self.assertFalse(self.log.exists())
+
+    def test_darwin_builds_test_runner_before_extracting_graphs(self):
+        for module in MODULES:
+            self.graph(module)
+        uname = self.bin / "uname"
+        uname.write_text("#!/bin/sh\nprintf 'Darwin\\n'\n", encoding="utf-8")
+        uname.chmod(0o755)
+        swift = self.bin / "swift"
+        swift.write_text(
+            "#!/bin/sh\n"
+            "if [ \"$1\" = build ]; then\n"
+            "  [ \"$2\" = --scratch-path ] && [ \"$3\" = \"$DOCC_TEST_SCRATCH\" ] && "
+            "[ \"$4\" = --build-tests ] || exit 2\n"
+            "  : > \"$DOCC_TEST_MARKER\"\n"
+            "elif [ \"$1\" = package ]; then\n"
+            "  [ -f \"$DOCC_TEST_MARKER\" ] || exit 3\n"
+            "else\n  exit 4\nfi\n", encoding="utf-8")
+        swift.chmod(0o755)
+        self.env["DOCC_TEST_SCRATCH"] = str(self.scratch)
+        self.env["DOCC_TEST_MARKER"] = str(self.root / "test-runner-built")
+        result = self.run_script()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(len(self.log.read_text().splitlines()), 3)
+
 if __name__ == "__main__":
     unittest.main()

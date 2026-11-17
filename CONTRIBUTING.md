@@ -51,7 +51,9 @@ sh Tools/build-docc.sh
 DocC needs Python 3 and a `docc` executable from the selected Swift toolchain.
 The documentation script checks public symbol comments for available modules;
 on Linux it reports that Apple DocC is skipped because Apple SDK symbols are
-unavailable. Validate the Apple archive on an Apple toolchain separately.
+unavailable. Validate the Apple archive on an Apple toolchain separately. On
+macOS the script also builds the test targets in its scratch directory before
+extracting symbol graphs; it does not run the tests.
 
 The fixture inventory asserts 375 code/expectation pairs across 65 languages;
 the parameterized fidelity test compares tokens and relevance. For grammar and
