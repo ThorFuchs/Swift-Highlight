@@ -1,0 +1,31 @@
+name: Registry lock A-B diagnostic
+
+on:
+  push:
+    branches: [fix/resolve-release-followups]
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    container: swift:6.4@sha256:0384f00cf80f81064a907c249a0ad56a1648906f65075a95b1827e88de666e21
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - run: apt-get update && apt-get install -y python3
+      - name: Build frozen baseline and candidate
+        run: |
+          mkdir /tmp/registry-baseline
+          git archive 194c372c92eabfde9222c860ceced7f1f66ccb09 | tar -x -C /tmp/registry-baseline
+          swift --version
+          swift build -c release -j 4 --package-path /tmp/registry-baseline
+          swift build -c release -j 4
+      - name: Interleaved registry benchmarks
+        run: |
+          python3 Benchmarks/paired_registry_ab.py --baseline /tmp/registry-baseline/.build/release/highlight-bench --candidate .build/release/highlight-bench --output /tmp/registry-ab.json --campaign linux-lock-ab
+          cat /tmp/registry-ab.json
