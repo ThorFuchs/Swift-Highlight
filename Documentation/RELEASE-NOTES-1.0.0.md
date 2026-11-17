@@ -7,8 +7,7 @@ reports language, grammar, and engine failures; the HTML renderer escapes code
 and validates scope and language class names. Apple themes can be applied to
 an existing result without repeating analysis.
 
-The package requires Swift 6.1 or later. Once the `1.0.0` tag is available,
-add it to a Swift package using:
+The package requires Swift 6.1 or later. Add it to a Swift package using:
 
 ```swift
 .package(url: "https://github.com/ThorFuchs/Swift-Highlight.git", from: "1.0.0")
@@ -22,9 +21,9 @@ or GitHub.com parity. See the [third-party notices](https://github.com/ThorFuchs
 
 Linux x86_64 builds and tests have passed on Swift 6.1.3, 6.2.4 and 6.4.2.
 Core and HTML have passed WASI Preview 1 builds and one runtime smoke test.
-The maintainer reported all CI jobs green at `d101ac3`; the macOS workflow
-includes tests, a release build, a generic iOS Simulator build and DocC for
-all three archives. Those CI results have not been independently inspected.
+The [CI run for the tagged commit `326a008`](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44070741672)
+passed its Linux, documentation, and macOS jobs. The macOS job includes tests,
+a release build, a generic iOS Simulator build, and DocC for all three archives.
 An earlier macOS DocC run at `cb3fb8c` documented 215/215 Core, 8/8 HTML,
 and 87/87 Apple public source symbols.
 

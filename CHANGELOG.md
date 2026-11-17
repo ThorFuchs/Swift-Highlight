@@ -10,6 +10,5 @@
 - Add WASI Preview 1 consumer smoke coverage and reproducible fixture checks.
 - Provide DocC documentation, contribution guidance, and release checks.
 
-This section describes the intended first release; consult repository tags and
-GitHub Releases for published versions. Historical HighlightKit release notes
-are preserved in [the upstream changelog](Documentation/UPSTREAM-CHANGELOG.md).
+Historical HighlightKit release notes are preserved in
+[the upstream changelog](Documentation/UPSTREAM-CHANGELOG.md).

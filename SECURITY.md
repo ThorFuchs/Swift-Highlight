@@ -9,11 +9,10 @@ is made.
 ## Report a vulnerability
 
 Do not post a suspected vulnerability, sensitive input or exploit publicly.
-When private vulnerability reporting is enabled for the repository, use its
-Security tab or [create a private advisory](https://github.com/ThorFuchs/Swift-Highlight/security/advisories/new).
-The maintainer must verify that this route is enabled and reachable before the
-repository is made public. If it is unavailable, contact the maintainer through
-a private GitHub channel without publishing sensitive details.
+Use the repository Security tab to report a vulnerability privately or
+[create a private advisory](https://github.com/ThorFuchs/Swift-Highlight/security/advisories/new).
+If this route is unavailable, contact the maintainer through a private channel
+without publishing sensitive details.
 
 Include the package version or commit, platform and Swift toolchain, the API and
 language used, a minimal non-sensitive reproducer, and expected and observed
