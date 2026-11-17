@@ -67,11 +67,11 @@ iteration counts, and leak checks.
 ## Registry publication and contention
 
 Registration generations compile at most once even when many tasks hit a cold
-grammar together. The adopted v3 keeps cold/failure state behind a
-per-generation `Synchronization.Mutex` and publishes the immutable graph in the
-canonical registry slot under the existing global mutex. This makes a warm
-canonical lookup one table hash and gives ThreadSanitizer a visible
-happens-before edge.
+grammar together. The measured v3 keeps cold/failure state behind a per-generation lock and
+publishes the immutable graph in the canonical registry slot under the global
+lock. This makes a warm canonical lookup one table hash. The measurements
+below predate the Linux-specific lock change described in the implementation
+report; they are not measurements of that change.
 
 Formal 15-pair production A/B results against the pre-generation registry:
 

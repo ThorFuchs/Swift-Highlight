@@ -229,7 +229,8 @@ quotations or named example. The notices now identify both Dorothy L. Sayers
 and Terry Pratchett. This documents provenance; it does not resolve any
 additional rights in the quoted material. The unchanged package source passed
 254 tests with Swift 6.4.2 on Linux while preparing the release notes.
-The Linux Thread Sanitizer warnings remain unclassified.
+At that point the Linux Thread Sanitizer warnings were unclassified; see the
+follow-up below.
 
 The [CI run for release commit `326a008`](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44070741672)
 completed successfully, including both Linux jobs, documentation, and macOS
@@ -244,3 +245,44 @@ escaping. On the same date, Apple Swift 6.4.2 (Xcode 27.2, arm64) passed
 `swift test --sanitize=thread --filter contendedLazyCompilation` at that
 commit: one test passed with no sanitizer diagnostics. This macOS result does
 not resolve the Linux warnings.
+
+After 1.0.0, the two Erlang quotation fixtures and the XML named example were
+changed to neutral original text while retaining the syntax under test. The
+three expectations were regenerated with the pinned highlight.js reference;
+all 375 fixture pairs matched, with no EOF clipping. This change reduces
+future distribution of the identified text in current source snapshots; the
+1.0.0 tag and imported history retain the original material, whose additional
+rights have not been independently established.
+
+## Linux compilation gate follow-up
+
+On 17 November 2026, the original warnings were reproduced in
+[Linux CI](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44083889175)
+with Swift 6.2.4 and 6.4. The isolated Mutex control also reported warnings;
+the NSLock control passed. After replacing only the Linux per-generation
+compilation gate with an NSLock-protected state, the targeted
+`contendedLazyCompilation` test passed under TSan on both toolchains in
+[a follow-up run](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44084182429).
+The Mutex control still reported warnings in that run, so the overall
+diagnostic jobs failed as designed. The evidence is consistent with a Mutex
+TSan interaction but does not classify every former warning or establish
+race freedom. The wrapper confines `@unchecked Sendable` to state whose every
+access is protected by the same lock; other platforms retain `Mutex`.
+
+A subsequent Swift 6.4 run reported another access in the registry's global
+`Mutex`-protected state, despite the earlier clean targeted run. Switching both
+the Linux global state and per-generation gates to the same NSLock-backed
+wrapper led to successful targeted runs for both contended successful and
+failed compilation on Swift 6.2.4 and 6.4 in
+[Linux CI](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44084965854).
+The isolated Mutex control continued to emit warnings; it is explicitly
+observational, while failures in the NSLock control and package tests fail the
+workflow. These targeted runs do not prove the entire package race-free.
+
+A 15-pair Linux release benchmark compared that NSLock variant against the
+pre-change commit. Warm highlighting and auto-detection intervals included
+zero, while eight- and 32-task warm contention had mean latency increases of
+7.7% and 5.9%, respectively. A pthread candidate was also tested and rejected
+after slower contention results. The measured trade-off, intervals, full raw
+samples, build commands, and links are in
+[the benchmark record](../Benchmarks/Results/2026-11-17-linux-lock-ab/README.md).

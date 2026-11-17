@@ -1,0 +1,42 @@
+name: Linux Thread Sanitizer diagnostics
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  thread-sanitizer:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - swift:6.2.4@sha256:3459518b2e723a7c363d0f8cfa44fc796c77ecd8c18e92fd10e6f92dd78c0b12
+          - swift:6.4@sha256:0384f00cf80f81064a907c249a0ad56a1648906f65075a95b1827e88de666e21
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      # TSan needs a compatible address-space layout. This setting applies
+      # only to the disposable GitHub-hosted VM, not to library consumers.
+      - name: Configure disposable runner for TSan
+        run: sudo sysctl vm.mmap_rnd_bits=28
+      - name: Toolchain version
+        run: docker run --rm '${{ matrix.image }}' swift --version
+      # The known toolchain diagnostic remains visible without masking failures
+      # in the NSLock control or either package test.
+      - name: Mutex control (observational)
+        continue-on-error: true
+        run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' sh -c 'swiftc -sanitize=thread Scripts/MutexSanitizerControl.swift -o /tmp/mutex-control && /tmp/mutex-control'
+      - name: NSLock control
+        if: ${{ always() }}
+        run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' sh -c 'swiftc -sanitize=thread Scripts/NSLockSanitizerControl.swift -o /tmp/nslock-control && /tmp/nslock-control'
+      - name: Contended lazy compilation
+        run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' sh -ec 'for attempt in 1 2 3; do echo "Attempt $attempt"; swift test --sanitize=thread --filter contendedLazyCompilation; done'
+      - name: Contended failed compilation
+        run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' sh -ec 'for attempt in 1 2 3; do echo "Attempt $attempt"; swift test --sanitize=thread --filter contendedFailedCompilation; done'

@@ -156,7 +156,7 @@ struct StressTests {
     /// simultaneously — the per-generation compile gates must keep this
     /// race-free without serializing different languages. The exact
     /// single-build invariant is pinned in `LanguageRegistryTests`. Run
-    /// under `swift test --sanitize=thread` to prove it race-free.
+    /// under `swift test --sanitize=thread` to check this workload for races.
     @Test func contendedLazyCompilation() async {
         let languages = LanguageCatalog.all.map(\.name)
         let highlighter = Highlighter() // fresh: no grammar compiled yet
