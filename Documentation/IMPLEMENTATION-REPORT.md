@@ -216,4 +216,8 @@ scratch directory. On Linux with Swift 6.4.2's native build system, the same
 missing test-module failure was reproduced; building tests in that scratch
 directory first made symbol graph extraction succeed. On macOS the DocC
 script now builds tests before extraction, without suppressing extraction
-errors. The updated macOS CI run remains to be verified.
+errors. The maintainer subsequently reported that all CI jobs for `d101ac3`
+were green. The macOS workflow includes `swift test`, a release build, an iOS
+Simulator build and all three DocC archives. This result is maintainer-reported;
+the GitHub API was not accessible for independent inspection. The eventual
+release commit must still have its own CI result checked.

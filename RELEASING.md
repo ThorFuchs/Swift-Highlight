@@ -18,11 +18,11 @@ release, and changing repository visibility are distinct maintainer actions.
   during preparation. Decide whether to create and select `main` as the default
   branch, as in Swift-GFM, before publishing; do not assume it already exists.
 - Confirm private vulnerability reporting is enabled and accessible before
-  publication. Review Linux Thread Sanitizer warnings, verify remaining Apple
-  SDK builds and tests on the intended release toolchains, and confirm CI for
-  the exact release commit. The maintainer reported successful macOS DocC
-  generation for all three archives at `cb3fb8c`. Distinguish user-reported
-  results and WASI smoke coverage from a comprehensive platform test.
+  publication. Review Linux Thread Sanitizer warnings and confirm CI for the
+  exact release commit. The maintainer reported all CI jobs green at `d101ac3`,
+  including the macOS workflow's tests, generic iOS Simulator build and DocC.
+  Distinguish user-reported results and WASI smoke coverage from comprehensive
+  platform tests.
   CI also runs the DocC script on macOS so that the Apple archive is checked;
   verify the actual outcome for the release commit.
 

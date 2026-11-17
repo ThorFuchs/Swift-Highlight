@@ -43,8 +43,8 @@ summarizes observed checks, not an unsupported-platform guarantee:
 | Platform | Evidence |
 | --- | --- |
 | Linux x86_64 | Core and HTML tests with Swift 6.1.3, 6.2.4 and 6.4.2; standard release build with 6.4.2 |
-| macOS | User-reported local Apple build; exact destination and tests not independently recorded |
-| iOS | Apple renderer implemented; SDK build not independently verified here |
+| macOS | Maintainer-reported passing CI at `d101ac3`, including tests, release build and DocC |
+| iOS | Maintainer-reported passing Apple renderer build for a generic iOS Simulator in CI at `d101ac3`; device runtime not verified |
 | WebAssembly (WASI Preview 1) | Core and HTML builds reported on macOS; one Swift/HTML consumer smoke executed on Node.js 24 from Linux |
 | Linux arm64, static Linux (musl), other Apple platforms | Not verified |
 

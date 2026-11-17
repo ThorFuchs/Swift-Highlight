@@ -17,11 +17,11 @@ or GitHub.com parity. See [third-party notices](../THIRD_PARTY_NOTICES.md).
 
 Linux x86_64 builds and tests have passed on Swift 6.1.3, 6.2.4 and 6.4.2.
 Core and HTML have passed WASI Preview 1 builds and one runtime smoke test.
-An Apple build was reported successful by the user, but the exact Apple SDK,
-destination and test results have not been independently recorded. The
-maintainer subsequently reported a successful macOS DocC build for all three
-archives at `cb3fb8c`, with 215/215 Core, 8/8 HTML, and 87/87 Apple public
-source symbols documented.
+The maintainer reported all CI jobs green at `d101ac3`; the macOS workflow
+includes tests, a release build, a generic iOS Simulator build and DocC for
+all three archives. Those CI results have not been independently inspected.
+An earlier macOS DocC run at `cb3fb8c` documented 215/215 Core, 8/8 HTML,
+and 87/87 Apple public source symbols.
 
 Before publishing, complete the checks in [RELEASING.md](../RELEASING.md),
 including upstream tag provenance, third-party rights review,
