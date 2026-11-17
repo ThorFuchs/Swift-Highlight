@@ -1,35 +1,19 @@
 import Foundation
 import Synchronization
-#if os(Linux)
-import Glibc
-#endif
 
 #if os(Linux)
-/// All access to the contained value goes through the same pthread mutex.
-/// Its address is stable for its whole lifetime; the registry and in-flight
-/// callers retain this wrapper while the mutex is in use.
+/// All access to the contained value goes through the same NSLock. Linux
+/// Thread Sanitizer has reported Swift access races in isolated Mutex controls,
+/// making it unreliable for auditing the registry on supported toolchains.
 private final class LinuxLockedState<Value: Sendable>: @unchecked Sendable {
-    private let lock: UnsafeMutablePointer<pthread_mutex_t>
+    private let lock = NSLock()
     private var value: Value
 
-    init(_ value: Value) {
-        self.value = value
-        lock = .allocate(capacity: 1)
-        lock.initialize(to: pthread_mutex_t())
-        guard pthread_mutex_init(lock, nil) == 0 else { fatalError("pthread_mutex_init failed") }
-    }
-
-    deinit {
-        guard pthread_mutex_destroy(lock) == 0 else { fatalError("pthread_mutex_destroy failed") }
-        lock.deinitialize(count: 1)
-        lock.deallocate()
-    }
+    init(_ value: Value) { self.value = value }
 
     func withLock<Result>(_ body: (inout Value) throws -> Result) rethrows -> Result {
-        guard pthread_mutex_lock(lock) == 0 else { fatalError("pthread_mutex_lock failed") }
-        defer {
-            guard pthread_mutex_unlock(lock) == 0 else { fatalError("pthread_mutex_unlock failed") }
-        }
+        lock.lock()
+        defer { lock.unlock() }
         return try body(&value)
     }
 }

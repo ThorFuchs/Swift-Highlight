@@ -37,6 +37,6 @@ jobs:
         if: ${{ always() }}
         run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' sh -c 'swiftc -sanitize=thread Scripts/NSLockSanitizerControl.swift -o /tmp/nslock-control && /tmp/nslock-control'
       - name: Contended lazy compilation
-        run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' swift test --sanitize=thread --filter contendedLazyCompilation
+        run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' sh -ec 'for attempt in 1 2 3; do echo "Attempt $attempt"; swift test --sanitize=thread --filter contendedLazyCompilation; done'
       - name: Contended failed compilation
-        run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' swift test --sanitize=thread --filter contendedFailedCompilation
+        run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' sh -ec 'for attempt in 1 2 3; do echo "Attempt $attempt"; swift test --sanitize=thread --filter contendedFailedCompilation; done'
