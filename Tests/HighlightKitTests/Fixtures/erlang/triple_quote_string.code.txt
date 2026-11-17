@@ -1,10 +1,9 @@
 quotes() ->
     S = """
-        "I always have a quotation for everything -
-        it saves original thinking." - Dorothy L. Sayers
+        "A quiet stream winds through the valley.
+        The morning light reflects on the water."
 
-        "Real stupidity beats artificial intelligence every time."
-        - Terry Pratchett
+        "A small bird sings beside the path."
         """,
     io:put_chars(S),
     io:nl().
