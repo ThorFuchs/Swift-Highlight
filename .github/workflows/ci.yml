@@ -33,6 +33,8 @@ jobs:
       - run: swift test
       - run: swift build -c release
       - run: xcodebuild -scheme SwiftHighlightApple -destination 'generic/platform=iOS Simulator' build
+      - name: Build all DocC archives
+        run: sh Tools/build-docc.sh
   documentation:
     runs-on: ubuntu-latest
     timeout-minutes: 45

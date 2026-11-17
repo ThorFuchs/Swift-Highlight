@@ -20,8 +20,8 @@ swift build
 swift test
 ```
 
-The repository is private while release preparation is in progress; access is
-required to clone it. Do not assume a release tag or public default branch exists.
+During release preparation, access to the private repository is required to
+clone it. Check the available tags and default branch before relying on them.
 
 ## Make a change
 

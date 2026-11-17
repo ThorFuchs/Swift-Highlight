@@ -23,6 +23,8 @@ release, and changing repository visibility are distinct maintainer actions.
   the exact release commit. The maintainer reported successful macOS DocC
   generation for all three archives at `cb3fb8c`. Distinguish user-reported
   results and WASI smoke coverage from a comprehensive platform test.
+  CI also runs the DocC script on macOS so that the Apple archive is checked;
+  verify the actual outcome for the release commit.
 
 ## Prepare and publish
 
