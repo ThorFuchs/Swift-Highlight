@@ -87,12 +87,27 @@ final class LanguageRegistry: Sendable {
         }
 
         /// Authoritative cold-build and failure state for this generation.
-        /// Successful graphs are additionally published under the registry's
-        /// global `Synchronization.Mutex`, which gives TSan a visible
-        /// happens-before edge without making warm readers acquire this
-        /// second lock. The performance log records why the otherwise-safe
-        /// `AtomicLazyReference` prototype was rejected on this toolchain.
+        /// Successful graphs are also published under the registry's global
+        /// lock so warm readers do not acquire the compilation gate.
+        #if os(Linux)
+        // The unchecked conformance is confined to this wrapper: every access
+        // to its private state is serialized by the same NSLock. Linux TSan
+        // does not consistently recognize Synchronization.Mutex as a lock on
+        // the supported Swift toolchains, obscuring checks of this path.
+        private final class CompilationGate: @unchecked Sendable {
+            private let lock = NSLock()
+            private var state = CompilationState.uninitialized
+
+            func withLock<Result>(_ body: (inout CompilationState) throws -> Result) rethrows -> Result {
+                lock.lock()
+                defer { lock.unlock() }
+                return try body(&state)
+            }
+        }
+        private let compilation = CompilationGate()
+        #else
         private let compilation = Mutex(CompilationState.uninitialized)
+        #endif
 
         init(_ descriptor: LanguageDescriptor) {
             let canonicalName = descriptor.name.lowercased()
