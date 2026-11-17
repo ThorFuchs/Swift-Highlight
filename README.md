@@ -153,7 +153,8 @@ restricted to a subset; its async form uses a processor-bounded task window.
 Cancellation is cooperative and cannot forcibly interrupt a synchronous ICU
 regex call. Apply your own input and execution limits for untrusted sources;
 the package does not enforce a hard time or input-size limit. Linux Thread
-Sanitizer reported unresolved registry warnings; see [verification](Documentation/IMPLEMENTATION-REPORT.md).
+Sanitizer checks and their limits are recorded in the
+[verification report](Documentation/IMPLEMENTATION-REPORT.md).
 
 The compatibility target is the pinned highlight.js port, subject to the
 [documented Unicode and incremental differences](Docs/FIDELITY.md). We do not

@@ -1,6 +1,24 @@
 import Foundation
 import Synchronization
 
+#if os(Linux)
+/// All access to the contained value goes through the same NSLock. Linux
+/// Thread Sanitizer has reported Swift access races in isolated Mutex controls,
+/// making it unreliable for auditing the registry on supported toolchains.
+private final class LinuxLockedState<Value: Sendable>: @unchecked Sendable {
+    private let lock = NSLock()
+    private var value: Value
+
+    init(_ value: Value) { self.value = value }
+
+    func withLock<Result>(_ body: (inout Value) throws -> Result) rethrows -> Result {
+        lock.lock()
+        defer { lock.unlock() }
+        return try body(&value)
+    }
+}
+#endif
+
 private enum LanguageBuildContext {
     /// Descriptor factories construct one self-contained raw grammar. They
     /// must not recursively ask a registry to compile another grammar while
@@ -87,12 +105,13 @@ final class LanguageRegistry: Sendable {
         }
 
         /// Authoritative cold-build and failure state for this generation.
-        /// Successful graphs are additionally published under the registry's
-        /// global `Synchronization.Mutex`, which gives TSan a visible
-        /// happens-before edge without making warm readers acquire this
-        /// second lock. The performance log records why the otherwise-safe
-        /// `AtomicLazyReference` prototype was rejected on this toolchain.
+        /// Successful graphs are also published under the registry's global
+        /// lock so warm readers do not acquire the compilation gate.
+        #if os(Linux)
+        private let compilation = LinuxLockedState(CompilationState.uninitialized)
+        #else
         private let compilation = Mutex(CompilationState.uninitialized)
+        #endif
 
         init(_ descriptor: LanguageDescriptor) {
             let canonicalName = descriptor.name.lowercased()
@@ -146,7 +165,7 @@ final class LanguageRegistry: Sendable {
         var compiled: CompiledLanguage?
     }
 
-    private struct State {
+    private struct State: Sendable {
         var entries: [String: Registration] = [:]
         var aliases: [String: Entry] = [:]
         var sortedNames: [String] = []
@@ -160,7 +179,11 @@ final class LanguageRegistry: Sendable {
         case uncompiled(Entry)
     }
 
+    #if os(Linux)
+    private let state = LinuxLockedState(State())
+    #else
     private let state = Mutex(State())
+    #endif
 
     init(languages: [LanguageDescriptor]) {
         register(languages)

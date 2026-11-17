@@ -1,0 +1,4554 @@
+{
+  "schema_version": 1,
+  "campaign": "linux-lock-ab",
+  "started_at_utc": "2026-11-17T12:47:39.771506+00:00",
+  "platform": {
+    "system": "Linux",
+    "release": "7.0.0-1014-aws",
+    "machine": "x86_64"
+  },
+  "paths": {
+    "baseline": "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+    "candidate": "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench"
+  },
+  "method": {
+    "pairs": 15,
+    "process_order": "even pair index baseline->candidate; odd pair index candidate->baseline",
+    "scenario_order": "six scenarios round-robin within every pair",
+    "warmup": "each scenario once per binary, alternating the binary-first order by scenario index",
+    "ratio": "candidate/baseline; exp(mean(log(pair ratio)))",
+    "ci": "Student-t df=14 in the log domain, then exponentiated; t(0.975,14)=2.1447866879169273",
+    "direction": "all values are latency; lower is better",
+    "cold_correctness": "candidate build_count must equal rounds; baseline build_count is retained and may exceed rounds",
+    "warm_contention_correctness": "build_count must equal one and checksum must equal the shared operation count on both sides",
+    "exclusions": "none; all completed observations are retained"
+  },
+  "hashes_before": {
+    "baseline": "1ba71713d08480b6c2d3323d7e6cb63921175c2bde54d5bcfd40874f06ba58cd",
+    "candidate": "e9bfea4b06fb62a6b3dc815df483bc635028533ce474dc30d53ae976bee8ac1a"
+  },
+  "scenario_definitions": [
+    {
+      "name": "warm-highlight",
+      "arguments": [
+        "--registry-bench",
+        "warm-highlight",
+        "200000"
+      ],
+      "iterations": 200000,
+      "value_unit": "ns/op"
+    },
+    {
+      "name": "auto-warm",
+      "arguments": [
+        "--registry-bench",
+        "auto-warm",
+        "500"
+      ],
+      "iterations": 500,
+      "language_count": 64,
+      "value_unit": "ns/op"
+    },
+    {
+      "name": "cold-contention",
+      "arguments": [
+        "--registry-bench",
+        "cold-contention",
+        "16",
+        "3"
+      ],
+      "task_count": 16,
+      "rounds": 3,
+      "value_unit": "ns/round"
+    },
+    {
+      "name": "warm-contention-1",
+      "csv_name": "warm-contention",
+      "arguments": [
+        "--registry-bench",
+        "warm-contention",
+        "1",
+        "200000"
+      ],
+      "task_count": 1,
+      "operation_count": 200000,
+      "value_unit": "ns/op"
+    },
+    {
+      "name": "warm-contention-8",
+      "csv_name": "warm-contention",
+      "arguments": [
+        "--registry-bench",
+        "warm-contention",
+        "8",
+        "200000"
+      ],
+      "task_count": 8,
+      "operation_count": 200000,
+      "value_unit": "ns/op"
+    },
+    {
+      "name": "warm-contention-32",
+      "csv_name": "warm-contention",
+      "arguments": [
+        "--registry-bench",
+        "warm-contention",
+        "32",
+        "200000"
+      ],
+      "task_count": 32,
+      "operation_count": 200000,
+      "value_unit": "ns/op"
+    }
+  ],
+  "warmups": {
+    "warm-highlight": {
+      "process_order": [
+        "baseline",
+        "candidate"
+      ],
+      "baseline": {
+        "scenario": "warm-highlight",
+        "iterations": 200000,
+        "value": 2568.66479,
+        "value_unit": "ns/op",
+        "build_count": 1,
+        "checksum": 200000,
+        "command": [
+          "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+          "--registry-bench",
+          "warm-highlight",
+          "200000"
+        ],
+        "stdout": "registry-bench,warm-highlight,200000,2568.664790,1,200000",
+        "stderr": ""
+      },
+      "candidate": {
+        "scenario": "warm-highlight",
+        "iterations": 200000,
+        "value": 2618.55749,
+        "value_unit": "ns/op",
+        "build_count": 1,
+        "checksum": 200000,
+        "command": [
+          "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+          "--registry-bench",
+          "warm-highlight",
+          "200000"
+        ],
+        "stdout": "registry-bench,warm-highlight,200000,2618.557490,1,200000",
+        "stderr": ""
+      }
+    },
+    "auto-warm": {
+      "process_order": [
+        "candidate",
+        "baseline"
+      ],
+      "candidate": {
+        "scenario": "auto-warm",
+        "iterations": 500,
+        "value": 175395.898,
+        "value_unit": "ns/op",
+        "language_count": 64,
+        "checksum": 1000,
+        "command": [
+          "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+          "--registry-bench",
+          "auto-warm",
+          "500"
+        ],
+        "stdout": "registry-bench,auto-warm,500,175395.898000,64,1000",
+        "stderr": ""
+      },
+      "baseline": {
+        "scenario": "auto-warm",
+        "iterations": 500,
+        "value": 170877.68,
+        "value_unit": "ns/op",
+        "language_count": 64,
+        "checksum": 1000,
+        "command": [
+          "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+          "--registry-bench",
+          "auto-warm",
+          "500"
+        ],
+        "stdout": "registry-bench,auto-warm,500,170877.680000,64,1000",
+        "stderr": ""
+      }
+    },
+    "cold-contention": {
+      "process_order": [
+        "baseline",
+        "candidate"
+      ],
+      "baseline": {
+        "scenario": "cold-contention",
+        "task_count": 16,
+        "rounds": 3,
+        "value": 3032773.666667,
+        "value_unit": "ns/round",
+        "build_count": 3,
+        "checksum": 48,
+        "command": [
+          "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+          "--registry-bench",
+          "cold-contention",
+          "16",
+          "3"
+        ],
+        "stdout": "registry-bench,cold-contention,16,3,3032773.666667,3,48",
+        "stderr": ""
+      },
+      "candidate": {
+        "scenario": "cold-contention",
+        "task_count": 16,
+        "rounds": 3,
+        "value": 2910620.666667,
+        "value_unit": "ns/round",
+        "build_count": 3,
+        "checksum": 48,
+        "command": [
+          "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+          "--registry-bench",
+          "cold-contention",
+          "16",
+          "3"
+        ],
+        "stdout": "registry-bench,cold-contention,16,3,2910620.666667,3,48",
+        "stderr": ""
+      }
+    },
+    "warm-contention-1": {
+      "process_order": [
+        "candidate",
+        "baseline"
+      ],
+      "candidate": {
+        "scenario": "warm-contention-1",
+        "task_count": 1,
+        "operation_count": 200000,
+        "value": 2547.84227,
+        "value_unit": "ns/op",
+        "build_count": 1,
+        "checksum": 200000,
+        "command": [
+          "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+          "--registry-bench",
+          "warm-contention",
+          "1",
+          "200000"
+        ],
+        "stdout": "registry-bench,warm-contention,1,200000,2547.842270,1,200000",
+        "stderr": ""
+      },
+      "baseline": {
+        "scenario": "warm-contention-1",
+        "task_count": 1,
+        "operation_count": 200000,
+        "value": 2566.527415,
+        "value_unit": "ns/op",
+        "build_count": 1,
+        "checksum": 200000,
+        "command": [
+          "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+          "--registry-bench",
+          "warm-contention",
+          "1",
+          "200000"
+        ],
+        "stdout": "registry-bench,warm-contention,1,200000,2566.527415,1,200000",
+        "stderr": ""
+      }
+    },
+    "warm-contention-8": {
+      "process_order": [
+        "baseline",
+        "candidate"
+      ],
+      "baseline": {
+        "scenario": "warm-contention-8",
+        "task_count": 8,
+        "operation_count": 200000,
+        "value": 1546.871145,
+        "value_unit": "ns/op",
+        "build_count": 1,
+        "checksum": 200000,
+        "command": [
+          "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+          "--registry-bench",
+          "warm-contention",
+          "8",
+          "200000"
+        ],
+        "stdout": "registry-bench,warm-contention,8,200000,1546.871145,1,200000",
+        "stderr": ""
+      },
+      "candidate": {
+        "scenario": "warm-contention-8",
+        "task_count": 8,
+        "operation_count": 200000,
+        "value": 1641.091755,
+        "value_unit": "ns/op",
+        "build_count": 1,
+        "checksum": 200000,
+        "command": [
+          "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+          "--registry-bench",
+          "warm-contention",
+          "8",
+          "200000"
+        ],
+        "stdout": "registry-bench,warm-contention,8,200000,1641.091755,1,200000",
+        "stderr": ""
+      }
+    },
+    "warm-contention-32": {
+      "process_order": [
+        "candidate",
+        "baseline"
+      ],
+      "candidate": {
+        "scenario": "warm-contention-32",
+        "task_count": 32,
+        "operation_count": 200000,
+        "value": 1674.099265,
+        "value_unit": "ns/op",
+        "build_count": 1,
+        "checksum": 200000,
+        "command": [
+          "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+          "--registry-bench",
+          "warm-contention",
+          "32",
+          "200000"
+        ],
+        "stdout": "registry-bench,warm-contention,32,200000,1674.099265,1,200000",
+        "stderr": ""
+      },
+      "baseline": {
+        "scenario": "warm-contention-32",
+        "task_count": 32,
+        "operation_count": 200000,
+        "value": 1557.324775,
+        "value_unit": "ns/op",
+        "build_count": 1,
+        "checksum": 200000,
+        "command": [
+          "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+          "--registry-bench",
+          "warm-contention",
+          "32",
+          "200000"
+        ],
+        "stdout": "registry-bench,warm-contention,32,200000,1557.324775,1,200000",
+        "stderr": ""
+      }
+    }
+  },
+  "scenarios": {
+    "warm-highlight": {
+      "definition": {
+        "name": "warm-highlight",
+        "arguments": [
+          "--registry-bench",
+          "warm-highlight",
+          "200000"
+        ],
+        "iterations": 200000,
+        "value_unit": "ns/op"
+      },
+      "samples": [
+        {
+          "pair_index": 0,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2566.37381,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2566.373810,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2556.43788,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2556.437880,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 1,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2533.456715,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2533.456715,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2565.862405,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2565.862405,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 2,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2595.88843,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2595.888430,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2573.662815,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2573.662815,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 3,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2565.411635,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2565.411635,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2573.89374,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2573.893740,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 4,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2609.73615,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2609.736150,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2570.94781,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2570.947810,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 5,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2556.07862,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2556.078620,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2583.97009,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2583.970090,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 6,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2565.04272,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2565.042720,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2590.429665,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2590.429665,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 7,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2548.446665,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2548.446665,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2553.76495,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2553.764950,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 8,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2594.8725,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2594.872500,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2576.270005,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2576.270005,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 9,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2635.327125,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2635.327125,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2584.571125,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2584.571125,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 10,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2567.195245,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2567.195245,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2564.812545,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2564.812545,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 11,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2590.867925,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2590.867925,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2542.47481,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2542.474810,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 12,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2576.13362,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2576.133620,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2545.23709,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2545.237090,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 13,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2555.321745,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2555.321745,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2566.436555,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2566.436555,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 14,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2545.461515,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2545.461515,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-highlight",
+            "iterations": 200000,
+            "value": 2586.05665,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-highlight",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-highlight,200000,2586.056650,1,200000",
+            "stderr": ""
+          }
+        }
+      ],
+      "summary": {
+        "value_unit": "ns/op",
+        "baseline_median": 2567.195245,
+        "candidate_median": 2565.411635,
+        "paired_geometric_mean_ratio_candidate_over_baseline": 0.9988702072371559,
+        "ratio_95_percent_ci": [
+          0.9924692728797215,
+          1.0053124244451208
+        ],
+        "percent_change": -0.1129792762844084,
+        "percent_change_95_percent_ci": [
+          -0.7530727120278469,
+          0.5312424445120811
+        ],
+        "direction": "neutral",
+        "candidate_better_pairs": 11,
+        "log_ratio_mean": -0.0011304314597962981,
+        "log_ratio_standard_error": 0.0029974051926024525,
+        "student_t_critical_df14_975": 2.1447866879169273,
+        "build_counts": {
+          "baseline": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "candidate": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "baseline_total": 15,
+          "candidate_total": 15,
+          "baseline_range": [
+            1,
+            1
+          ],
+          "candidate_range": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    "auto-warm": {
+      "definition": {
+        "name": "auto-warm",
+        "arguments": [
+          "--registry-bench",
+          "auto-warm",
+          "500"
+        ],
+        "iterations": 500,
+        "language_count": 64,
+        "value_unit": "ns/op"
+      },
+      "samples": [
+        {
+          "pair_index": 0,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 171875.122,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,171875.122000,64,1000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 169688.684,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,169688.684000,64,1000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 1,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 172036.774,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,172036.774000,64,1000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170707.734,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170707.734000,64,1000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 2,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 172572.712,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,172572.712000,64,1000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 171063.584,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,171063.584000,64,1000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 3,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170150.176,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170150.176000,64,1000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170289.922,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170289.922000,64,1000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 4,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 169994.2,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,169994.200000,64,1000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170965.378,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170965.378000,64,1000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 5,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170360.576,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170360.576000,64,1000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 169765.996,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,169765.996000,64,1000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 6,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170498.796,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170498.796000,64,1000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 171309.546,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,171309.546000,64,1000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 7,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 173634.504,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,173634.504000,64,1000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170483.042,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170483.042000,64,1000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 8,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170140.038,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170140.038000,64,1000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170113.784,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170113.784000,64,1000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 9,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 169723.874,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,169723.874000,64,1000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 171885.588,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,171885.588000,64,1000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 10,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170581.918,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170581.918000,64,1000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 169885.758,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,169885.758000,64,1000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 11,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170955.728,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170955.728000,64,1000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 171047.022,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,171047.022000,64,1000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 12,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170439.304,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170439.304000,64,1000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170572.968,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170572.968000,64,1000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 13,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170258.628,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170258.628000,64,1000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 169798.298,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,169798.298000,64,1000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 14,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 170363.704,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,170363.704000,64,1000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "auto-warm",
+            "iterations": 500,
+            "value": 172354.192,
+            "value_unit": "ns/op",
+            "language_count": 64,
+            "checksum": 1000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "auto-warm",
+              "500"
+            ],
+            "stdout": "registry-bench,auto-warm,500,172354.192000,64,1000",
+            "stderr": ""
+          }
+        }
+      ],
+      "summary": {
+        "value_unit": "ns/op",
+        "baseline_median": 170483.042,
+        "candidate_median": 170572.968,
+        "paired_geometric_mean_ratio_candidate_over_baseline": 1.0010188760469891,
+        "ratio_95_percent_ci": [
+          0.9963235975641691,
+          1.005736281517552
+        ],
+        "percent_change": 0.10188760469891367,
+        "percent_change_95_percent_ci": [
+          -0.36764024358308944,
+          0.57362815175519
+        ],
+        "direction": "neutral",
+        "candidate_better_pairs": 7,
+        "log_ratio_mean": 0.0010183573450883107,
+        "log_ratio_standard_error": 0.00219207550288555,
+        "student_t_critical_df14_975": 2.1447866879169273
+      }
+    },
+    "cold-contention": {
+      "definition": {
+        "name": "cold-contention",
+        "arguments": [
+          "--registry-bench",
+          "cold-contention",
+          "16",
+          "3"
+        ],
+        "task_count": 16,
+        "rounds": 3,
+        "value_unit": "ns/round"
+      },
+      "samples": [
+        {
+          "pair_index": 0,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3180515.333333,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3180515.333333,3,48",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3082173.666667,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3082173.666667,3,48",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 1,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3016202.0,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3016202.000000,3,48",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3091265.333333,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3091265.333333,3,48",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 2,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2890722.0,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2890722.000000,3,48",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2991804.333333,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2991804.333333,3,48",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 3,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2946204.0,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2946204.000000,3,48",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2845734.666667,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2845734.666667,3,48",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 4,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2937873.0,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2937873.000000,3,48",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3047323.0,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3047323.000000,3,48",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 5,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3214209.666667,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3214209.666667,3,48",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2927887.666667,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2927887.666667,3,48",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 6,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3228838.666667,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3228838.666667,3,48",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3099785.666667,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3099785.666667,3,48",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 7,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3085187.333333,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3085187.333333,3,48",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3025261.666667,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3025261.666667,3,48",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 8,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2996280.0,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2996280.000000,3,48",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2571569.333333,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2571569.333333,3,48",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 9,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3213531.666667,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3213531.666667,3,48",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2885481.333333,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2885481.333333,3,48",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 10,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3058255.666667,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3058255.666667,3,48",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2922238.333333,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2922238.333333,3,48",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 11,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2806768.666667,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2806768.666667,3,48",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2817734.0,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2817734.000000,3,48",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 12,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2955960.666667,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2955960.666667,3,48",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3099561.0,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3099561.000000,3,48",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 13,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2736044.666667,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2736044.666667,3,48",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3010050.0,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3010050.000000,3,48",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 14,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 2986616.333333,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,2986616.333333,3,48",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "cold-contention",
+            "task_count": 16,
+            "rounds": 3,
+            "value": 3031300.333333,
+            "value_unit": "ns/round",
+            "build_count": 3,
+            "checksum": 48,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "cold-contention",
+              "16",
+              "3"
+            ],
+            "stdout": "registry-bench,cold-contention,16,3,3031300.333333,3,48",
+            "stderr": ""
+          }
+        }
+      ],
+      "summary": {
+        "value_unit": "ns/round",
+        "baseline_median": 2986616.333333,
+        "candidate_median": 3031300.333333,
+        "paired_geometric_mean_ratio_candidate_over_baseline": 0.9996036305156702,
+        "ratio_95_percent_ci": [
+          0.9626743474121401,
+          1.0379495629297453
+        ],
+        "percent_change": -0.03963694843297505,
+        "percent_change_95_percent_ci": [
+          -3.7325652587859914,
+          3.7949562929745273
+        ],
+        "direction": "neutral",
+        "candidate_better_pairs": 7,
+        "log_ratio_mean": -0.0003964480594777232,
+        "log_ratio_standard_error": 0.01755122838473167,
+        "student_t_critical_df14_975": 2.1447866879169273,
+        "build_counts": {
+          "baseline": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "candidate": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "baseline_total": 45,
+          "candidate_total": 45,
+          "baseline_range": [
+            3,
+            3
+          ],
+          "candidate_range": [
+            3,
+            3
+          ]
+        }
+      }
+    },
+    "warm-contention-1": {
+      "definition": {
+        "name": "warm-contention-1",
+        "csv_name": "warm-contention",
+        "arguments": [
+          "--registry-bench",
+          "warm-contention",
+          "1",
+          "200000"
+        ],
+        "task_count": 1,
+        "operation_count": 200000,
+        "value_unit": "ns/op"
+      },
+      "samples": [
+        {
+          "pair_index": 0,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2583.799685,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2583.799685,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2553.717555,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2553.717555,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 1,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2602.29739,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2602.297390,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2562.96369,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2562.963690,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 2,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2544.230875,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2544.230875,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2582.273335,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2582.273335,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 3,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2580.091185,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2580.091185,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2560.71684,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2560.716840,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 4,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2561.97443,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2561.974430,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2555.06976,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2555.069760,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 5,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2566.187365,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2566.187365,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2565.45702,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2565.457020,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 6,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2554.966155,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2554.966155,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2577.582365,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2577.582365,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 7,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2586.59126,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2586.591260,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2545.876935,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2545.876935,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 8,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2575.35091,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2575.350910,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2606.151835,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2606.151835,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 9,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2548.003485,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2548.003485,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2564.404815,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2564.404815,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 10,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2542.593925,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2542.593925,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2630.684295,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2630.684295,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 11,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2596.80537,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2596.805370,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2570.17341,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2570.173410,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 12,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2564.874985,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2564.874985,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2668.95467,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2668.954670,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 13,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2564.378115,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2564.378115,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2548.402765,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2548.402765,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 14,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2553.40289,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2553.402890,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-1",
+            "task_count": 1,
+            "operation_count": 200000,
+            "value": 2582.267995,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "1",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,1,200000,2582.267995,1,200000",
+            "stderr": ""
+          }
+        }
+      ],
+      "summary": {
+        "value_unit": "ns/op",
+        "baseline_median": 2561.97443,
+        "candidate_median": 2582.267995,
+        "paired_geometric_mean_ratio_candidate_over_baseline": 1.0104051809265917,
+        "ratio_95_percent_ci": [
+          1.0028492625299517,
+          1.0180180290184013
+        ],
+        "percent_change": 1.0405180926591706,
+        "percent_change_95_percent_ci": [
+          0.2849262529951657,
+          1.8018029018401327
+        ],
+        "direction": "slower",
+        "candidate_better_pairs": 3,
+        "log_ratio_mean": 0.010351419640554627,
+        "log_ratio_standard_error": 0.00349974596887684,
+        "student_t_critical_df14_975": 2.1447866879169273,
+        "build_counts": {
+          "baseline": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "candidate": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "baseline_total": 15,
+          "candidate_total": 15,
+          "baseline_range": [
+            1,
+            1
+          ],
+          "candidate_range": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    "warm-contention-8": {
+      "definition": {
+        "name": "warm-contention-8",
+        "csv_name": "warm-contention",
+        "arguments": [
+          "--registry-bench",
+          "warm-contention",
+          "8",
+          "200000"
+        ],
+        "task_count": 8,
+        "operation_count": 200000,
+        "value_unit": "ns/op"
+      },
+      "samples": [
+        {
+          "pair_index": 0,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1587.88547,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1587.885470,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1643.007745,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1643.007745,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 1,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1657.38271,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1657.382710,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1554.957065,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1554.957065,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 2,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1547.47834,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1547.478340,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1642.026435,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1642.026435,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 3,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1656.517005,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1656.517005,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1552.531315,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1552.531315,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 4,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1569.32587,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1569.325870,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1745.73001,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1745.730010,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 5,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1635.759035,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1635.759035,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1538.78295,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1538.782950,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 6,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1516.15217,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1516.152170,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1634.897915,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1634.897915,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 7,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1610.25652,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1610.256520,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1534.593245,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1534.593245,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 8,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1553.974015,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1553.974015,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1955.245315,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1955.245315,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 9,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1635.3451,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1635.345100,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1548.032515,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1548.032515,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 10,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1562.695485,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1562.695485,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1580.454695,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1580.454695,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 11,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1656.77398,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1656.773980,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1511.754765,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1511.754765,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 12,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1520.854245,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1520.854245,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1645.751215,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1645.751215,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 13,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1663.372525,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1663.372525,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1573.670915,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1573.670915,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 14,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1583.85659,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1583.856590,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-8",
+            "task_count": 8,
+            "operation_count": 200000,
+            "value": 1700.73511,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "8",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,8,200000,1700.735110,1,200000",
+            "stderr": ""
+          }
+        }
+      ],
+      "summary": {
+        "value_unit": "ns/op",
+        "baseline_median": 1552.531315,
+        "candidate_median": 1645.751215,
+        "paired_geometric_mean_ratio_candidate_over_baseline": 1.0765380782871936,
+        "ratio_95_percent_ci": [
+          1.04793054247417,
+          1.105926573402502
+        ],
+        "percent_change": 7.653807828719361,
+        "percent_change_95_percent_ci": [
+          4.793054247417006,
+          10.592657340250188
+        ],
+        "direction": "slower",
+        "candidate_better_pairs": 0,
+        "log_ratio_mean": 0.07375040950249531,
+        "log_ratio_standard_error": 0.012557473531914136,
+        "student_t_critical_df14_975": 2.1447866879169273,
+        "build_counts": {
+          "baseline": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "candidate": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "baseline_total": 15,
+          "candidate_total": 15,
+          "baseline_range": [
+            1,
+            1
+          ],
+          "candidate_range": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    "warm-contention-32": {
+      "definition": {
+        "name": "warm-contention-32",
+        "csv_name": "warm-contention",
+        "arguments": [
+          "--registry-bench",
+          "warm-contention",
+          "32",
+          "200000"
+        ],
+        "task_count": 32,
+        "operation_count": 200000,
+        "value_unit": "ns/op"
+      },
+      "samples": [
+        {
+          "pair_index": 0,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1598.869525,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1598.869525,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1669.20959,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1669.209590,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 1,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1665.469425,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1665.469425,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1560.141975,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1560.141975,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 2,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1547.251715,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1547.251715,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1636.443785,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1636.443785,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 3,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1662.14092,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1662.140920,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1571.78955,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1571.789550,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 4,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1553.183435,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1553.183435,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1677.376005,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1677.376005,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 5,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1688.55579,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1688.555790,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1569.066995,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1569.066995,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 6,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1589.179285,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1589.179285,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1669.993285,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1669.993285,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 7,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1682.22376,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1682.223760,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1548.763705,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1548.763705,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 8,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1758.53856,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1758.538560,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1713.11571,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1713.115710,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 9,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1664.55066,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1664.550660,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1586.041425,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1586.041425,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 10,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1562.399975,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1562.399975,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1670.28976,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1670.289760,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 11,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1672.58961,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1672.589610,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1592.797795,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1592.797795,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 12,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1549.895395,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1549.895395,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1689.828465,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1689.828465,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 13,
+          "process_order": [
+            "candidate",
+            "baseline"
+          ],
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1677.32947,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1677.329470,1,200000",
+            "stderr": ""
+          },
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1558.3265,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1558.326500,1,200000",
+            "stderr": ""
+          }
+        },
+        {
+          "pair_index": 14,
+          "process_order": [
+            "baseline",
+            "candidate"
+          ],
+          "baseline": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1583.08808,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/tmp/registry-baseline/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1583.088080,1,200000",
+            "stderr": ""
+          },
+          "candidate": {
+            "scenario": "warm-contention-32",
+            "task_count": 32,
+            "operation_count": 200000,
+            "value": 1688.61637,
+            "value_unit": "ns/op",
+            "build_count": 1,
+            "checksum": 200000,
+            "command": [
+              "/__w/Swift-Highlight/Swift-Highlight/.build/out/Products/Release-linux-x86_64/highlight-bench",
+              "--registry-bench",
+              "warm-contention",
+              "32",
+              "200000"
+            ],
+            "stdout": "registry-bench,warm-contention,32,200000,1688.616370,1,200000",
+            "stderr": ""
+          }
+        }
+      ],
+      "summary": {
+        "value_unit": "ns/op",
+        "baseline_median": 1569.066995,
+        "candidate_median": 1672.58961,
+        "paired_geometric_mean_ratio_candidate_over_baseline": 1.0593801867715391,
+        "ratio_95_percent_ci": [
+          1.043823664632099,
+          1.0751685539910198
+        ],
+        "percent_change": 5.938018677153911,
+        "percent_change_95_percent_ci": [
+          4.382366463209908,
+          7.516855399101985
+        ],
+        "direction": "slower",
+        "candidate_better_pairs": 1,
+        "log_ratio_mean": 0.05768400764222197,
+        "log_ratio_standard_error": 0.006897392705781951,
+        "student_t_critical_df14_975": 2.1447866879169273,
+        "build_counts": {
+          "baseline": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "candidate": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "baseline_total": 15,
+          "candidate_total": 15,
+          "baseline_range": [
+            1,
+            1
+          ],
+          "candidate_range": [
+            1,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "hashes_after": {
+    "baseline": "1ba71713d08480b6c2d3323d7e6cb63921175c2bde54d5bcfd40874f06ba58cd",
+    "candidate": "e9bfea4b06fb62a6b3dc815df483bc635028533ce474dc30d53ae976bee8ac1a"
+  },
+  "hashes_stable": true,
+  "completed_at_utc": "2026-11-17T12:48:37.670626+00:00"
+}

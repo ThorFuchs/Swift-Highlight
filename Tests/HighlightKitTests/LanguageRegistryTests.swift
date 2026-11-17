@@ -83,6 +83,37 @@ struct LanguageRegistryTests {
         }
     }
 
+    /// Exercises the cached-failure path under contention without introducing
+    /// another test-side Mutex into the Thread Sanitizer measurement.
+    @Test func contendedFailedCompilation() async {
+        let invalid = LanguageDescriptor(name: "invalid-tsan") {
+            LanguageDefinition(name: "invalid-tsan", root: Mode(contains: [Mode(begin: "(")]))
+        }
+        let registry = LanguageRegistry(languages: [invalid])
+        let taskCount = 64
+        let barrier = StartBarrier(participantCount: taskCount)
+        var failures = 0
+
+        await withTaskGroup(of: Bool.self) { group in
+            for _ in 0..<taskCount {
+                group.addTask {
+                    await barrier.wait()
+                    do {
+                        _ = try registry.compiledLanguage(named: "invalid-tsan")
+                        return false
+                    } catch let error as HighlightError {
+                        if case .invalidRegex = error { return true }
+                        return false
+                    } catch {
+                        return false
+                    }
+                }
+            }
+            for await failed in group where failed { failures += 1 }
+        }
+        #expect(failures == taskCount)
+    }
+
     @Test func compilationFailureIsCachedPerGenerationUnderContention() async {
         let builds = Mutex(0)
         let invalid = LanguageDescriptor(name: "invalid-contended") {
