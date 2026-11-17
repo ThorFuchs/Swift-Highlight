@@ -16,18 +16,20 @@ private final class LinuxLockedState<Value: Sendable>: @unchecked Sendable {
         self.value = value
         lock = .allocate(capacity: 1)
         lock.initialize(to: pthread_mutex_t())
-        precondition(pthread_mutex_init(lock, nil) == 0, "pthread_mutex_init failed")
+        guard pthread_mutex_init(lock, nil) == 0 else { fatalError("pthread_mutex_init failed") }
     }
 
     deinit {
-        precondition(pthread_mutex_destroy(lock) == 0, "pthread_mutex_destroy failed")
+        guard pthread_mutex_destroy(lock) == 0 else { fatalError("pthread_mutex_destroy failed") }
         lock.deinitialize(count: 1)
         lock.deallocate()
     }
 
     func withLock<Result>(_ body: (inout Value) throws -> Result) rethrows -> Result {
-        precondition(pthread_mutex_lock(lock) == 0, "pthread_mutex_lock failed")
-        defer { precondition(pthread_mutex_unlock(lock) == 0, "pthread_mutex_unlock failed") }
+        guard pthread_mutex_lock(lock) == 0 else { fatalError("pthread_mutex_lock failed") }
+        defer {
+            guard pthread_mutex_unlock(lock) == 0 else { fatalError("pthread_mutex_unlock failed") }
+        }
         return try body(&value)
     }
 }
