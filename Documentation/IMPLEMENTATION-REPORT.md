@@ -147,8 +147,8 @@ The project documentation was aligned with the structure of Swift-GFM. DocC
 catalogs now cover the core, HTML and Apple layers. On Linux x86_64 with Swift
 6.4.2, `Tools/build-docc.sh` built the core and HTML archives with DocC warnings
 as errors and checked documentation on 215/215 and 8/8 source-declared public
-symbols respectively. The Apple archive was skipped because this host has no
-Apple SDK; its symbols and documentation have not been verified here. The
+symbols respectively. The Apple archive was skipped on that host because it has
+no Apple SDK; a later successful macOS run is recorded below. The
 local-link checker, 254-test Swift 6.4.2 suite, and a separate Swift 6.1.3
 consumer using the documented core and HTML APIs also passed. The added CI
 documentation job has not yet run on GitHub.
@@ -160,7 +160,7 @@ reference; similarities and exact-prefix relationships are recorded in the
 provenance inventory. Quoted material and individual contributions still need
 release review; this analysis is not a legal opinion.
 
-Before public release, verify the Apple DocC and SDK checks on the intended
+Before public release, verify the remaining Apple SDK checks on the intended
 Apple toolchain, review the unresolved sanitizer observations and third-party
 material, enable and verify a private vulnerability-reporting channel, and
 confirm CI for the exact release commit. The local `0.1.0` tag refers to
@@ -196,12 +196,16 @@ reproduction showed that cross-module and Foundation extensions emit synthetic
 `swift.extension` container symbols alongside their separately declared public
 members. The checker now skips only those containers; it still requires every
 public member's documentation and rejects graphs containing only containers.
-The fix and its regression tests were checked on Linux; the Apple DocC run must
-be repeated on macOS before calling it verified.
+The fix and its regression tests were checked on Linux.
 
 The macOS run at `6dd7545` confirmed 215/215 Core, 8/8 HTML, and 87/87 Apple
 public symbols documented. Apple archive conversion then failed because a
 documentation link to the Core type `HighlightToken` could not be resolved in
-the Apple-only symbol graphs. That reference now uses inline code instead of a
-DocC symbol link. Apple archive conversion must be rerun on macOS to verify the
-fix.
+the Apple-only symbol graphs. That reference was changed to use inline code
+instead of a DocC symbol link.
+
+The maintainer subsequently reported a macOS run at `cb3fb8c` that built all
+three documentation archives successfully, with 215/215 Core, 8/8 HTML, and
+87/87 Apple public source symbols documented and DocC exit status 0. This
+confirms documentation generation on that macOS toolchain; it is not a substitute
+for the remaining platform tests or CI on the eventual release commit.
