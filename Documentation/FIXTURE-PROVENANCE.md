@@ -1,6 +1,7 @@
 # Fixture provenance inventory
 
-Compared raw bytes against tracked highlight.js source files at commit `08cb242e7d4aee787114eb04cc7ab18314d82f92`. Exact matches establish byte identity, not the original source or ownership of each contribution. Similarities are character-sequence ratios (Python difflib, autojunk disabled), not proof of derivation or ownership. Unmatched or modified files may be generated, changed, or independently authored; their provenance remains unresolved. JSON expectations were not used for attribution.
+The inventory below records the original 1.0.0 fixture inputs compared as raw
+bytes against tracked highlight.js source files at commit `08cb242e7d4aee787114eb04cc7ab18314d82f92`. Exact matches establish byte identity, not the original source or ownership of each contribution. Similarities are character-sequence ratios (Python difflib, autojunk disabled), not proof of derivation or ownership. Unmatched or modified files may be generated, changed, or independently authored; their provenance remains unresolved. JSON expectations were not used for attribution.
 
 All 17 fixtures below marked as similar or extended match the corresponding
 file at the pinned HighlightKit revision `524c185b0553756498c1b6a1765e8d119c4623a6`
@@ -8,6 +9,13 @@ byte-for-byte. The same check was made for the two Erlang quotation fixtures
 and `xml/document-type-variations.code.txt`. HighlightKit's MIT license is
 retained, alongside the highlight.js BSD-3-Clause license. This confirms where
 those copies were imported from, not independent ownership of their contents.
+
+After 1.0.0, the two Erlang inputs and the XML input named above were edited
+to replace the identified quotations and named example with neutral original
+text. Their syntax cases were retained and their expectations regenerated
+against the pinned reference; the original inputs remain in the 1.0.0 tag and
+Git history. The three table rows therefore describe the 1.0.0 inputs, not the
+modified current files.
 
 | Imported code fixture | Byte-identical highlight.js file(s) |
 | --- | --- |

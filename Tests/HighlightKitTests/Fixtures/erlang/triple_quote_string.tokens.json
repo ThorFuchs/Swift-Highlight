@@ -27,13 +27,13 @@
   },
   {
    "start": 20,
-   "length": 218,
+   "length": 162,
    "scopes": [
     "string"
    ]
   },
   {
-   "start": 275,
+   "start": 219,
    "length": 14,
    "scopes": [
     "function",
@@ -41,7 +41,7 @@
    ]
   },
   {
-   "start": 289,
+   "start": 233,
    "length": 2,
    "scopes": [
     "function",
@@ -49,21 +49,21 @@
    ]
   },
   {
-   "start": 291,
+   "start": 235,
    "length": 3,
    "scopes": [
     "function"
    ]
   },
   {
-   "start": 299,
+   "start": 243,
    "length": 119,
    "scopes": [
     "string"
    ]
   },
   {
-   "start": 421,
+   "start": 365,
    "length": 11,
    "scopes": [
     "function",
@@ -71,7 +71,7 @@
    ]
   },
   {
-   "start": 432,
+   "start": 376,
    "length": 2,
    "scopes": [
     "function",
@@ -79,14 +79,14 @@
    ]
   },
   {
-   "start": 434,
+   "start": 378,
    "length": 3,
    "scopes": [
     "function"
    ]
   },
   {
-   "start": 442,
+   "start": 386,
    "length": 24,
    "scopes": [
     "string"

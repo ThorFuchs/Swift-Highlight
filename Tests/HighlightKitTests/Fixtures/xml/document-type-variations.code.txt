@@ -4,14 +4,14 @@
 <!DOCTYPE note [
 <!ENTITY nbsp '&#xA0;'>
 <!ENTITY pound '&#xA3;'>
-<!ENTITY writer_person " Writer: Donald Duck. ">
-<!ENTITY copyright "Copyright: Walt Disney Company.">
+<!ENTITY writer_person " Writer: Example Author. ">
+<!ENTITY copyright "Copyright: Example Publisher.">
 ]>
 
 <!ENTITY nbsp ' &#xA0; '>
 <!ENTITY pound '&#xA3;'>
-<!ENTITY writer_person " Writer: Donald Duck. ">
-<!ENTITY copyright "Copyright: Walt Disney Company.">
+<!ENTITY writer_person " Writer: Example Author. ">
+<!ENTITY copyright "Copyright: Example Publisher.">
 
 <!DOCTYPE bookstore [
 <!ELEMENT bookstore (book*)>
