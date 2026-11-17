@@ -9,6 +9,7 @@ exactly the supplied UTF-16 source. The output is the content of a code element,
 not an entire HTML document. Stylesheets and document sanitization belong to
 the consuming application.
 
+<!-- docc-verify: html -->
 ```swift
 import SwiftHighlight
 import SwiftHighlightHTML

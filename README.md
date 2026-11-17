@@ -173,7 +173,11 @@ completed checks from open platform and sanitizer work. The
 [WASI example](Examples/WASISmoke/README.md) exercises one actual Swift/HTML
 case. See [contributing](CONTRIBUTING.md) for fixture and reference checks and
 [DocC guides](Sources/HighlightKit/SwiftHighlight.docc/SwiftHighlight.md) for
-API contracts.
+API contracts. To build all available DocC archives locally, run
+`sh Tools/build-docc.sh`; the archives are written to `.build/docc`. Building
+the Apple archive requires an Apple SDK. The package's Swift Package Index
+manifest lists all three documentation targets for use when the package is
+indexed.
 
 ## Versioning and support
 

@@ -18,9 +18,9 @@ public enum CommonModes {
     public static let underscoreIdentRe = "[a-zA-Z_]\\w*"
     /// A regex source for a simple decimal number.
     public static let numberRe = "\\b\\d+(\\.\\d+)?"
-    /// 0x…, decimal, float with exponent
+    /// A regex source for hexadecimal, decimal, and exponent-form numbers.
     public static let cNumberRe = "(-?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)"
-    /// 0b…
+    /// A regex source for binary numbers prefixed with `0b`.
     public static let binaryNumberRe = "\\b(0b[01]+)"
     /// A regex source for tokens that can precede a regular-expression literal.
     public static let reStartersRe =

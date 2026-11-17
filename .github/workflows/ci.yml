@@ -35,6 +35,8 @@ jobs:
       - run: xcodebuild -scheme SwiftHighlightApple -destination 'generic/platform=iOS Simulator' build
       - name: Build all DocC archives
         run: sh Tools/build-docc.sh
+      - name: Verify DocC examples, including Apple rendering
+        run: python3 Tools/verify-docc-examples.py
   documentation:
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -47,4 +49,5 @@ jobs:
         run: apt-get update && apt-get install -y python3
       - run: python3 Tools/check-documentation-links.py
       - run: python3 -m unittest discover -s Tools -p 'test_*.py'
+      - run: python3 Tools/verify-docc-examples.py
       - run: sh Tools/build-docc.sh

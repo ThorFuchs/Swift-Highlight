@@ -1,8 +1,16 @@
 internal import Foundation
 public import SwiftHighlight
 
-/// Produces HTML from UTF-16 token ranges. Class components must consist of
-/// ASCII letters, digits, hyphens, or underscores; dots separate components.
+/// Renders syntax tokens as escaped HTML fragments or code blocks.
+///
+/// Prefer ``render(_:result:)`` when you have a `HighlightResult`: it checks
+/// that the result was produced from the exact supplied source. The lower-level
+/// token APIs validate ranges but can't verify their association with a source.
+/// Scope and language class components accept ASCII letters, digits, hyphens,
+/// and underscores; dots separate components and become hyphens in class names.
+///
+/// This renderer escapes the code it receives. It doesn't sanitize surrounding
+/// HTML, locate code blocks in an existing document, or include a stylesheet.
 public struct HTMLHighlightRenderer: Sendable {
     /// An error specific to HTML text or class rendering.
     public enum RenderError: Error, Sendable, Equatable {
@@ -14,13 +22,30 @@ public struct HTMLHighlightRenderer: Sendable {
     /// Creates a stateless HTML renderer.
     public init() {}
 
-    /// Validates that this result belongs to exactly this source.
+    /// Renders a source-bound result as an HTML fragment.
+    ///
+    /// - Parameters:
+    ///   - source: The exact input passed to the highlighter.
+    ///   - result: The result produced for that input.
+    /// - Returns: Escaped text and nested `span` elements, without a wrapper.
+    /// - Throws: `TokenValidationError` for a source mismatch or invalid range,
+    ///   or ``RenderError`` for a NUL character or invalid scope class.
     public func render(_ source: String, result: HighlightResult) throws -> String {
         try result.validateSource(source)
         return try render(source, tokens: result.tokens)
     }
 
-    /// Low-level API: callers are responsible for associating tokens with their source.
+    /// Renders externally supplied tokens as an HTML fragment.
+    ///
+    /// - Important: Range validation can't establish that `tokens` belong to
+    ///   `source`. Keep this association in the caller, or use
+    ///   ``render(_:result:)`` for a source-bound result.
+    /// - Parameters:
+    ///   - source: The text against which ranges are validated.
+    ///   - tokens: Ordered, non-overlapping UTF-16 token ranges.
+    /// - Returns: Escaped text and nested `span` elements, without a wrapper.
+    /// - Throws: `TokenValidationError` for an invalid range, or ``RenderError``
+    ///   for a NUL character or invalid scope class.
     public func render(_ source: String, tokens: [HighlightToken]) throws -> String {
         guard !source.unicodeScalars.contains(where: { $0.value == 0 }) else { throw RenderError.nullCharacter }
         try validateTokens(tokens, in: source)
@@ -40,7 +65,17 @@ public struct HTMLHighlightRenderer: Sendable {
         return output
     }
 
-    /// Renders a `<pre><code>` wrapper. Callers must associate tokens with their source.
+    /// Renders escaped code in a `<pre><code>` wrapper.
+    ///
+    /// - Important: The caller must associate `tokens` with their original
+    ///   `source`; this method validates ranges but not source identity.
+    /// - Parameters:
+    ///   - source: The text against which ranges are validated.
+    ///   - tokens: Ordered, non-overlapping UTF-16 token ranges.
+    ///   - language: An optional language class component, such as `swift`.
+    /// - Returns: A complete `<pre><code>` element containing escaped source.
+    /// - Throws: `TokenValidationError` for invalid ranges, or ``RenderError``
+    ///   for NUL or an invalid scope or language class.
     public func codeBlock(_ source: String, tokens: [HighlightToken], language: String? = nil) throws -> String {
         let attribute = try language.map { " class=\"language-\(try cssName($0))\"" } ?? ""
         return "<pre><code\(attribute)>\(try render(source, tokens: tokens))</code></pre>"

@@ -8,6 +8,7 @@ Analyze code with SwiftHighlight and apply a theme to the resulting tokens.
 A theme change reuses the result; it does not require another grammar scan.
 The renderer validates the result against the exact input before applying ranges.
 
+<!-- docc-verify: apple -->
 ```swift
 import SwiftHighlight
 import SwiftHighlightApple

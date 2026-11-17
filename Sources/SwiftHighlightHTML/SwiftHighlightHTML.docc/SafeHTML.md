@@ -17,3 +17,28 @@ markup.
 The result-based renderer verifies input identity. The `tokens:` overload and
 code-block wrapper only validate ranges; callers must associate them with the
 original input themselves.
+
+## Render a complete code block
+
+The fragment API checks source identity. The wrapper API accepts tokens, so
+validate the source-bound result before passing it to that lower-level method:
+
+<!-- docc-verify: html -->
+```swift
+import SwiftHighlight
+import SwiftHighlightHTML
+
+let source = "let value = \"<hello>\""
+let result = try Highlighter().highlightStrict(source, as: "swift")
+let renderer = HTMLHighlightRenderer()
+let fragment = try renderer.render(source, result: result)
+precondition(fragment.contains("&lt;hello&gt;"))
+
+try result.validateSource(source)
+let block = try renderer.codeBlock(source, tokens: result.tokens, language: "swift")
+precondition(block.hasPrefix("<pre><code class=\"language-swift\">"))
+```
+
+Insert the resulting markup into an appropriate HTML context and provide your
+own stylesheet. Don't escape the returned markup a second time; escape or
+sanitize any separately composed content according to its own context.
