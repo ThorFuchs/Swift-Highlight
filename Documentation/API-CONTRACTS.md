@@ -51,8 +51,8 @@ lines; use whole-block highlighting for the reference behavior.
 A registry synchronizes lazy grammar compilation and publishes immutable
 compiled graphs. Internal `@unchecked Sendable` graph types rely on owner
 lifetimes and explicit cycle teardown. The [implementation report](IMPLEMENTATION-REPORT.md)
-records unresolved Thread Sanitizer warnings and the available controls; no
-blanket race or leak freedom is implied.
+records targeted Thread Sanitizer checks and their limitations; no blanket
+race or leak freedom is implied.
 
 No hard input-size, memory or time limits are enforced. Regex matching uses
 Foundation and ICU; hostile patterns and inputs can consume substantial

@@ -63,3 +63,13 @@ A companion `Scripts/NSLockSanitizerControl.swift` uses an `NSLock`-protected
 counter. Its isolated `@unchecked Sendable` type is a diagnostic control,
 not part of the library. On the same Swift 6.4.2 Linux runtime it completed
 without sanitizer warnings, whereas the Mutex control reported warnings.
+
+The Linux compilation gate uses `NSLock` on Linux so that the previously
+reported contended registry workload can be checked by TSan. The
+`thread-sanitizer.yml` workflow checks the NSLock control and both the
+successful and failed contended compilation paths on Swift 6.2.4 and 6.4.
+The Mutex control is observational and allowed to fail; the package tests and
+NSLock control are not. A passing targeted run is not a proof of race freedom.
+The workflow configures address-space randomization only on the disposable
+hosted VM and runs the pinned containers with an unrestricted seccomp profile
+to allow TSan to start.

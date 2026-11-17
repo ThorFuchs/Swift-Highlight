@@ -2,7 +2,7 @@ name: Linux Thread Sanitizer diagnostics
 
 on:
   push:
-    branches: [fix/resolve-release-followups]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -28,11 +28,15 @@ jobs:
         run: sudo sysctl vm.mmap_rnd_bits=28
       - name: Toolchain version
         run: docker run --rm '${{ matrix.image }}' swift --version
-      - name: Mutex control
+      # The known toolchain diagnostic remains visible without masking failures
+      # in the NSLock control or either package test.
+      - name: Mutex control (observational)
+        continue-on-error: true
         run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' sh -c 'swiftc -sanitize=thread Scripts/MutexSanitizerControl.swift -o /tmp/mutex-control && /tmp/mutex-control'
       - name: NSLock control
         if: ${{ always() }}
         run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' sh -c 'swiftc -sanitize=thread Scripts/NSLockSanitizerControl.swift -o /tmp/nslock-control && /tmp/nslock-control'
       - name: Contended lazy compilation
-        if: ${{ always() }}
         run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' swift test --sanitize=thread --filter contendedLazyCompilation
+      - name: Contended failed compilation
+        run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' swift test --sanitize=thread --filter contendedFailedCompilation

@@ -244,3 +244,26 @@ escaping. On the same date, Apple Swift 6.4.2 (Xcode 27.2, arm64) passed
 `swift test --sanitize=thread --filter contendedLazyCompilation` at that
 commit: one test passed with no sanitizer diagnostics. This macOS result does
 not resolve the Linux warnings.
+
+After 1.0.0, the two Erlang quotation fixtures and the XML named example were
+changed to neutral original text while retaining the syntax under test. The
+three expectations were regenerated with the pinned highlight.js reference;
+all 375 fixture pairs matched, with no EOF clipping. This change reduces
+future distribution of the identified text in current source snapshots; the
+1.0.0 tag and imported history retain the original material, whose additional
+rights have not been independently established.
+
+## Linux compilation gate follow-up
+
+On 17 November 2026, the original warnings were reproduced in
+[Linux CI](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44083889175)
+with Swift 6.2.4 and 6.4. The isolated Mutex control also reported warnings;
+the NSLock control passed. After replacing only the Linux per-generation
+compilation gate with an NSLock-protected state, the targeted
+`contendedLazyCompilation` test passed under TSan on both toolchains in
+[a follow-up run](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44084182429).
+The Mutex control still reported warnings in that run, so the overall
+diagnostic jobs failed as designed. The evidence is consistent with a Mutex
+TSan interaction but does not classify every former warning or establish
+race freedom. The wrapper confines `@unchecked Sendable` to state whose every
+access is protected by the same lock; other platforms retain `Mutex`.
