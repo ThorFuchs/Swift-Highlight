@@ -140,7 +140,7 @@ final class CompiledLanguage: @unchecked Sendable {
     }
 }
 
-/// Errors raised while compiling a grammar.
+/// Errors resolving a language or compiling its grammar.
 public enum HighlightError: Error, CustomStringConvertible {
     /// The requested language or alias is not registered.
     case unknownLanguage(String)

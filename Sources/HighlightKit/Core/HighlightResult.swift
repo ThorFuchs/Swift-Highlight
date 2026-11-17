@@ -17,9 +17,12 @@ import Foundation
 /// following lines are unaffected and need not be re-highlighted:
 ///
 /// ```swift
-/// let result = highlighter.highlight(line, as: lang, continuation: prev)
-/// if result.continuation == storedEndState[lineIndex] { return }  // converged
-/// storedEndState[lineIndex] = result.continuation
+/// let highlighter = Highlighter()
+/// let old = highlighter.highlight("/* old comment\n", as: "swift")
+/// let updated = highlighter.highlight("/* new comment\n", as: "swift")
+/// if old.continuation == updated.continuation {
+///     // An editor can reuse unchanged subsequent lines.
+/// }
 /// ```
 ///
 /// - Important: Highlighting a line **in isolation** cannot see the
@@ -29,10 +32,9 @@ import Foundation
 ///   line. For such constructs a line-by-line pass can differ from
 ///   highlighting the whole text at once. This is intrinsic to
 ///   line-isolation and is shared by every line-mode highlighter; the
-///   continuation carries all it *can*. When exactness matters (Phrase's
-///   code blocks), highlight the whole block string in one call — that is
-///   always token-for-token exact and, at this engine's throughput, fast
-///   enough for typical blocks.
+///   continuation carries parser state but not surrounding source text. When
+///   exact whole-block behavior matters, highlight the complete block in one
+///   call. Measure performance on the inputs used by your application.
 public struct Continuation: Equatable, Sendable {
     // Full resumable parser state (mode stack + per-run state a resumed
     // line needs to reproduce the whole-buffer tokenization).
@@ -138,8 +140,8 @@ public struct HighlightResult: Sendable {
     /// The language the code was highlighted as (`nil` for plain text).
     public let language: String?
 
-    /// How confident the grammar is that the code is really this
-    /// language; used to rank candidates during auto-detection.
+    /// A grammar-specific score used to rank automatic-detection candidates.
+    /// This value is not a probability or a calibrated confidence percentage.
     public let relevance: Double
 
     /// `true` when parsing was aborted because the code contained
@@ -159,7 +161,15 @@ public struct HighlightResult: Sendable {
 
     private var analyzedSource: String?
 
-    /// Verifies exact UTF-16 identity, including normalization differences.
+    /// Validates source identity and every token range.
+    ///
+    /// Compares the exact UTF-16 sequence, so canonically equivalent strings
+    /// with different encodings don't match. A successful result doesn't imply
+    /// that its tokens cover plain-text gaps.
+    ///
+    /// - Parameter source: The exact string passed to the highlighting call.
+    /// - Throws: ``TokenValidationError/sourceMismatch`` if the text differs,
+    ///   or ``TokenValidationError/invalidRange(index:)`` for an invalid range.
     public func validateSource(_ source: String) throws {
         guard let analyzedSource, analyzedSource.utf16.elementsEqual(source.utf16) else {
             throw TokenValidationError.sourceMismatch

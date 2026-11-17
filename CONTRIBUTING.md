@@ -42,6 +42,7 @@ swift test
 swift build -c release
 python3 Tools/check-documentation-links.py
 python3 -m unittest discover -s Tools -p 'test_*.py'
+python3 Tools/verify-docc-examples.py
 sh Tools/build-docc.sh
 ```
 
@@ -51,6 +52,11 @@ on Linux it reports that Apple DocC is skipped because Apple SDK symbols are
 unavailable. Validate the Apple archive on an Apple toolchain separately. On
 macOS the script also builds the test targets in its scratch directory before
 extracting symbol graphs; it does not run the tests.
+
+The DocC example verifier compiles and runs marked catalog examples and inline
+core API examples as independent SwiftPM consumers. Every Swift code block in
+a catalog must have a `docc-verify` marker. Linux skips Apple-only examples;
+macOS CI checks them.
 
 The fixture inventory asserts 375 code/expectation pairs across 65 languages;
 the parameterized fidelity test compares tokens and relevance. For grammar and

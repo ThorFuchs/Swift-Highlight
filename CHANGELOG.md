@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Expand DocC API guidance and add verified examples for language detection,
+  incremental highlighting, custom grammars, HTML, and Apple themes.
+
 ## 1.0.1
 
 - Replace identified literary quotations and a named example in three test

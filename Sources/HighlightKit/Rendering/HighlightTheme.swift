@@ -115,11 +115,18 @@ public struct HighlightTheme: Sendable {
 }
 
 extension HighlightResult {
-    /// Renders the highlighted code as an attributed string.
+    /// Applies a theme to a previously analyzed result.
+    ///
+    /// Reuse the same result with another theme to change its appearance without
+    /// repeating analysis. The theme's background color is a suggestion for
+    /// the enclosing view; this method applies foreground and font attributes.
     ///
     /// - Parameters:
-    ///   - code: the exact code string that produced this result.
-    ///   - theme: colors and font to apply.
+    ///   - code: The exact source string passed to the highlighter.
+    ///   - theme: The colors, font, and scope styles to apply.
+    /// - Returns: An attributed string containing the original source.
+    /// - Throws: `TokenValidationError` if the source doesn't match or a token
+    ///   range is invalid. No partially rendered string is returned.
     public func attributedString(for code: String, theme: HighlightTheme) throws -> NSAttributedString {
         try validateSource(code)
         let baseFont = theme.font.resolved()

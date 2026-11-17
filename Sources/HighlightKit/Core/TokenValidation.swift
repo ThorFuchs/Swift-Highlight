@@ -8,7 +8,19 @@ public enum TokenValidationError: Error, Sendable, Equatable {
     case invalidRange(index: Int)
 }
 
-/// Checks ordering, bounds and UTF-16 scalar boundaries against the supplied text.
+/// Checks token ordering, bounds, and UTF-16 scalar boundaries.
+///
+/// This validates ranges against `source`, but can't establish that the tokens
+/// were produced from that exact source. For a result returned by a highlighter,
+/// use ``HighlightResult/validateSource(_:)`` to check source identity as well.
+/// Ranges may cross grapheme-cluster boundaries as long as they don't split a
+/// UTF-16 surrogate pair.
+///
+/// - Parameters:
+///   - tokens: Tokens in ascending, non-overlapping order.
+///   - source: The string against which the UTF-16 ranges are validated.
+/// - Throws: ``TokenValidationError/invalidRange(index:)`` for the first invalid
+///   range, including an empty or overlapping range.
 public func validateTokens(_ tokens: [HighlightToken], in source: String) throws {
     let units = source.utf16
     let count = units.count

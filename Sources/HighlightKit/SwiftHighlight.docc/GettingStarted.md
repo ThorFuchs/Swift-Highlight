@@ -2,9 +2,25 @@
 
 Create a highlighter, select a registered language, and consume its tokens.
 
+## Add the package
+
+Add the public repository URL `https://github.com/ThorFuchs/Swift-Highlight.git`
+as a Swift package dependency and add the `SwiftHighlight` product to your
+application target. The package requires Swift tools 6.1 and Swift 6 language
+mode. Its Apple deployment targets are macOS 15, iOS 18, tvOS 18, watchOS 11,
+and visionOS 2 or later. The core and HTML products also support Linux; see the
+repository's platform verification report for tested toolchains.
+
+Choose `SwiftHighlightHTML` for escaped HTML or `SwiftHighlightApple` for
+attributed text on Apple platforms. These are separate products; add the
+renderer your application uses to its target dependencies.
+
 ## Explicit language
 
+<!-- docc-verify: core -->
 ```swift
+import SwiftHighlight
+
 let highlighter = Highlighter()
 let source = "let value = 42"
 let result = try highlighter.highlightStrict(source, as: "swift")

@@ -9,6 +9,7 @@ engine. It produces tokens without depending on a renderer or an Apple UI
 framework. Language definitions and engine semantics derive from HighlightKit
 and the pinned highlight.js version; see the repository's third-party notices.
 
+<!-- docc-verify: core -->
 ```swift
 import SwiftHighlight
 
@@ -28,6 +29,9 @@ token array can also be a successful result with no scoped text.
 ### Guides
 
 - <doc:GettingStarted>
+- <doc:LanguageDetection>
+- <doc:IncrementalHighlighting>
+- <doc:CustomLanguages>
 - <doc:TokensAndDiagnostics>
 - <doc:ConcurrencyAndLimits>
 
