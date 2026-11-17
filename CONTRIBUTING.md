@@ -20,9 +20,6 @@ swift build
 swift test
 ```
 
-During release preparation, access to the private repository is required to
-clone it. Check the available tags and default branch before relying on them.
-
 ## Make a change
 
 - Keep the `SwiftHighlight`, `SwiftHighlightHTML`, and `SwiftHighlightApple`

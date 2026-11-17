@@ -37,19 +37,21 @@ test material come with their original licenses; see
 
 ## Requirements and installation
 
-The manifest requires Swift tools 6.1 and Swift 6 language mode. The table
-summarizes observed checks, not an unsupported-platform guarantee:
+The manifest requires Swift tools 6.1 and Swift 6 language mode. Apple deployment
+targets must be at least macOS 15, iOS 18, tvOS 18, watchOS 11, or visionOS 2.
+Declare a compatible minimum platform version in your package manifest or app
+project. The table summarizes observed checks, not an unsupported-platform
+guarantee:
 
 | Platform | Evidence |
 | --- | --- |
 | Linux x86_64 | Core and HTML tests with Swift 6.1.3, 6.2.4 and 6.4.2; standard release build with 6.4.2 |
-| macOS | Maintainer-reported passing CI at `d101ac3`, including tests, release build and DocC |
-| iOS | Maintainer-reported passing Apple renderer build for a generic iOS Simulator in CI at `d101ac3`; device runtime not verified |
+| macOS | [CI at `326a008`](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44070741672) passed tests, release build and DocC |
+| iOS | Generic iOS Simulator build passed in [CI at `326a008`](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44070741672); device runtime not verified |
 | WebAssembly (WASI Preview 1) | Core and HTML builds reported on macOS; one Swift/HTML consumer smoke executed on Node.js 24 from Linux |
 | Linux arm64, static Linux (musl), other Apple platforms | Not verified |
 
-To use a tagged release, specify a version requirement after the `1.0.0` tag
-is available:
+To use a tagged release, specify a version requirement:
 
 ```swift
 dependencies: [
@@ -65,9 +67,8 @@ targets: [
 ]
 ```
 
-Before a release is available, use a local checkout or replace the version
-requirement with `branch: "feature/bootstrap-swift-highlight"`. Branch
-dependencies are not stable releases. See [release preparation](RELEASING.md).
+See [releases](https://github.com/ThorFuchs/Swift-Highlight/releases) and the
+[release process](RELEASING.md) for published versions.
 
 ## Analyze source
 

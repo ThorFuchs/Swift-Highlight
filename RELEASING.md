@@ -1,46 +1,37 @@
 # Release process
 
-The initial release version is `1.0.0`. Check the repository tags and releases
-for publication status. Use semantic version tags without a `v` prefix,
-consistent with Swift-GFM. Never
-move or delete a published tag. Creating a tag, pushing it, publishing a GitHub
-release, and changing repository visibility are distinct maintainer actions.
+Swift-Highlight uses semantic version tags without a `v` prefix. Version
+[1.0.0](https://github.com/ThorFuchs/Swift-Highlight/releases/tag/1.0.0) was
+published from commit `326a0085c05931b868f5bff084d51eca7584aad7`. Never move,
+delete, or recreate a published tag.
 
-## Current release checks
-
-- Neither the local repository nor `origin` had a `1.0.0` tag when checked.
-  Imported HighlightKit tags `0.1.0`, `0.1.1`, and `0.2.0` refer to upstream
-  commits, not Swift-Highlight releases. Keep them for provenance; do not use
-  `git push --tags` or move an existing remote tag. Push the chosen tag only.
-- Review the [fixture provenance inventory](Documentation/FIXTURE-PROVENANCE.md)
-  and third-party notices, including quoted material and modified fixtures.
-  Current documentation does not assert a completed rights audit.
-- `origin/HEAD` selected `feature/bootstrap-swift-highlight` when checked
-  during preparation. Prepare `main` from the reviewed candidate and select it
-  as the default branch on GitHub before publishing; verify both its commit and
-  the default-branch setting rather than assuming they are current.
-- Confirm private vulnerability reporting is enabled and accessible before
-  publication. Review Linux Thread Sanitizer warnings and confirm CI for the
-  exact release commit. The maintainer reported all CI jobs green at `d101ac3`,
-  including the macOS workflow's tests, generic iOS Simulator build and DocC.
-  Distinguish user-reported results and WASI smoke coverage from comprehensive
-  platform tests.
-  CI also runs the DocC script on macOS so that the Apple archive is checked;
-  verify the actual outcome for the release commit.
+Imported HighlightKit tags `0.1.0`, `0.1.1`, and `0.2.0` refer to upstream
+commits, not Swift-Highlight releases. Keep them for provenance; do not use
+`git push --tags`. Push only the intended new tag.
 
 ## Prepare and publish
 
 1. Review the API and [versioning policy](README.md#versioning-and-support),
-   changes, licenses, platform claims, and unresolved diagnostics.
+   changes, licenses, platform claims, and unresolved diagnostics. Review the
+   [fixture provenance inventory](Documentation/FIXTURE-PROVENANCE.md) and
+   third-party notices; provenance does not establish all rights in quoted
+   material.
 2. Run the checks in [CONTRIBUTING.md](CONTRIBUTING.md), including the pinned
-   fixture verification and relevant Apple and WASI checks. Inspect the actual
-   CI outcome for the exact commit; configuration alone is not a pass.
-3. Review the `1.0.0` changelog and release notes on the agreed release commit.
-   Merge to the intended default branch through the normal review process.
-4. Recheck local and remote tag names, then create an annotated `1.0.0` tag on
-   the agreed release commit and push that tag only. Publish a GitHub release
-   with [the draft release notes](Documentation/RELEASE-NOTES-1.0.0.md) after
-   review and authorization. Do not move an existing remote tag.
+   fixture verification and relevant Apple and WASI checks. Review outstanding
+   sanitizer findings. Inspect the actual CI outcome for the exact release
+   commit; configuration alone is not a pass. Distinguish simulator builds and
+   WASI smoke coverage from comprehensive runtime tests.
+3. Update the changelog and prepare release notes. Merge the agreed release
+   commit to the intended default branch through the normal review process.
+4. Check local and remote tags and verify the commit to release. Create an
+   annotated tag for the new version and push that tag only. Publish a GitHub
+   release using the reviewed notes and the existing tag. If the tag already
+   exists, verify its target and never move or recreate it.
 5. From a separate consumer, resolve the published version through SwiftPM and
-   build the applicable products. Verify documentation and release assets,
-   including third-party notices for source and binary distributions.
+   build the applicable products. Verify the release page, documentation and
+   third-party notices for source and binary distributions.
+
+The [1.0.0 release notes](Documentation/RELEASE-NOTES-1.0.0.md) provide an
+example of the scope and limitations to record. The
+[implementation report](Documentation/IMPLEMENTATION-REPORT.md) preserves
+historical verification details and unresolved findings.

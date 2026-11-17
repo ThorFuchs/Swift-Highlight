@@ -228,5 +228,19 @@ HighlightKit revision, as were the three fixtures containing the identified
 quotations or named example. The notices now identify both Dorothy L. Sayers
 and Terry Pratchett. This documents provenance; it does not resolve any
 additional rights in the quoted material. The unchanged package source passed
-254 tests with Swift 6.4.2 on Linux while preparing the release notes. Linux
-Thread Sanitizer findings and GitHub settings remain to be reviewed.
+254 tests with Swift 6.4.2 on Linux while preparing the release notes.
+The Linux Thread Sanitizer warnings remain unclassified.
+
+The [CI run for release commit `326a008`](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44070741672)
+completed successfully, including both Linux jobs, documentation, and macOS
+tests, release build, generic iOS Simulator build, and all three DocC archives.
+The simulator build is not an iOS device runtime test. Private vulnerability
+reporting was enabled before release, according to the release handover.
+
+On 17 November 2026, an independent macOS SwiftPM executable resolved the
+public package URL with `from: "1.0.0"` to commit `326a008`, built Core and
+HTML with a macOS 15 deployment target, and checked Swift tokens and HTML
+escaping. On the same date, Apple Swift 6.4.2 (Xcode 27.2, arm64) passed
+`swift test --sanitize=thread --filter contendedLazyCompilation` at that
+commit: one test passed with no sanitizer diagnostics. This macOS result does
+not resolve the Linux warnings.
