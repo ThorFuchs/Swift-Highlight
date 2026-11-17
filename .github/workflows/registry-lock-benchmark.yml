@@ -21,7 +21,8 @@ jobs:
       - name: Build frozen baseline and candidate
         run: |
           mkdir /tmp/registry-baseline
-          git archive 194c372c92eabfde9222c860ceced7f1f66ccb09 | tar -x -C /tmp/registry-baseline
+          git -c safe.directory="$GITHUB_WORKSPACE" archive 194c372c92eabfde9222c860ceced7f1f66ccb09 > /tmp/registry-baseline.tar
+          tar -xf /tmp/registry-baseline.tar -C /tmp/registry-baseline
           swift --version
           swift build -c release -j 4 --package-path /tmp/registry-baseline
           swift build -c release -j 4
