@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   thread-sanitizer:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     strategy:
       fail-fast: false
@@ -18,17 +18,21 @@ jobs:
         image:
           - swift:6.2.4@sha256:3459518b2e723a7c363d0f8cfa44fc796c77ecd8c18e92fd10e6f92dd78c0b12
           - swift:6.4@sha256:0384f00cf80f81064a907c249a0ad56a1648906f65075a95b1827e88de666e21
-    container: ${{ matrix.image }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
-      - run: swift --version
+      # TSan needs a compatible address-space layout. This setting applies
+      # only to the disposable GitHub-hosted VM, not to library consumers.
+      - name: Configure disposable runner for TSan
+        run: sudo sysctl vm.mmap_rnd_bits=28
+      - name: Toolchain version
+        run: docker run --rm '${{ matrix.image }}' swift --version
       - name: Mutex control
-        run: swiftc -sanitize=thread Scripts/MutexSanitizerControl.swift -o /tmp/mutex-control && /tmp/mutex-control
+        run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' sh -c 'swiftc -sanitize=thread Scripts/MutexSanitizerControl.swift -o /tmp/mutex-control && /tmp/mutex-control'
       - name: NSLock control
         if: ${{ always() }}
-        run: swiftc -sanitize=thread Scripts/NSLockSanitizerControl.swift -o /tmp/nslock-control && /tmp/nslock-control
+        run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' sh -c 'swiftc -sanitize=thread Scripts/NSLockSanitizerControl.swift -o /tmp/nslock-control && /tmp/nslock-control'
       - name: Contended lazy compilation
         if: ${{ always() }}
-        run: swift test --sanitize=thread --filter contendedLazyCompilation
+        run: docker run --rm --security-opt seccomp=unconfined -v "$PWD:/work" -w /work '${{ matrix.image }}' swift test --sanitize=thread --filter contendedLazyCompilation
