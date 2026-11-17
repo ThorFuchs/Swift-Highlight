@@ -21,8 +21,11 @@ BSD-3-Clause root license; exact revisions appear in
 `Documentation/FIXTURE-PROVENANCE.md`. Similarity does not prove attribution. Exact matches
 do not by themselves prove the ownership of all contributed material. In particular,
 `Tests/HighlightKitTests/Fixtures/xml/document-type-variations.code.txt`
-contains a Walt Disney Company copyright string. The Erlang fixtures `erlang/sigil.code.txt` and
-`erlang/triple_quote_string.code.txt` include an attributed Dorothy L. Sayers
-quotation; both match upstream highlight.js test files. Before distribution,
-review the 17 modified fixtures and any additional rights in quoted material.
+contains a Walt Disney Company copyright string and a Donald Duck reference.
+The Erlang fixtures `erlang/sigil.code.txt` and
+`erlang/triple_quote_string.code.txt` include attributed quotations from
+Dorothy L. Sayers and Terry Pratchett; both match upstream highlight.js test
+files. The 17 non-identical-to-highlight.js fixtures and these three examples
+also match the pinned HighlightKit revision byte-for-byte. Before distribution,
+review the provenance and any additional rights in quoted material.
 This document does not assert that such an audit is complete.

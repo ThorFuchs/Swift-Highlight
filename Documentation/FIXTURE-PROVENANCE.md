@@ -2,6 +2,13 @@
 
 Compared raw bytes against tracked highlight.js source files at commit `08cb242e7d4aee787114eb04cc7ab18314d82f92`. Exact matches establish byte identity, not the original source or ownership of each contribution. Similarities are character-sequence ratios (Python difflib, autojunk disabled), not proof of derivation or ownership. Unmatched or modified files may be generated, changed, or independently authored; their provenance remains unresolved. JSON expectations were not used for attribution.
 
+All 17 fixtures below marked as similar or extended match the corresponding
+file at the pinned HighlightKit revision `524c185b0553756498c1b6a1765e8d119c4623a6`
+byte-for-byte. The same check was made for the two Erlang quotation fixtures
+and `xml/document-type-variations.code.txt`. HighlightKit's MIT license is
+retained, alongside the highlight.js BSD-3-Clause license. This confirms where
+those copies were imported from, not independent ownership of their contents.
+
 | Imported code fixture | Byte-identical highlight.js file(s) |
 | --- | --- |
 | `ada/default.code.txt` | Similar, not byte-identical: `test/markup/ada/default.txt` (similarity 0.988); attribution unconfirmed |

@@ -1,7 +1,8 @@
 # Release process
 
-The proposed initial version is `1.0.0`; it is **not yet published**. Use
-semantic version tags without a `v` prefix, consistent with Swift-GFM. Never
+The initial release version is `1.0.0`. Check the repository tags and releases
+for publication status. Use semantic version tags without a `v` prefix,
+consistent with Swift-GFM. Never
 move or delete a published tag. Creating a tag, pushing it, publishing a GitHub
 release, and changing repository visibility are distinct maintainer actions.
 
@@ -15,8 +16,9 @@ release, and changing repository visibility are distinct maintainer actions.
   and third-party notices, including quoted material and modified fixtures.
   Current documentation does not assert a completed rights audit.
 - `origin/HEAD` selected `feature/bootstrap-swift-highlight` when checked
-  during preparation. Decide whether to create and select `main` as the default
-  branch, as in Swift-GFM, before publishing; do not assume it already exists.
+  during preparation. Prepare `main` from the reviewed candidate and select it
+  as the default branch on GitHub before publishing; verify both its commit and
+  the default-branch setting rather than assuming they are current.
 - Confirm private vulnerability reporting is enabled and accessible before
   publication. Review Linux Thread Sanitizer warnings and confirm CI for the
   exact release commit. The maintainer reported all CI jobs green at `d101ac3`,
@@ -33,9 +35,8 @@ release, and changing repository visibility are distinct maintainer actions.
 2. Run the checks in [CONTRIBUTING.md](CONTRIBUTING.md), including the pinned
    fixture verification and relevant Apple and WASI checks. Inspect the actual
    CI outcome for the exact commit; configuration alone is not a pass.
-3. Move `Unreleased` notes into a `1.0.0` section only when the release commit
-   is agreed. Merge to the intended default branch through the normal review
-   process.
+3. Review the `1.0.0` changelog and release notes on the agreed release commit.
+   Merge to the intended default branch through the normal review process.
 4. Recheck local and remote tag names, then create an annotated `1.0.0` tag on
    the agreed release commit and push that tag only. Publish a GitHub release
    with [the draft release notes](Documentation/RELEASE-NOTES-1.0.0.md) after

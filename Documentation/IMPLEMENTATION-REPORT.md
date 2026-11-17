@@ -221,3 +221,12 @@ were green. The macOS workflow includes `swift test`, a release build, an iOS
 Simulator build and all three DocC archives. This result is maintainer-reported;
 the GitHub API was not accessible for independent inspection. The eventual
 release commit must still have its own CI result checked.
+
+For the `1.0.0` release candidate, all 17 fixtures that differ from the pinned
+highlight.js reference were confirmed byte-identical to the pinned
+HighlightKit revision, as were the three fixtures containing the identified
+quotations or named example. The notices now identify both Dorothy L. Sayers
+and Terry Pratchett. This documents provenance; it does not resolve any
+additional rights in the quoted material. The unchanged package source passed
+254 tests with Swift 6.4.2 on Linux while preparing the release notes. Linux
+Thread Sanitizer findings and GitHub settings remain to be reviewed.
