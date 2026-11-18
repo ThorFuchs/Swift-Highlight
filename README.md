@@ -35,6 +35,24 @@ test material come with their original licenses; see
 - **No external Swift package dependencies.** The core does require
   Foundation's regular expressions and the Swift `Synchronization` module.
 
+## Language gallery
+
+These original examples were highlighted by Swift-Highlight and rendered with
+its `githubDark` Apple theme. Select a language name to see the source; the
+[showcase guide](Examples/Showcase/README.md) explains how to regenerate the images.
+
+| [Swift](Examples/Showcase/Samples/Greeting.swift) | [Python](Examples/Showcase/Samples/greetings.py) |
+| :---: | :---: |
+| ![Swift code highlighted in the GitHub dark theme](Examples/Showcase/Images/swift.png) | ![Python code highlighted in the GitHub dark theme](Examples/Showcase/Images/python.png) |
+| [TypeScript](Examples/Showcase/Samples/greetings.ts) | [JavaScript](Examples/Showcase/Samples/greetings.js) |
+| ![TypeScript code highlighted in the GitHub dark theme](Examples/Showcase/Images/typescript.png) | ![JavaScript code highlighted in the GitHub dark theme](Examples/Showcase/Images/javascript.png) |
+| [Rust](Examples/Showcase/Samples/greetings.rs) | [Go](Examples/Showcase/Samples/greetings.go) |
+| ![Rust code highlighted in the GitHub dark theme](Examples/Showcase/Images/rust.png) | ![Go code highlighted in the GitHub dark theme](Examples/Showcase/Images/go.png) |
+| [Ruby](Examples/Showcase/Samples/greetings.rb) | [SQL](Examples/Showcase/Samples/greetings.sql) |
+| ![Ruby code highlighted in the GitHub dark theme](Examples/Showcase/Images/ruby.png) | ![SQL code highlighted in the GitHub dark theme](Examples/Showcase/Images/sql.png) |
+| [HTML](Examples/Showcase/Samples/greetings.html) | [Bash](Examples/Showcase/Samples/greetings.sh) |
+| ![HTML code highlighted in the GitHub dark theme](Examples/Showcase/Images/html.png) | ![Bash code highlighted in the GitHub dark theme](Examples/Showcase/Images/bash.png) |
+
 ## Requirements and installation
 
 The manifest requires Swift tools 6.1 and Swift 6 language mode. Apple deployment
