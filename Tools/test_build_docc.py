@@ -8,7 +8,7 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parent.parent
-MODULES = ("SwiftHighlight", "SwiftHighlightHTML", "SwiftHighlightApple")
+MODULES = ("SwiftHighlight", "SwiftHighlightHTML", "SwiftHighlightApple", "SwiftHighlightCodeCard", "SwiftHighlightSwiftUI")
 
 class DocCGraphDiscoveryTests(unittest.TestCase):
     def setUp(self):
@@ -49,7 +49,7 @@ class DocCGraphDiscoveryTests(unittest.TestCase):
             self.graph(module)
         result = self.run_script()
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertEqual(len(self.log.read_text().splitlines()), 3)
+        self.assertEqual(len(self.log.read_text().splitlines()), len(MODULES))
         for module in MODULES:
             self.assertIn(module + ".doccarchive", result.stdout)
 
@@ -101,7 +101,7 @@ class DocCGraphDiscoveryTests(unittest.TestCase):
         self.env["DOCC_TEST_MARKER"] = str(self.root / "test-runner-built")
         result = self.run_script()
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertEqual(len(self.log.read_text().splitlines()), 3)
+        self.assertEqual(len(self.log.read_text().splitlines()), len(MODULES))
 
 if __name__ == "__main__":
     unittest.main()

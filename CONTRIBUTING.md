@@ -22,8 +22,10 @@ swift test
 
 ## Make a change
 
-- Keep the `SwiftHighlight`, `SwiftHighlightHTML`, and `SwiftHighlightApple`
-  boundaries. Core must not depend on Apple UI frameworks or a renderer.
+- Keep the `SwiftHighlight`, `SwiftHighlightHTML`, `SwiftHighlightApple`,
+  `SwiftHighlightCodeCard`, and `SwiftHighlightSwiftUI` boundaries. Core must
+  not depend on Apple UI frameworks or a renderer; HTML cards must remain
+  independent of SwiftUI.
 - Add a focused regression test when behavior changes. Preserve UTF-16 source
   ranges, plain-text gaps, strict diagnostics, and safe HTML escaping.
 - Document public APIs and meaningful behavior changes. Add user-visible changes
@@ -44,11 +46,12 @@ python3 Tools/check-documentation-links.py
 python3 -m unittest discover -s Tools -p 'test_*.py'
 python3 Tools/verify-docc-examples.py
 sh Tools/build-docc.sh
+sh Scripts/test-code-card-cli.sh
 ```
 
 DocC needs Python 3 and a `docc` executable from the selected Swift toolchain.
 The documentation script checks public symbol comments for available modules;
-on Linux it reports that Apple DocC is skipped because Apple SDK symbols are
+on Linux it reports that Apple and SwiftUI DocC are skipped because Apple SDK symbols are
 unavailable. Validate the Apple archive on an Apple toolchain separately. On
 macOS the script also builds the test targets in its scratch directory before
 extracting symbol graphs; it does not run the tests.
@@ -56,7 +59,8 @@ extracting symbol graphs; it does not run the tests.
 The DocC example verifier compiles and runs marked catalog examples and inline
 core API examples as independent SwiftPM consumers. Every Swift code block in
 a catalog must have a `docc-verify` marker. Linux skips Apple-only examples;
-macOS CI checks them.
+macOS CI checks them. The CLI smoke test checks HTML on both platforms and PNG
+export on macOS.
 
 The fixture inventory asserts 375 code/expectation pairs across 65 languages;
 the parameterized fidelity test compares tokens and relevance. For grammar and

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add optional SwiftUI code cards, portable HTML cards, and a command-line
+  exporter for HTML and macOS PNG output.
+
 ## 1.0.2
 
 - Expand DocC API guidance and add verified examples for language detection,
