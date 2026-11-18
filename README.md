@@ -46,8 +46,8 @@ guarantee:
 | Platform | Evidence |
 | --- | --- |
 | Linux x86_64 | Core and HTML tests with Swift 6.1.3, 6.2.4 and 6.4.2; standard release build with 6.4.2 |
-| macOS | [CI at `326a008`](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44070741672) passed tests, release build and DocC |
-| iOS | Generic iOS Simulator build passed in [CI at `326a008`](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44070741672); device runtime not verified |
+| macOS | [CI at `d0af8d8`](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44140698357) passed tests, release build and DocC |
+| iOS | Generic iOS Simulator build passed in [CI at `d0af8d8`](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44140698357); device runtime not verified |
 | WebAssembly (WASI Preview 1) | Core and HTML builds reported on macOS; one Swift/HTML consumer smoke executed on Node.js 24 from Linux |
 | Linux arm64, static Linux (musl), other Apple platforms | Not verified |
 
@@ -56,7 +56,7 @@ To use a tagged release, specify a version requirement:
 ```swift
 dependencies: [
     .package(url: "https://github.com/ThorFuchs/Swift-Highlight.git",
-             from: "1.0.1")
+             from: "1.0.2")
 ],
 targets: [
     .target(name: "YourTarget", dependencies: [
@@ -172,8 +172,10 @@ The [implementation report](Documentation/IMPLEMENTATION-REPORT.md) separates
 completed checks from open platform and sanitizer work. The
 [WASI example](Examples/WASISmoke/README.md) exercises one actual Swift/HTML
 case. See [contributing](CONTRIBUTING.md) for fixture and reference checks and
-[DocC guides](Sources/HighlightKit/SwiftHighlight.docc/SwiftHighlight.md) for
-API contracts. To build all available DocC archives locally, run
+[the Core DocC catalog](Sources/HighlightKit/SwiftHighlight.docc/SwiftHighlight.md),
+[HTML DocC catalog](Sources/SwiftHighlightHTML/SwiftHighlightHTML.docc/SwiftHighlightHTML.md),
+and [Apple DocC catalog](Sources/HighlightKit/Rendering/SwiftHighlightApple.docc/SwiftHighlightApple.md)
+for API guidance. To build all available DocC archives locally, run
 `sh Tools/build-docc.sh`; the archives are written to `.build/docc`. Building
 the Apple archive requires an Apple SDK. The package's Swift Package Index
 manifest lists all three documentation targets for use when the package is
@@ -182,8 +184,7 @@ indexed.
 ## Versioning and support
 
 Starting with version 1.0.0, Semantic Versioning applies to the public APIs of
-the Core, HTML and Apple library products. Before the first stable release,
-the API remains provisional. Incompatible public API changes require a major
+the Core, HTML and Apple library products. Incompatible public API changes require a major
 version; compatible additions use a minor version and fixes use a patch. Use [GitHub Issues](https://github.com/ThorFuchs/Swift-Highlight/issues)
 for questions and bugs; report security issues as described in [SECURITY.md](SECURITY.md).
 
