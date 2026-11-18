@@ -31,6 +31,8 @@ jobs:
       - run: swift --version
       - run: swift build
       - run: swift test
+      - name: Render the language showcase
+        run: swift run --package-path Examples/Showcase ShowcaseGenerator Examples/Showcase/Samples "$RUNNER_TEMP/showcase"
       - run: swift build -c release
       - run: xcodebuild -scheme SwiftHighlightApple -destination 'generic/platform=iOS Simulator' build
       - name: Build all DocC archives
