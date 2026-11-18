@@ -2,8 +2,13 @@
 
 ## Unreleased
 
+## 1.1.0
+
 - Add optional SwiftUI code cards, portable HTML cards, and a command-line
   exporter for HTML and macOS PNG output.
+- Add ten original language examples and a reproducible image gallery.
+- Document all five library products and extend the WASI consumer smoke test
+  to cover HTML code cards.
 
 ## 1.0.2
 

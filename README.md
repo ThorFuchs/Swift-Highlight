@@ -53,13 +53,22 @@ its `githubDark` Apple theme. Select a language name to see the source; the
 | [HTML](Examples/Showcase/Samples/greetings.html) | [Bash](Examples/Showcase/Samples/greetings.sh) |
 | ![HTML code highlighted in the GitHub dark theme](Examples/Showcase/Images/html.png) | ![Bash code highlighted in the GitHub dark theme](Examples/Showcase/Images/bash.png) |
 
-## Code cards (unreleased)
+## Code cards
 
-The default branch also provides optional `SwiftHighlightCodeCard` and
-`SwiftHighlightSwiftUI` products, plus the `highlight-card` command. These
-additions are not included in the latest tagged release yet. HTML cards work
+Optional `SwiftHighlightCodeCard` and `SwiftHighlightSwiftUI` products and the
+`highlight-card` command are available starting with version 1.1.0. HTML cards work
 without Apple UI frameworks; the SwiftUI view accepts existing built-in and
 custom `HighlightTheme` values. PNG export uses SwiftUI on macOS.
+
+For a SwiftUI app, add the three products you import to your target:
+
+```swift
+.target(name: "YourTarget", dependencies: [
+    .product(name: "SwiftHighlightApple", package: "Swift-Highlight"),
+    .product(name: "SwiftHighlightCodeCard", package: "Swift-Highlight"),
+    .product(name: "SwiftHighlightSwiftUI", package: "Swift-Highlight"),
+])
+```
 
 ```swift
 import SwiftHighlightApple
@@ -96,10 +105,11 @@ guarantee:
 
 | Platform | Evidence |
 | --- | --- |
-| Linux x86_64 | Core and HTML tests with Swift 6.1.3, 6.2.4 and 6.4.2; standard release build with 6.4.2 |
-| macOS | [CI at `d0af8d8`](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44140698357) passed tests, release build and DocC |
-| iOS | Generic iOS Simulator build passed in [CI at `d0af8d8`](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44140698357); device runtime not verified |
-| WebAssembly (WASI Preview 1) | Core and HTML builds reported on macOS; one Swift/HTML consumer smoke executed on Node.js 24 from Linux |
+| Linux x86_64 | [CI at `924f63e`](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44268287328) passed tests, HTML card CLI smoke and release builds with Swift 6.2.4 and 6.4 |
+| macOS | [CI at `924f63e`](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44268287328) passed tests, PNG export, release build and all five DocC archives |
+| iOS | Apple renderer and SwiftUI generic iOS Simulator builds passed in [CI at `924f63e`](https://github.com/ThorFuchs/Swift-Highlight/actions/runs/44268287328); device runtime not verified |
+| WebAssembly (WASI Preview 1) | One core, HTML and HTML-card consumer smoke executed with Node.js 26 on macOS using Swift 6.4.2 |
+| watchOS | SwiftUI product built locally for the generic watchOS Simulator; device runtime not verified |
 | Linux arm64, static Linux (musl), other Apple platforms | Not verified |
 
 To use a tagged release, specify a version requirement:
@@ -107,13 +117,14 @@ To use a tagged release, specify a version requirement:
 ```swift
 dependencies: [
     .package(url: "https://github.com/ThorFuchs/Swift-Highlight.git",
-             from: "1.0.2")
+             from: "1.1.0")
 ],
 targets: [
     .target(name: "YourTarget", dependencies: [
         .product(name: "SwiftHighlight", package: "Swift-Highlight"),
         .product(name: "SwiftHighlightHTML", package: "Swift-Highlight"),
         // Add SwiftHighlightApple on supported Apple platforms if needed.
+        // Add SwiftHighlightCodeCard and SwiftHighlightSwiftUI for code cards.
     ])
 ]
 ```
@@ -221,11 +232,13 @@ swift build -c release
 
 The [implementation report](Documentation/IMPLEMENTATION-REPORT.md) separates
 completed checks from open platform and sanitizer work. The
-[WASI example](Examples/WASISmoke/README.md) exercises one actual Swift/HTML
+[WASI example](Examples/WASISmoke/README.md) exercises one actual Swift/HTML-card
 case. See [contributing](CONTRIBUTING.md) for fixture and reference checks and
 [the Core DocC catalog](Sources/HighlightKit/SwiftHighlight.docc/SwiftHighlight.md),
 [HTML DocC catalog](Sources/SwiftHighlightHTML/SwiftHighlightHTML.docc/SwiftHighlightHTML.md),
-and [Apple DocC catalog](Sources/HighlightKit/Rendering/SwiftHighlightApple.docc/SwiftHighlightApple.md)
+[Apple DocC catalog](Sources/HighlightKit/Rendering/SwiftHighlightApple.docc/SwiftHighlightApple.md),
+[code-card catalog](Sources/SwiftHighlightCodeCard/SwiftHighlightCodeCard.docc/SwiftHighlightCodeCard.md),
+and [SwiftUI catalog](Sources/SwiftHighlightSwiftUI/SwiftHighlightSwiftUI.docc/SwiftHighlightSwiftUI.md)
 for API guidance. To build all available DocC archives locally, run
 `sh Tools/build-docc.sh`; the archives are written to `.build/docc`. Building
 the Apple and SwiftUI archives requires an Apple SDK. The package's Swift Package Index
@@ -235,8 +248,8 @@ indexed.
 ## Versioning and support
 
 Starting with version 1.0.0, Semantic Versioning applies to the public APIs of
-the Core, HTML, Apple, code-card, and SwiftUI library products. The last two
-are currently unreleased. Incompatible public API changes require a major
+the Core, HTML, Apple, code-card, and SwiftUI library products. Incompatible
+public API changes require a major
 version; compatible additions use a minor version and fixes use a patch. Use [GitHub Issues](https://github.com/ThorFuchs/Swift-Highlight/issues)
 for questions and bugs; report security issues as described in [SECURITY.md](SECURITY.md).
 
