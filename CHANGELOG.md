@@ -2,8 +2,12 @@
 
 ## Unreleased
 
+## 1.0.2
+
 - Expand DocC API guidance and add verified examples for language detection,
   incremental highlighting, custom grammars, HTML, and Apple themes.
+- Add a Swift Package Index documentation configuration for all three library
+  products and check documentation examples in continuous integration.
 
 ## 1.0.1
 
