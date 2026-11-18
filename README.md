@@ -53,6 +53,39 @@ its `githubDark` Apple theme. Select a language name to see the source; the
 | [HTML](Examples/Showcase/Samples/greetings.html) | [Bash](Examples/Showcase/Samples/greetings.sh) |
 | ![HTML code highlighted in the GitHub dark theme](Examples/Showcase/Images/html.png) | ![Bash code highlighted in the GitHub dark theme](Examples/Showcase/Images/bash.png) |
 
+## Code cards (unreleased)
+
+The default branch also provides optional `SwiftHighlightCodeCard` and
+`SwiftHighlightSwiftUI` products, plus the `highlight-card` command. These
+additions are not included in the latest tagged release yet. HTML cards work
+without Apple UI frameworks; the SwiftUI view accepts existing built-in and
+custom `HighlightTheme` values. PNG export uses SwiftUI on macOS.
+
+```swift
+import SwiftHighlightApple
+import SwiftHighlightCodeCard
+import SwiftHighlightSwiftUI
+
+let options = try CodeCardOptions(title: "Example.swift")
+let card = try CodeCardView(source: "let answer = 42", language: "swift",
+                            theme: .githubDark, options: options)
+// Use card in a SwiftUI view hierarchy.
+```
+
+From a checkout, render HTML or a PNG (the latter requires macOS):
+
+```sh
+swift run highlight-card --language swift --input Example.swift \
+  --title Example.swift --format html --output card.html
+swift run highlight-card --language swift --input Example.swift \
+  --title Example.swift --format png --output card.png
+```
+
+Use `swift run highlight-card --help` for themes, wrapping and layout options.
+See the [card guide](Sources/SwiftHighlightCodeCard/SwiftHighlightCodeCard.docc/SwiftHighlightCodeCard.md)
+and [SwiftUI guide](Sources/SwiftHighlightSwiftUI/SwiftHighlightSwiftUI.docc/SwiftHighlightSwiftUI.md)
+for API examples and platform limits.
+
 ## Requirements and installation
 
 The manifest requires Swift tools 6.1 and Swift 6 language mode. Apple deployment
@@ -195,14 +228,15 @@ case. See [contributing](CONTRIBUTING.md) for fixture and reference checks and
 and [Apple DocC catalog](Sources/HighlightKit/Rendering/SwiftHighlightApple.docc/SwiftHighlightApple.md)
 for API guidance. To build all available DocC archives locally, run
 `sh Tools/build-docc.sh`; the archives are written to `.build/docc`. Building
-the Apple archive requires an Apple SDK. The package's Swift Package Index
-manifest lists all three documentation targets for use when the package is
+the Apple and SwiftUI archives requires an Apple SDK. The package's Swift Package Index
+manifest lists all five documentation targets for use when the package is
 indexed.
 
 ## Versioning and support
 
 Starting with version 1.0.0, Semantic Versioning applies to the public APIs of
-the Core, HTML and Apple library products. Incompatible public API changes require a major
+the Core, HTML, Apple, code-card, and SwiftUI library products. The last two
+are currently unreleased. Incompatible public API changes require a major
 version; compatible additions use a minor version and fixes use a patch. Use [GitHub Issues](https://github.com/ThorFuchs/Swift-Highlight/issues)
 for questions and bugs; report security issues as described in [SECURITY.md](SECURITY.md).
 

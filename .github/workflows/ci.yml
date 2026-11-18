@@ -19,7 +19,9 @@ jobs:
       - run: swift --version
       - run: swift build --product SwiftHighlight
       - run: swift build --product SwiftHighlightHTML
+      - run: swift build --product highlight-card
       - run: swift test
+      - run: sh Scripts/test-code-card-cli.sh
       - run: swift build -c release
   macos:
     runs-on: macos-latest
@@ -31,10 +33,12 @@ jobs:
       - run: swift --version
       - run: swift build
       - run: swift test
+      - run: sh Scripts/test-code-card-cli.sh
       - name: Render the language showcase
         run: swift run --package-path Examples/Showcase ShowcaseGenerator Examples/Showcase/Samples "$RUNNER_TEMP/showcase"
       - run: swift build -c release
       - run: xcodebuild -scheme SwiftHighlightApple -destination 'generic/platform=iOS Simulator' build
+      - run: xcodebuild -scheme SwiftHighlightSwiftUI -destination 'generic/platform=iOS Simulator' build
       - name: Build all DocC archives
         run: sh Tools/build-docc.sh
       - name: Verify DocC examples, including Apple rendering

@@ -8,6 +8,7 @@ let package = Package(
         .executableTarget(name: "WASISmoke", dependencies: [
             .product(name: "SwiftHighlight", package: "SwiftHighlightLocal"),
             .product(name: "SwiftHighlightHTML", package: "SwiftHighlightLocal"),
+            .product(name: "SwiftHighlightCodeCard", package: "SwiftHighlightLocal"),
         ]),
     ]
 )

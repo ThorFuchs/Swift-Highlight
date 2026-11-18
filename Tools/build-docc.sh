@@ -28,7 +28,7 @@ fi
 # Prefer the consolidated output, but search per target when it is absent.
 tmp=$(mktemp -d "${TMPDIR:-/tmp}/swift-highlight-docc.XXXXXXXX")
 trap 'rm -rf "$tmp"' EXIT HUP INT TERM
-for module in SwiftHighlight SwiftHighlightHTML SwiftHighlightApple; do
+for module in SwiftHighlight SwiftHighlightHTML SwiftHighlightApple SwiftHighlightCodeCard SwiftHighlightSwiftUI; do
     graph="$scratch/out/symbolgraph/$module.symbols.json"
     if [ ! -f "$graph" ]; then
         graph=$(find "$scratch" -type f -name "$module.symbols.json" -print -quit)
@@ -42,12 +42,14 @@ for module in SwiftHighlight SwiftHighlightHTML SwiftHighlightApple; do
       SwiftHighlight) catalog=Sources/HighlightKit/SwiftHighlight.docc ;;
       SwiftHighlightHTML) catalog=Sources/SwiftHighlightHTML/SwiftHighlightHTML.docc ;;
       SwiftHighlightApple) catalog=Sources/HighlightKit/Rendering/SwiftHighlightApple.docc ;;
+      SwiftHighlightCodeCard) catalog=Sources/SwiftHighlightCodeCard/SwiftHighlightCodeCard.docc ;;
+      SwiftHighlightSwiftUI) catalog=Sources/SwiftHighlightSwiftUI/SwiftHighlightSwiftUI.docc ;;
     esac
     # Linux cannot emit UIKit/AppKit symbols; report the omission explicitly.
     count=$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))["symbols"]))' "$graph")
     if [ "$count" -eq 0 ]; then
-        if [ "$module" = SwiftHighlightApple ] && [ "$(uname -s)" = Linux ]; then
-            printf '%s\n' 'Skipping SwiftHighlightApple DocC: no Apple SDK symbols on this host.'
+        if { [ "$module" = SwiftHighlightApple ] || [ "$module" = SwiftHighlightSwiftUI ]; } && [ "$(uname -s)" = Linux ]; then
+            printf 'Skipping %s DocC: no Apple SDK symbols on this host.\n' "$module"
             continue
         fi
         printf 'No symbols found for %s\n' "$module" >&2

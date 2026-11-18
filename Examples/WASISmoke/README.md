@@ -1,6 +1,6 @@
 # WASI smoke test
 
-This standalone consumer checks Swift syntax tokens and escaped HTML under
+This standalone consumer checks Swift syntax tokens, escaped HTML, and an HTML card under
 WASI Preview 1. It depends on the package via `../..`; it is not a package
 product and does not require JavaScript at library runtime.
 
@@ -20,6 +20,6 @@ runtime. For example, with Node.js 24 (whose WASI API is experimental):
 node --experimental-wasi-unstable-preview1 run-wasi.mjs /path/to/WASISmoke.wasm
 ```
 
-A successful run prints `WASI highlight and HTML smoke passed`. This single
-case checks one Swift grammar and the HTML renderer; it is not a WASI run of
+A successful run prints `WASI highlight, HTML and code card smoke passed`. This single
+case checks one Swift grammar, the HTML renderer, and a card; it is not a WASI run of
 the full language or fixture suite.

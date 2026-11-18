@@ -2,8 +2,8 @@
 """Compile and run marked DocC examples as independent SwiftPM consumers.
 
 An HTML comment immediately before a Swift fence selects dependencies:
-    <!-- docc-verify: core -->  (or html / apple)
-Apple examples are skipped on non-Apple hosts and should also run on macOS CI.
+    <!-- docc-verify: core -->  (or html / apple / card / swiftui)
+Apple and SwiftUI examples are skipped on non-Apple hosts and also run on macOS CI.
 Swift fences in inline core API comments are checked as well.
 """
 from __future__ import annotations
@@ -17,13 +17,15 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 PATTERN = re.compile(
-    r"<!-- docc-verify: (core|html|apple) -->\s*\n```swift\s*\n(.*?)\n```",
+    r"<!-- docc-verify: (core|html|apple|card|swiftui) -->\s*\n```swift\s*\n(.*?)\n```",
     re.DOTALL,
 )
 PRODUCTS = {
     "core": ["SwiftHighlight"],
     "html": ["SwiftHighlight", "SwiftHighlightHTML"],
     "apple": ["SwiftHighlight", "SwiftHighlightApple"],
+    "card": ["SwiftHighlight", "SwiftHighlightCodeCard"],
+    "swiftui": ["SwiftHighlight", "SwiftHighlightApple", "SwiftHighlightCodeCard", "SwiftHighlightSwiftUI"],
 }
 
 
@@ -40,7 +42,7 @@ def main() -> None:
                 raise SystemExit(f"Unverified Swift code block in {path}")
             for match in matches:
                 platform, source = match.groups()
-                if platform == "apple" and sys.platform != "darwin":
+                if platform in ("apple", "swiftui") and sys.platform != "darwin":
                     skipped.append(path.relative_to(ROOT))
                     continue
                 examples.append((path.relative_to(ROOT), platform, source))
